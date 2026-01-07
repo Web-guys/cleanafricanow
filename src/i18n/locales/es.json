@@ -642,5 +642,10 @@
       "faq6Q": "¿Qué pasa después de enviar un reporte?",
       "faq6A": "Tu reporte es revisado por nuestro equipo, luego se envía a las autoridades locales u ONGs apropiadas. Recibirás actualizaciones cuando el estado cambie."
     }
+  },
+  "cities": {
+    "featured": "Ciudades Cubiertas",
+    "featuredDesc": "Reporta problemas ambientales en las principales ciudades marroquíes",
+    "viewAll": "Ver todas las ciudades en el mapa"
   }
 }

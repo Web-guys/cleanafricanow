@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Trash2, AlertTriangle, MapPin, Map, LogOut, User, TrendingUp } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { CommunityImpact } from "@/components/home/CommunityImpact";
+import { FeaturedCities } from "@/components/home/FeaturedCities";
+import { MobileNav } from "@/components/home/MobileNav";
 
 const Home = () => {
   const { user, signOut, hasRole } = useAuth();
@@ -70,18 +71,10 @@ const Home = () => {
             <LanguageSwitcher />
             <ThemeToggle />
           </nav>
-          <div className="md:hidden flex gap-2">
-            {user ? (
-              <Button variant="ghost" size="icon" onClick={signOut}>
-                <LogOut className="h-5 w-5" />
-              </Button>
-            ) : (
-              <Button size="sm" asChild>
-                <Link to="/auth">{t('nav.signIn')}</Link>
-              </Button>
-            )}
+          <div className="md:hidden flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
+            <MobileNav />
           </div>
         </div>
       </header>
@@ -129,6 +122,9 @@ const Home = () => {
 
       {/* Community Impact Stats */}
       <CommunityImpact />
+
+      {/* Featured Cities */}
+      <FeaturedCities />
 
       {/* How It Works */}
       <section className="py-20 bg-background">

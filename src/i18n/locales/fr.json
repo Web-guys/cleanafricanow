@@ -642,5 +642,10 @@
       "faq6Q": "Que se passe-t-il après avoir soumis un signalement ?",
       "faq6A": "Votre signalement est examiné par notre équipe, puis transmis aux autorités locales ou ONG appropriées. Vous recevrez des mises à jour lorsque le statut change."
     }
+  },
+  "cities": {
+    "featured": "Villes Couvertes",
+    "featuredDesc": "Signalez les problèmes environnementaux dans les grandes villes marocaines",
+    "viewAll": "Voir toutes les villes sur la carte"
   }
 }

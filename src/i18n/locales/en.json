@@ -642,5 +642,10 @@
       "faq6Q": "What happens after I submit a report?",
       "faq6A": "Your report is reviewed by our team, then forwarded to the appropriate local authorities or NGOs. You'll receive updates as the status changes."
     }
+  },
+  "cities": {
+    "featured": "Cities We Cover",
+    "featuredDesc": "Report environmental issues in major Moroccan cities",
+    "viewAll": "View all cities on map"
   }
 }
