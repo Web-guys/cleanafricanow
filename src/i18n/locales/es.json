@@ -647,5 +647,13 @@
     "featured": "Ciudades Cubiertas",
     "featuredDesc": "Reporta problemas ambientales en las principales ciudades marroquíes",
     "viewAll": "Ver todas las ciudades en el mapa"
+  },
+  "dashboard": {
+    "quickActions": "Acciones Rápidas",
+    "needsAttention": "Necesita atención",
+    "beingProcessed": "En proceso",
+    "resolutionRate": "tasa de resolución",
+    "inYourCity": "En tu ciudad",
+    "inYourRegions": "En tus regiones"
   }
 }

@@ -647,5 +647,13 @@
     "featured": "المدن المغطاة",
     "featuredDesc": "أبلغ عن المشاكل البيئية في المدن المغربية الرئيسية",
     "viewAll": "عرض جميع المدن على الخريطة"
+  },
+  "dashboard": {
+    "quickActions": "إجراءات سريعة",
+    "needsAttention": "يحتاج اهتماماً",
+    "beingProcessed": "قيد المعالجة",
+    "resolutionRate": "معدل الحل",
+    "inYourCity": "في مدينتك",
+    "inYourRegions": "في مناطقك"
   }
 }
