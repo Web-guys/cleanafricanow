@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet custom styles */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-content {
+  margin: 12px;
+  min-width: 280px;
+}
+
+.leaflet-popup-tip {
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.1);
+}
+
+.custom-marker:hover > div {
+  transform: scale(1.15);
+}
+
+/* Improve zoom controls */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-control-zoom a {
+  border: none !important;
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: hsl(var(--accent)) !important;
+}
+
+/* Marker cluster custom styles */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background: transparent !important;
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background: transparent !important;
+}
+
+.custom-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Cluster hover effect */
+.leaflet-marker-icon.custom-cluster-icon:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 210 100% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 100% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 100% 12%;
+
+    /* Environmental Green - Primary */
+    --primary: 145 63% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 145 63% 55%;
+
+    /* Deep Blue - Secondary */
+    --secondary: 210 57% 16%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 145 20% 96%;
+    --muted-foreground: 210 20% 40%;
+
+    --accent: 145 63% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 145 30% 90%;
+    --input: 145 30% 90%;
+    --ring: 145 63% 42%;
+
+    --radius: 1rem;
+
+    /* Custom environmental colors */
+    --hero-gradient-start: 145 63% 42%;
+    --hero-gradient-end: 210 57% 16%;
+    --success: 145 63% 42%;
+    --success-foreground: 145 40% 25%;
+    --warning: 45 93% 47%;
+    --warning-foreground: 45 80% 25%;
+    --info: 210 100% 50%;
+    --info-foreground: 210 80% 25%;
+
+    /* Shadows */
+    --shadow-primary: 145 63% 42%;
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 145 20% 98%;
+    --sidebar-foreground: 210 100% 12%;
+    --sidebar-primary: 145 63% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 145 20% 96%;
+    --sidebar-accent-foreground: 210 100% 12%;
+    --sidebar-border: 145 30% 90%;
+    --sidebar-ring: 145 63% 42%;
+  }
+
+  .dark {
+    --background: 210 57% 16%;
+    --foreground: 0 0% 98%;
+
+    --card: 210 50% 20%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 210 50% 20%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 145 63% 42%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 145 63% 55%;
+
+    --secondary: 210 40% 30%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 210 40% 25%;
+    --muted-foreground: 145 20% 70%;
+
+    --accent: 145 63% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Dark mode environmental colors */
+    --success: 145 63% 42%;
+    --success-foreground: 145 30% 90%;
+    --warning: 45 93% 47%;
+    --warning-foreground: 45 30% 90%;
+    --info: 210 100% 50%;
+    --info-foreground: 210 30% 90%;
+
+    --border: 210 40% 30%;
+    --input: 210 40% 30%;
+    --ring: 145 63% 42%;
+    
+    --sidebar-background: 210 50% 18%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 145 63% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 25%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 210 40% 30%;
+    --sidebar-ring: 145 63% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* RTL Support for Arabic */
+  [dir="rtl"] {
+    text-align: right;
+  }
+
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+  }
+
+  /* Ensure proper RTL spacing */
+  [dir="rtl"] .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  [dir="rtl"] .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+}
+
+/* Arabic font stack */
+.font-arabic {
+  font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+}
+
+[dir="rtl"] body {
+  font-family: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+}
