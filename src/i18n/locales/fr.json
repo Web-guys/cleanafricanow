@@ -647,5 +647,13 @@
     "featured": "Villes Couvertes",
     "featuredDesc": "Signalez les problèmes environnementaux dans les grandes villes marocaines",
     "viewAll": "Voir toutes les villes sur la carte"
+  },
+  "dashboard": {
+    "quickActions": "Actions Rapides",
+    "needsAttention": "Nécessite attention",
+    "beingProcessed": "En cours de traitement",
+    "resolutionRate": "taux de résolution",
+    "inYourCity": "Dans votre ville",
+    "inYourRegions": "Dans vos régions"
   }
 }

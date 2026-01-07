@@ -647,5 +647,13 @@
     "featured": "Cities We Cover",
     "featuredDesc": "Report environmental issues in major Moroccan cities",
     "viewAll": "View all cities on map"
+  },
+  "dashboard": {
+    "quickActions": "Quick Actions",
+    "needsAttention": "Needs attention",
+    "beingProcessed": "Being processed",
+    "resolutionRate": "resolution rate",
+    "inYourCity": "In your city",
+    "inYourRegions": "In your regions"
   }
 }
