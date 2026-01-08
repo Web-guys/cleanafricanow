@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -18,17 +19,23 @@ import {
   Legend,
 } from "recharts";
 import { format, subDays, eachDayOfInterval, startOfDay } from "date-fns";
+import { Activity } from "lucide-react";
 
-const CATEGORY_COLORS = {
-  waste: "hsl(var(--success))",
-  pollution: "hsl(var(--warning))",
-  danger: "hsl(var(--destructive))",
+const CATEGORY_COLORS: Record<string, string> = {
+  waste: "#22c55e",
+  pollution: "#f59e0b",
+  danger: "#ef4444",
+  noise: "#8b5cf6",
+  water: "#3b82f6",
+  air: "#06b6d4",
+  illegal_dumping: "#ec4899",
+  deforestation: "#84cc16",
 };
 
-const STATUS_COLORS = {
-  pending: "hsl(var(--warning))",
-  in_progress: "hsl(var(--info))",
-  resolved: "hsl(var(--success))",
+const STATUS_COLORS: Record<string, string> = {
+  pending: "#f59e0b",
+  in_progress: "#3b82f6",
+  resolved: "#22c55e",
 };
 
 interface Report {
@@ -41,8 +48,9 @@ interface Report {
 
 export const ReportAnalytics = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const { data: reports = [] } = useQuery({
+  const { data: reports = [], isLoading } = useQuery({
     queryKey: ["analytics-reports"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -54,6 +62,43 @@ export const ReportAnalytics = () => {
       return data as Report[];
     },
   });
+
+  // Real-time subscription for live updates
+  useEffect(() => {
+    const channel = supabase
+      .channel("analytics-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "reports" },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["analytics-reports"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid md:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="animate-pulse">
+              <CardHeader className="pb-2">
+                <div className="h-4 bg-muted rounded w-1/2" />
+              </CardHeader>
+              <CardContent>
+                <div className="h-8 bg-muted rounded w-1/3" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   // Reports over last 30 days
   const last30Days = eachDayOfInterval({
@@ -77,24 +122,15 @@ export const ReportAnalytics = () => {
     };
   });
 
-  // Category breakdown
-  const categoryData = [
-    {
-      name: t("report.categories.waste"),
-      value: reports.filter((r) => r.category === "waste").length,
-      color: CATEGORY_COLORS.waste,
-    },
-    {
-      name: t("report.categories.pollution"),
-      value: reports.filter((r) => r.category === "pollution").length,
-      color: CATEGORY_COLORS.pollution,
-    },
-    {
-      name: t("report.categories.danger"),
-      value: reports.filter((r) => r.category === "danger").length,
-      color: CATEGORY_COLORS.danger,
-    },
-  ].filter((d) => d.value > 0);
+  // Category breakdown - all categories
+  const allCategories = ["waste", "pollution", "danger", "noise", "water", "air", "illegal_dumping", "deforestation"];
+  const categoryData = allCategories
+    .map((cat) => ({
+      name: t(`report.categories.${cat}`),
+      value: reports.filter((r) => r.category === cat).length,
+      color: CATEGORY_COLORS[cat] || "#6b7280",
+    }))
+    .filter((d) => d.value > 0);
 
   // Status breakdown
   const statusData = [
@@ -137,6 +173,12 @@ export const ReportAnalytics = () => {
 
   return (
     <div className="space-y-6">
+      {/* Live indicator */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Activity className="h-4 w-4 text-success animate-pulse" />
+        <span>{t("admin.analytics.liveUpdates", "Live updates enabled")}</span>
+      </div>
+
       {/* Quick Stats */}
       <div className="grid md:grid-cols-3 gap-4">
         <Card>

@@ -130,7 +130,7 @@ const handler = async (req: Request): Promise<Response> => {
               </p>
               
               <p style="color: #71717a; font-size: 14px; margin: 32px 0 0 0;">
-                — The FixMyCity Team
+                — The CleanAfricaNow Team
               </p>
             </div>
           </div>
@@ -139,7 +139,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "FixMyCity <onboarding@resend.dev>",
+      from: "CleanAfricaNow <onboarding@resend.dev>",
       to: [profile.email],
       subject: `Report Status Updated: ${newStatusLabel}`,
       html: emailHtml,
