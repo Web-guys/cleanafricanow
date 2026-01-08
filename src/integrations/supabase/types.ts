@@ -174,6 +174,89 @@ export type Database = {
           },
         ]
       }
+      discharge_sites: {
+        Row: {
+          address: string | null
+          capacity_percentage: number | null
+          city_id: string | null
+          closing_time: string | null
+          contact_name: string | null
+          created_at: string | null
+          created_by: string | null
+          current_capacity_tons: number | null
+          email: string | null
+          id: string
+          latitude: number
+          longitude: number
+          max_capacity_tons: number | null
+          name: string
+          notes: string | null
+          opening_time: string | null
+          operating_days: string[] | null
+          phone: string | null
+          site_type: string
+          status: string
+          updated_at: string | null
+          waste_types_accepted: string[] | null
+        }
+        Insert: {
+          address?: string | null
+          capacity_percentage?: number | null
+          city_id?: string | null
+          closing_time?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_capacity_tons?: number | null
+          email?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          max_capacity_tons?: number | null
+          name: string
+          notes?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          phone?: string | null
+          site_type?: string
+          status?: string
+          updated_at?: string | null
+          waste_types_accepted?: string[] | null
+        }
+        Update: {
+          address?: string | null
+          capacity_percentage?: number | null
+          city_id?: string | null
+          closing_time?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_capacity_tons?: number | null
+          email?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          max_capacity_tons?: number | null
+          name?: string
+          notes?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          phone?: string | null
+          site_type?: string
+          status?: string
+          updated_at?: string | null
+          waste_types_accepted?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discharge_sites_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           approved_at: string | null
@@ -387,6 +470,77 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      partner_companies: {
+        Row: {
+          address: string | null
+          city_id: string | null
+          company_type: string
+          contact_name: string | null
+          contract_end: string | null
+          contract_start: string | null
+          created_at: string | null
+          created_by: string | null
+          email: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          notes: string | null
+          phone: string | null
+          services: string[] | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          city_id?: string | null
+          company_type?: string
+          contact_name?: string | null
+          contract_end?: string | null
+          contract_start?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          services?: string[] | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          city_id?: string | null
+          company_type?: string
+          contact_name?: string | null
+          contract_end?: string | null
+          contract_start?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          services?: string[] | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_companies_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -648,6 +802,86 @@ export type Database = {
           },
         ]
       }
+      sorting_centers: {
+        Row: {
+          address: string | null
+          center_type: string
+          city_id: string | null
+          closing_time: string | null
+          contact_name: string | null
+          created_at: string | null
+          created_by: string | null
+          current_load_tons: number | null
+          daily_capacity_tons: number | null
+          email: string | null
+          id: string
+          latitude: number
+          longitude: number
+          materials_processed: string[] | null
+          name: string
+          notes: string | null
+          opening_time: string | null
+          operating_days: string[] | null
+          phone: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          center_type?: string
+          city_id?: string | null
+          closing_time?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_load_tons?: number | null
+          daily_capacity_tons?: number | null
+          email?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          materials_processed?: string[] | null
+          name: string
+          notes?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          center_type?: string
+          city_id?: string | null
+          closing_time?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_load_tons?: number | null
+          daily_capacity_tons?: number | null
+          email?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          materials_processed?: string[] | null
+          name?: string
+          notes?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          phone?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sorting_centers_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_settings: {
         Row: {
           category: string | null
@@ -683,6 +917,81 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      team_workers: {
+        Row: {
+          assigned_route_id: string | null
+          city_id: string | null
+          created_at: string | null
+          created_by: string | null
+          email: string | null
+          full_name: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          notes: string | null
+          phone: string | null
+          role: string
+          schedule_end: string | null
+          schedule_start: string | null
+          status: string
+          updated_at: string | null
+          working_days: string[] | null
+        }
+        Insert: {
+          assigned_route_id?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          phone?: string | null
+          role?: string
+          schedule_end?: string | null
+          schedule_start?: string | null
+          status?: string
+          updated_at?: string | null
+          working_days?: string[] | null
+        }
+        Update: {
+          assigned_route_id?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          phone?: string | null
+          role?: string
+          schedule_end?: string | null
+          schedule_start?: string | null
+          status?: string
+          updated_at?: string | null
+          working_days?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_workers_assigned_route_id_fkey"
+            columns: ["assigned_route_id"]
+            isOneToOne: false
+            referencedRelation: "collection_routes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_workers_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_activity_logs: {
         Row: {

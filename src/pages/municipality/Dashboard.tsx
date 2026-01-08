@@ -1,4 +1,4 @@
-import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route } from "lucide-react";
+import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route, Recycle, Trash, Building2 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CollectionEventsPanel } from "@/components/municipality/CollectionEventsPanel";
 import { CollectionRoutesPanel } from "@/components/municipality/CollectionRoutesPanel";
 import { EventRegistrationsPanel } from "@/components/municipality/EventRegistrationsPanel";
+import { TeamWorkersPanel } from "@/components/municipality/TeamWorkersPanel";
+import { PartnerCompaniesPanel } from "@/components/municipality/PartnerCompaniesPanel";
+import { DischargeSitesPanel } from "@/components/municipality/DischargeSitesPanel";
+import { SortingCentersPanel } from "@/components/municipality/SortingCentersPanel";
 
 interface ProfileWithCity {
   city_id: string | null;
@@ -201,22 +205,38 @@ const MunicipalityDashboard = () => {
 
         {/* Collection Management Tabs */}
         <Tabs defaultValue="reports" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="reports" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
+            <TabsTrigger value="reports" className="flex items-center gap-1">
               <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Reports</span>
+              <span className="hidden lg:inline">Reports</span>
             </TabsTrigger>
-            <TabsTrigger value="events" className="flex items-center gap-2">
+            <TabsTrigger value="events" className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
-              <span className="hidden sm:inline">Events</span>
+              <span className="hidden lg:inline">Events</span>
             </TabsTrigger>
-            <TabsTrigger value="routes" className="flex items-center gap-2">
+            <TabsTrigger value="routes" className="flex items-center gap-1">
               <Route className="h-4 w-4" />
-              <span className="hidden sm:inline">Routes</span>
+              <span className="hidden lg:inline">Routes</span>
             </TabsTrigger>
-            <TabsTrigger value="registrations" className="flex items-center gap-2">
+            <TabsTrigger value="registrations" className="flex items-center gap-1">
               <Users className="h-4 w-4" />
-              <span className="hidden sm:inline">Registrations</span>
+              <span className="hidden lg:inline">Registrations</span>
+            </TabsTrigger>
+            <TabsTrigger value="workers" className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              <span className="hidden lg:inline">Workers</span>
+            </TabsTrigger>
+            <TabsTrigger value="companies" className="flex items-center gap-1">
+              <Building2 className="h-4 w-4" />
+              <span className="hidden lg:inline">Companies</span>
+            </TabsTrigger>
+            <TabsTrigger value="discharge" className="flex items-center gap-1">
+              <Trash className="h-4 w-4" />
+              <span className="hidden lg:inline">Décharges</span>
+            </TabsTrigger>
+            <TabsTrigger value="sorting" className="flex items-center gap-1">
+              <Recycle className="h-4 w-4" />
+              <span className="hidden lg:inline">Centres tri</span>
             </TabsTrigger>
           </TabsList>
 
@@ -241,6 +261,22 @@ const MunicipalityDashboard = () => {
 
           <TabsContent value="registrations">
             <EventRegistrationsPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="workers">
+            <TeamWorkersPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="companies">
+            <PartnerCompaniesPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="discharge">
+            <DischargeSitesPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="sorting">
+            <SortingCentersPanel cityId={cityId} />
           </TabsContent>
         </Tabs>
       </div>
