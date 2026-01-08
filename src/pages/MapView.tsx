@@ -165,7 +165,7 @@ const MapView = () => {
                 variant="secondary" 
                 size="sm" 
                 asChild 
-                className="pointer-events-auto shadow-lg bg-card/95 backdrop-blur-md border border-border/50 hover:bg-card"
+                className="pointer-events-auto shadow-lg bg-card backdrop-blur-md border border-border hover:bg-accent text-foreground"
               >
                 <Link to="/cities-map">
                   <MapPin className="mr-2 h-4 w-4" />
@@ -214,7 +214,7 @@ const MapView = () => {
             <Button
               variant="secondary"
               size="lg"
-              className="shadow-lg bg-card/95 backdrop-blur-md border border-border/50 hover:bg-card gap-2"
+              className="shadow-lg bg-card backdrop-blur-md border border-border hover:bg-accent text-foreground gap-2"
               onClick={() => setSidebarOpen(true)}
             >
               <List className="w-5 h-5" />
