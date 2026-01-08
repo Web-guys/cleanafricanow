@@ -98,18 +98,25 @@
   "auth": {
     "welcome": "Welcome",
     "subtitle": "Sign in to report and track environmental issues",
-    "login": "Login",
+    "login": "Sign In",
     "signup": "Sign Up",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "fullName": "Full Name",
-    "role": "I am a",
+    "role": "Your Role",
     "roleHelp": "Choose your role to get the right experience",
     "signInButton": "Sign In",
     "createAccount": "Create Account",
-    "emailPlaceholder": "your@email.com",
+    "emailPlaceholder": "you@example.com",
     "namePlaceholder": "John Doe",
+    "heroTitle": "Make Your City Cleaner",
+    "heroDesc": "Join our community of environmental advocates and help create cleaner, safer spaces for everyone.",
+    "feature1": "Report environmental issues instantly",
+    "feature2": "Cover cities across Africa",
+    "feature3": "Join thousands of active citizens",
+    "feature4": "Track report resolution progress",
+    "poweredBy": "Powered by WebGuys Agency",
     "roles": {
       "citizen": "Citizen",
       "tourist": "Tourist",
@@ -666,5 +673,29 @@
     "resolutionRate": "resolution rate",
     "inYourCity": "In your city",
     "inYourRegions": "In your regions"
+  },
+  "testimonials": {
+    "title": "What People Are Saying",
+    "subtitle": "Real stories from citizens and officials making a difference"
+  },
+  "partners": {
+    "title": "Trusted by Leading Organizations"
+  },
+  "leaderboard": {
+    "title": "Community Leaderboard",
+    "subtitle": "Celebrating our top environmental champions",
+    "topContributors": "Top Contributors",
+    "rank": "Rank",
+    "name": "Name",
+    "reports": "Reports",
+    "impactScore": "Impact Score",
+    "badge": "Badge",
+    "yourRank": "Your Rank",
+    "howToEarn": "How to Earn Points",
+    "earnPoints": "Submit reports, get them verified, and see issues resolved to climb the leaderboard!",
+    "communityStats": "Community Stats",
+    "totalImpact": "Total Impact",
+    "totalContributors": "Total Contributors",
+    "totalReports": "Total Reports"
   }
 }

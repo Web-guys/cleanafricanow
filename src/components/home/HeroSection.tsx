@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2, AlertTriangle, Map, ArrowRight, Sparkles, Play, Zap, TrendingUp } from "lucide-react";
+import { Trash2, AlertTriangle, Map, ArrowRight, Sparkles, Zap, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,7 +35,7 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = "" }: { end: number; d
 
 const FloatingCard = ({ children, className = "", delay = "0s" }: { children: React.ReactNode; className?: string; delay?: string }) => (
   <div 
-    className={`absolute bg-card/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-border/50 p-4 animate-fade-in ${className}`}
+    className={`absolute bg-card/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-border p-4 animate-fade-in ${className}`}
     style={{ animationDelay: delay }}
   >
     {children}

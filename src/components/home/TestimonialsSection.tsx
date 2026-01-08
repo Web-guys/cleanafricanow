@@ -37,10 +37,10 @@ export const TestimonialsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-muted/30 dark:bg-muted/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">
+          <h3 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             {t('testimonials.title', 'Voices from the Community')}
           </h3>
           <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -52,10 +52,10 @@ export const TestimonialsSection = () => {
           {testimonials.map((testimonial) => (
             <Card 
               key={testimonial.id} 
-              className="border-2 border-transparent hover:border-primary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              className="border-2 border-border hover:border-primary/30 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <CardContent className="p-6">
-                <Quote className="h-8 w-8 text-primary/20 mb-4" />
+                <Quote className="h-8 w-8 text-primary/30 mb-4" />
                 
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   "{testimonial.content}"
@@ -75,7 +75,7 @@ export const TestimonialsSection = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
                     <p className="text-sm text-muted-foreground">
                       {testimonial.role} • {testimonial.location}
                     </p>

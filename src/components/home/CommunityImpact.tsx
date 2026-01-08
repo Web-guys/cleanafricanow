@@ -11,9 +11,9 @@ export const CommunityImpact = () => {
   const { data: stats } = useQuery({
     queryKey: ["public-impact-stats"],
     queryFn: async () => {
-      // Fetch all reports
+      // Fetch all reports using reports_public view for security
       const { data: reports, error: reportsError } = await supabase
-        .from("reports")
+        .from("reports_public")
         .select("id, status, category, city_id, created_at");
 
       if (reportsError) throw reportsError;
@@ -116,12 +116,12 @@ export const CommunityImpact = () => {
   ];
 
   return (
-    <section className="py-16 bg-muted/50">
+    <section className="py-16 bg-muted/50 dark:bg-muted/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Leaf className="h-8 w-8 text-primary" />
-            <h3 className="text-3xl md:text-4xl font-bold">{t("impact.title")}</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-foreground">{t("impact.title")}</h3>
           </div>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {t("impact.subtitle")}
@@ -133,7 +133,7 @@ export const CommunityImpact = () => {
           {impactStats.map((stat, index) => (
             <Card
               key={index}
-              className="border-2 border-border/50 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
+              className="border-2 border-border bg-card shadow-lg hover:shadow-xl transition-all hover:-translate-y-1"
             >
               <CardContent className="pt-6 text-center">
                 <div
@@ -144,7 +144,7 @@ export const CommunityImpact = () => {
                 <p className={`text-3xl md:text-4xl font-bold ${stat.color}`}>
                   {stat.value}
                 </p>
-                <p className="font-medium mt-1">{stat.label}</p>
+                <p className="font-medium mt-1 text-foreground">{stat.label}</p>
                 <p className="text-sm text-muted-foreground">{stat.sublabel}</p>
               </CardContent>
             </Card>
