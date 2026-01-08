@@ -1,1 +1,16 @@
 project_id = "csmdggopddxjixwsqnom"
+
+[functions.send-status-notification]
+verify_jwt = false
+
+[functions.rbac-permissions]
+verify_jwt = false
+
+[functions.role-management]
+verify_jwt = false
+
+[functions.organization-management]
+verify_jwt = false
+
+[functions.audit-logs]
+verify_jwt = false
