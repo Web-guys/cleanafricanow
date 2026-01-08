@@ -27,9 +27,10 @@ interface LeafletMapProps {
   onMarkerClick: (report: Report) => void;
   onMapClick?: (lat: number, lng: number) => void;
   showHeatmap?: boolean;
+  mapRef?: React.MutableRefObject<L.Map | null>;
 }
 
-const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHeatmap = false }: LeafletMapProps) => {
+const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHeatmap = false, mapRef: externalMapRef }: LeafletMapProps) => {
   const mapRef = useRef<L.Map | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tempMarkerRef = useRef<L.Marker | null>(null);
@@ -48,16 +49,21 @@ const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHe
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
     });
 
-    mapRef.current = L.map(containerRef.current).setView(
+    const map = L.map(containerRef.current, {
+      zoomControl: false, // We use custom controls
+    }).setView(
       MAP_CONFIG.defaultCenter,
       MAP_CONFIG.defaultZoom
     );
+    
+    mapRef.current = map;
+    if (externalMapRef) externalMapRef.current = map;
 
     L.tileLayer(MAP_CONFIG.tileLayer.url, {
       attribution: MAP_CONFIG.tileLayer.attribution,
       minZoom: MAP_CONFIG.minZoom,
       maxZoom: MAP_CONFIG.maxZoom,
-    }).addTo(mapRef.current);
+    }).addTo(map);
 
     // Initialize marker cluster group with custom styling
     clusterGroupRef.current = L.markerClusterGroup({
