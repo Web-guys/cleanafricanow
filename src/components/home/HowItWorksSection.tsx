@@ -46,14 +46,14 @@ export const HowItWorksSection = () => {
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
 
   return (
-    <section className="py-24 bg-gradient-to-b from-background via-muted/30 to-background overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-background via-muted/30 to-background dark:from-background dark:via-muted/10 dark:to-background overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-6">
             <span className="text-sm font-semibold text-primary">Simple Process</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">{t('howItWorks.title', 'How It Works')}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">{t('howItWorks.title', 'How It Works')}</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             {t('howItWorks.subtitle', 'Report environmental issues in just a few steps and track their resolution')}
           </p>
