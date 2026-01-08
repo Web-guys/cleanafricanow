@@ -16,8 +16,10 @@ import { z } from "zod";
 const citySchema = z.object({
   name: z.string().min(1, "City name is required"),
   country: z.string().min(1, "Country is required"),
+  region: z.string().optional(),
   latitude: z.coerce.number().min(-90).max(90),
   longitude: z.coerce.number().min(-180).max(180),
+  population: z.coerce.number().optional(),
 });
 
 const AdminCities = () => {
@@ -29,9 +31,12 @@ const AdminCities = () => {
   const [formData, setFormData] = useState({
     name: "",
     country: "Morocco",
+    region: "",
     latitude: 0 as number,
     longitude: 0 as number,
+    population: 0 as number,
   });
+  const [regionFilter, setRegionFilter] = useState<string>("all");
 
   const { data: cities } = useQuery({
     queryKey: ['admin-cities'],
@@ -101,9 +106,12 @@ const AdminCities = () => {
   });
 
   const resetForm = () => {
-    setFormData({ name: "", country: "Morocco", latitude: 0, longitude: 0 });
+    setFormData({ name: "", country: "Morocco", region: "", latitude: 0, longitude: 0, population: 0 });
     setEditingCity(null);
   };
+
+  const regions = cities ? [...new Set(cities.map(c => c.region).filter(Boolean))] : [];
+  const filteredCities = cities?.filter(c => regionFilter === "all" || c.region === regionFilter);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,8 +134,10 @@ const AdminCities = () => {
     setFormData({
       name: city.name,
       country: city.country,
+      region: city.region || "",
       latitude: Number(city.latitude),
       longitude: Number(city.longitude),
+      population: city.population || 0,
     });
     setIsOpen(true);
   };
@@ -159,9 +169,10 @@ const AdminCities = () => {
         <div className="container mx-auto px-4">
           <Card>
             <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle>{t('admin.cities.covered')} ({cities?.length || 0})</CardTitle>
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between items-center">
+                  <CardTitle>{t('admin.cities.covered')} ({filteredCities?.length || 0} / {cities?.length || 0})</CardTitle>
+                  <Dialog open={isOpen} onOpenChange={setIsOpen}>
                   <DialogTrigger asChild>
                     <Button onClick={resetForm}>
                       <Plus className="mr-2 h-4 w-4" />
@@ -189,6 +200,25 @@ const AdminCities = () => {
                           value={formData.country}
                           onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                           placeholder="Morocco"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="region">Region</Label>
+                        <Input
+                          id="region"
+                          value={formData.region}
+                          onChange={(e) => setFormData({ ...formData, region: e.target.value })}
+                          placeholder="Casablanca-Settat"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="population">Population</Label>
+                        <Input
+                          id="population"
+                          type="number"
+                          value={formData.population}
+                          onChange={(e) => setFormData({ ...formData, population: parseInt(e.target.value) || 0 })}
+                          placeholder="1000000"
                         />
                       </div>
                       <div>
@@ -223,7 +253,27 @@ const AdminCities = () => {
                       </div>
                     </form>
                   </DialogContent>
-                </Dialog>
+                  </Dialog>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <Button 
+                    variant={regionFilter === "all" ? "default" : "outline"} 
+                    size="sm"
+                    onClick={() => setRegionFilter("all")}
+                  >
+                    All Regions
+                  </Button>
+                  {regions.map(region => (
+                    <Button
+                      key={region}
+                      variant={regionFilter === region ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setRegionFilter(region!)}
+                    >
+                      {region}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -231,26 +281,31 @@ const AdminCities = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t('admin.cities.cityName')}</TableHead>
-                    <TableHead>{t('admin.cities.country')}</TableHead>
+                    <TableHead>Region</TableHead>
+                    <TableHead>Population</TableHead>
                     <TableHead>{t('admin.cities.latitude')}</TableHead>
                     <TableHead>{t('admin.cities.longitude')}</TableHead>
-                    <TableHead>{t('admin.cities.addedDate')}</TableHead>
                     <TableHead className="text-right">{t('common.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {cities?.map((city) => (
+                  {filteredCities?.map((city) => (
                     <TableRow key={city.id}>
-                      <TableCell className="font-semibold">{city.name}</TableCell>
-                      <TableCell>{city.country}</TableCell>
+                      <TableCell>
+                        <div>
+                          <span className="font-semibold">{city.name}</span>
+                          <span className="text-muted-foreground text-xs ml-2">{city.country}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm">{city.region || '-'}</TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {city.population?.toLocaleString() || '-'}
+                      </TableCell>
                       <TableCell className="font-mono text-sm">
                         {Number(city.latitude).toFixed(4)}
                       </TableCell>
                       <TableCell className="font-mono text-sm">
                         {Number(city.longitude).toFixed(4)}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(city.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
