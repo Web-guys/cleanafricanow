@@ -58,10 +58,29 @@ export const EventRegistrationsPanel = ({ cityId }: EventRegistrationsPanelProps
         })
         .eq('id', id);
       if (error) throw error;
+
+      // Send email notification for approved/rejected status
+      if (status === 'approved' || status === 'rejected') {
+        try {
+          const response = await supabase.functions.invoke('send-registration-notification', {
+            body: { registrationId: id, status }
+          });
+          if (response.error) {
+            console.error('Failed to send notification:', response.error);
+          }
+        } catch (e) {
+          console.error('Failed to send notification:', e);
+        }
+      }
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['event-registrations'] });
-      toast({ title: 'Registration Updated' });
+      const message = variables.status === 'approved' 
+        ? 'Registration approved & notification sent' 
+        : variables.status === 'rejected'
+        ? 'Registration rejected & notification sent'
+        : 'Registration updated';
+      toast({ title: message });
     },
     onError: (error: any) => {
       toast({ title: 'Error', description: error.message, variant: 'destructive' });
