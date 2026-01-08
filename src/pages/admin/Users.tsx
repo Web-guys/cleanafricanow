@@ -34,18 +34,21 @@ const Users = () => {
   const { data: users, isLoading } = useQuery({
     queryKey: ['admin-users'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select(`
-          *,
-          cities(name),
-          user_roles(role)
-        `)
-        .order('created_at', { ascending: false });
-      
+      // Use backend admin endpoint so RLS doesn't restrict the admin users list
+      const { data, error } = await supabase.functions.invoke('role-management', {
+        body: { action: 'list_users', page: 1, limit: 500 },
+      });
+
       if (error) throw error;
-      return data;
-    }
+      if (data?.error) throw new Error(data.error);
+
+      // Normalize to the shape this page already expects (user_roles)
+      const rawUsers = data?.users ?? [];
+      return rawUsers.map((u: any) => ({
+        ...u,
+        user_roles: (u.roles ?? []).map((r: string) => ({ role: r })),
+      }));
+    },
   });
 
   const { data: cities } = useQuery({
@@ -257,13 +260,16 @@ const Users = () => {
     const headers = ['Name', 'Email', 'Role', 'City', 'Joined'];
     const csvContent = [
       headers.join(','),
-      ...filteredUsers.map((user: any) => [
-        `"${user.full_name?.replace(/"/g, '""') || ''}"`,
-        user.email,
-        user.user_roles?.[0]?.role || 'citizen',
-        user.cities?.name || '',
-        new Date(user.created_at || '').toISOString()
-      ].join(','))
+      ...filteredUsers.map((user: any) => {
+        const cityName = cities?.find((c: any) => c.id === user.city_id)?.name || '';
+        return [
+          `"${user.full_name?.replace(/"/g, '""') || ''}"`,
+          user.email,
+          user.user_roles?.[0]?.role || 'citizen',
+          cityName,
+          new Date(user.created_at || '').toISOString(),
+        ].join(',');
+      }),
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
