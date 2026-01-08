@@ -233,14 +233,14 @@ const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHe
 
       const marker = L.marker([report.latitude, report.longitude], { icon })
         .bindPopup(`
-          <div style="min-width: 220px; padding: 8px;">
+          <div style="min-width: 220px; padding: 8px; background: hsl(var(--card)); color: hsl(var(--foreground)); border-radius: 8px;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
               <span style="font-size: 20px;">${emoji}</span>
-              <strong style="font-size: 14px; text-transform: capitalize;">${report.category.replace('_', ' ')}</strong>
+              <strong style="font-size: 14px; text-transform: capitalize; color: hsl(var(--foreground));">${report.category.replace('_', ' ')}</strong>
             </div>
-            <p style="margin: 8px 0; font-size: 13px; color: #666; line-height: 1.4;">${report.description.slice(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">
-              <span style="font-size: 11px; color: #999;">${new Date(report.created_at!).toLocaleDateString()}</span>
+            <p style="margin: 8px 0; font-size: 13px; color: hsl(var(--muted-foreground)); line-height: 1.4;">${report.description.slice(0, 100)}${report.description.length > 100 ? '...' : ''}</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid hsl(var(--border));">
+              <span style="font-size: 11px; color: hsl(var(--muted-foreground));">${new Date(report.created_at!).toLocaleDateString()}</span>
               <span style="
                 font-size: 10px;
                 padding: 2px 8px;
@@ -316,6 +316,19 @@ const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHe
         }
         .custom-cluster-icon {
           background: transparent !important;
+        }
+        /* Dark mode support for Leaflet popups */
+        .leaflet-popup-content-wrapper {
+          background: hsl(var(--card));
+          color: hsl(var(--foreground));
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .leaflet-popup-tip {
+          background: hsl(var(--card));
+        }
+        .leaflet-popup-content {
+          margin: 0;
         }
       `}</style>
       <div ref={containerRef} className="h-full w-full z-0" />

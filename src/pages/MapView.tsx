@@ -86,11 +86,16 @@ const MapView = () => {
         (position) => {
           mapRef.current?.flyTo(
             [position.coords.latitude, position.coords.longitude],
-            14,
+            16, // Higher zoom for better precision view
             { duration: 1 }
           );
         },
-        (error) => console.error('Geolocation error:', error)
+        (error) => console.error('Geolocation error:', error),
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
       );
     }
   }, []);
