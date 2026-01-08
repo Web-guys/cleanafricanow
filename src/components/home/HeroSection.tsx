@@ -129,11 +129,11 @@ export const HeroSection = () => {
 
             {/* Quick Report Buttons */}
             <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
-              <span className="text-sm text-primary-foreground/60 self-center mr-2">Quick report:</span>
+              <span className="text-sm text-primary-foreground/70 self-center mr-2">Quick report:</span>
               <Button 
                 size="sm" 
                 variant="secondary" 
-                className="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
+                className="bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-sm text-primary-foreground"
                 asChild
               >
                 <Link to="/report?category=waste">
@@ -144,7 +144,7 @@ export const HeroSection = () => {
               <Button 
                 size="sm" 
                 variant="secondary"
-                className="bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
+                className="bg-white/15 hover:bg-white/25 border border-white/20 backdrop-blur-sm text-primary-foreground"
                 asChild
               >
                 <Link to="/report?category=pollution">
