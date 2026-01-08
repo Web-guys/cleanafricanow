@@ -18,6 +18,8 @@ import AdminUsers from "./pages/admin/Users";
 import AdminOrganizations from "./pages/admin/Organizations";
 import AdminSLADashboard from "./pages/admin/SLADashboard";
 import AdminAuditLogs from "./pages/admin/AuditLogs";
+import AdminAIAnalysis from "./pages/admin/AIAnalysis";
+import AdminExport from "./pages/admin/Export";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
 import Mission from "./pages/Mission";
@@ -131,6 +133,22 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['admin']}>
                   <AdminAuditLogs />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/ai-analysis"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminAIAnalysis />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/export"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminExport />
                 </ProtectedRoute>
               }
             />

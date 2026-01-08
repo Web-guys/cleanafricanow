@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import type L from "leaflet";
 import { useTranslation } from "react-i18next";
 import { useReports, type Report } from "@/hooks/useReports";
+import { useRealtimeReports } from "@/hooks/useRealtimeReports";
 import MapHeader from "@/components/map/MapHeader";
 import LeafletMap from "@/components/map/LeafletMap";
 import CreateReportDialog from "@/components/map/CreateReportDialog";
@@ -36,6 +37,9 @@ const MapView = () => {
   // Create report dialog state
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [clickedLocation, setClickedLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Enable realtime updates for the map
+  useRealtimeReports();
 
   const { data: reports, isLoading } = useReports({
     categoryFilter,
