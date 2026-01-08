@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Clock, AlertTriangle, CheckCircle2, TrendingUp, MapPin, Download, RefreshCw } from "lucide-react";
+import { Clock, AlertTriangle, CheckCircle2, TrendingUp, MapPin, RefreshCw, BarChart3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -10,7 +10,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSLADashboard, useSLAOverdue, useSLADueSoon, useSLAStats, useSLAByTerritory } from "@/hooks/useAdminApi";
-import { format, formatDistanceToNow } from "date-fns";
+import {
+  SLAComplianceGauge,
+  SLAPriorityChart,
+  SLAStatusDistribution,
+  SLAResolutionMetrics,
+  SLAPriorityBreakdown,
+  SLATerritoryHeatmap,
+} from "@/components/admin/SLACharts";
 
 const AdminSLADashboard = () => {
   const { t } = useTranslation();
@@ -62,13 +69,13 @@ const AdminSLADashboard = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="border-l-4 border-l-red-500">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-3xl font-bold text-red-600">{stats?.overdue || 0}</p>
-                    <p className="text-sm text-muted-foreground">Overdue Reports</p>
+                    <p className="text-sm text-muted-foreground">Overdue</p>
                   </div>
                   <AlertTriangle className="h-8 w-8 text-red-500" />
                 </div>
@@ -92,7 +99,7 @@ const AdminSLADashboard = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-3xl font-bold text-blue-600">{stats?.due_this_week || 0}</p>
-                    <p className="text-sm text-muted-foreground">Due This Week</p>
+                    <p className="text-sm text-muted-foreground">This Week</p>
                   </div>
                   <TrendingUp className="h-8 w-8 text-blue-500" />
                 </div>
@@ -113,56 +120,21 @@ const AdminSLADashboard = () => {
           </div>
         )}
 
-        {/* By Priority */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>By Priority</CardTitle>
-              <CardDescription>Active reports grouped by priority level</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {["critical", "high", "medium", "low"].map((priority) => (
-                <div key={priority} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Badge className={getPriorityColor(priority)}>{priority}</Badge>
-                    <span className="text-sm font-medium">
-                      {stats?.by_priority?.[priority] || 0} reports
-                    </span>
-                  </div>
-                  <Progress
-                    value={stats?.total_active ? ((stats.by_priority?.[priority] || 0) / stats.total_active) * 100 : 0}
-                    className="w-32"
-                  />
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>SLA Compliance (30 Days)</CardTitle>
-              <CardDescription>Resolution performance metrics</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <p className="text-5xl font-bold text-primary">
-                  {statsData?.sla_compliance_rate || 0}%
-                </p>
-                <p className="text-sm text-muted-foreground">Overall Compliance Rate</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="text-center">
-                  <p className="text-2xl font-semibold">{statsData?.total_resolved || 0}</p>
-                  <p className="text-xs text-muted-foreground">Total Resolved</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-semibold">{statsData?.avg_resolution_hours || 0}h</p>
-                  <p className="text-xs text-muted-foreground">Avg Resolution Time</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <SLAComplianceGauge complianceRate={statsData?.sla_compliance_rate || 0} />
+          <SLAStatusDistribution stats={stats} />
+          <SLAResolutionMetrics statsData={statsData} />
         </div>
+
+        {/* Priority & Territory Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SLAPriorityChart byPriority={statsData?.by_priority || []} />
+          <SLAPriorityBreakdown byPriority={statsData?.by_priority || []} />
+        </div>
+
+        {/* Territory Heatmap */}
+        <SLATerritoryHeatmap territories={territoryData?.territories || []} />
 
         {/* Tabs for Overdue and Due Soon */}
         <Tabs defaultValue="overdue">
@@ -317,25 +289,33 @@ const AdminSLADashboard = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {territoryData?.territories?.map((territory: any) => (
-                      <TableRow key={territory.city_id}>
-                        <TableCell className="font-medium">{territory.city_name}</TableCell>
-                        <TableCell>{territory.total}</TableCell>
-                        <TableCell>
-                          <span className={territory.overdue > 0 ? "text-red-600 font-medium" : ""}>
-                            {territory.overdue}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span className={territory.due_soon > 0 ? "text-yellow-600 font-medium" : ""}>
-                            {territory.due_soon}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-green-600">{territory.on_track}</span>
+                    {territoryData?.territories?.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                          No territory data available
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      territoryData?.territories?.map((territory: any) => (
+                        <TableRow key={territory.city_id}>
+                          <TableCell className="font-medium">{territory.city_name}</TableCell>
+                          <TableCell>{territory.total}</TableCell>
+                          <TableCell>
+                            <span className={territory.overdue > 0 ? "text-red-600 font-medium" : ""}>
+                              {territory.overdue}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className={territory.due_soon > 0 ? "text-yellow-600 font-medium" : ""}>
+                              {territory.due_soon}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-green-600">{territory.on_track}</span>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </CardContent>
