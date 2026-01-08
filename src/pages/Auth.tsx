@@ -34,12 +34,14 @@ const signupSchema = z.object({
 const Auth = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user, signIn, signUp, getRoleBasedRedirect } = useAuth();
+  const { user, signIn, signUp, resetPassword, getRoleBasedRedirect } = useAuth();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState('');
@@ -313,7 +315,68 @@ const Auth = () => {
                         )}
                         {t('auth.signInButton', 'Sign In')}
                       </Button>
+                      <div className="text-center">
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-sm text-primary hover:underline"
+                        >
+                          {t('auth.forgotPassword', 'Forgot your password?')}
+                        </button>
+                      </div>
                     </form>
+
+                    {/* Forgot Password Dialog */}
+                    {showForgotPassword && (
+                      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                        <Card className="w-full max-w-md">
+                          <CardHeader>
+                            <CardTitle>{t('auth.resetPassword', 'Reset Password')}</CardTitle>
+                            <CardDescription>
+                              {t('auth.resetPasswordDesc', 'Enter your email and we\'ll send you a reset link.')}
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="reset-email">{t('auth.email', 'Email')}</Label>
+                              <Input
+                                id="reset-email"
+                                type="email"
+                                placeholder={t('auth.emailPlaceholder', 'you@example.com')}
+                                value={resetEmail}
+                                onChange={(e) => setResetEmail(e.target.value)}
+                                className="h-12"
+                              />
+                            </div>
+                            <div className="flex gap-3">
+                              <Button
+                                variant="outline"
+                                className="flex-1"
+                                onClick={() => {
+                                  setShowForgotPassword(false);
+                                  setResetEmail('');
+                                }}
+                              >
+                                {t('common.cancel', 'Cancel')}
+                              </Button>
+                              <Button
+                                className="flex-1"
+                                disabled={loading || !resetEmail}
+                                onClick={async () => {
+                                  setLoading(true);
+                                  await resetPassword(resetEmail);
+                                  setLoading(false);
+                                  setShowForgotPassword(false);
+                                  setResetEmail('');
+                                }}
+                              >
+                                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('auth.sendResetLink', 'Send Reset Link')}
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    )}
                   </TabsContent>
 
                   <TabsContent value="signup" className="mt-0 animate-fade-in">
