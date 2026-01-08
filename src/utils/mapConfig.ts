@@ -21,6 +21,25 @@ export const CATEGORY_COLORS: Record<string, string> = {
   deforestation: '#2ecc71'
 };
 
+export const REGION_COLORS: Record<string, string> = {
+  'Casablanca-Settat': '#E63946',
+  'Rabat-Salé-Kénitra': '#457B9D',
+  'Marrakech-Safi': '#E9C46A',
+  'Fès-Meknès': '#2A9D8F',
+  'Tanger-Tétouan-Al Hoceïma': '#264653',
+  'Oriental': '#F4A261',
+  'Béni Mellal-Khénifra': '#8338EC',
+  'Drâa-Tafilalet': '#FF006E',
+  'Souss-Massa': '#3A86FF',
+  'Guelmim-Oued Noun': '#FB5607',
+  'Laâyoune-Sakia El Hamra': '#FFBE0B',
+  'Dakhla-Oued Ed-Dahab': '#06D6A0'
+};
+
+export const getRegionColor = (region: string | null): string => {
+  return REGION_COLORS[region || ''] || '#6B7280';
+};
+
 export const CATEGORY_ICONS: Record<string, string> = {
   waste: '🗑️',
   pollution: '🏭',
