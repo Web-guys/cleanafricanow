@@ -303,6 +303,13 @@ export type Database = {
             referencedRelation: "reports"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "report_assignments_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       report_history: {
@@ -348,6 +355,13 @@ export type Database = {
             columns: ["report_id"]
             isOneToOne: false
             referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_history_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports_public"
             referencedColumns: ["id"]
           },
         ]
@@ -530,12 +544,132 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          city_id: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          impact_score: number | null
+          reports_count: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          impact_score?: number | null
+          reports_count?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          impact_score?: number | null
+          reports_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reports_public: {
+        Row: {
+          category: Database["public"]["Enums"]["report_category"] | null
+          city_id: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_deleted: boolean | null
+          latitude: number | null
+          longitude: number | null
+          photos: string[] | null
+          priority: Database["public"]["Enums"]["priority_level"] | null
+          resolved_at: string | null
+          sla_due_date: string | null
+          status: Database["public"]["Enums"]["report_status"] | null
+          updated_at: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["report_category"] | null
+          city_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_deleted?: boolean | null
+          latitude?: never
+          longitude?: never
+          photos?: string[] | null
+          priority?: Database["public"]["Enums"]["priority_level"] | null
+          resolved_at?: string | null
+          sla_due_date?: string | null
+          status?: Database["public"]["Enums"]["report_status"] | null
+          updated_at?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["report_category"] | null
+          city_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_deleted?: boolean | null
+          latitude?: never
+          longitude?: never
+          photos?: string[] | null
+          priority?: Database["public"]["Enums"]["priority_level"] | null
+          resolved_at?: string | null
+          sla_due_date?: string | null
+          status?: Database["public"]["Enums"]["report_status"] | null
+          updated_at?: string | null
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_access_territory: {
         Args: { _city_id: string; _user_id: string }
         Returns: boolean
+      }
+      can_view_full_profile: {
+        Args: { _profile_id: string; _viewer_id: string }
+        Returns: boolean
+      }
+      get_report_with_submitter: {
+        Args: { report_id: string }
+        Returns: {
+          category: string
+          city_id: string
+          created_at: string
+          description: string
+          id: string
+          latitude: number
+          longitude: number
+          photos: string[]
+          priority: string
+          status: string
+          submitter_id: string
+          submitter_name: string
+        }[]
       }
       get_user_organizations: { Args: { _user_id: string }; Returns: string[] }
       get_user_roles: {
