@@ -14,3 +14,15 @@ verify_jwt = false
 
 [functions.audit-logs]
 verify_jwt = false
+
+[functions.report-workflow]
+verify_jwt = false
+
+[functions.report-assignments]
+verify_jwt = false
+
+[functions.sla-tracking]
+verify_jwt = false
+
+[functions.analytics-export]
+verify_jwt = false
