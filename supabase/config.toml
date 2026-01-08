@@ -3,6 +3,9 @@ project_id = "csmdggopddxjixwsqnom"
 [functions.send-status-notification]
 verify_jwt = false
 
+[functions.send-sla-breach-notification]
+verify_jwt = false
+
 [functions.rbac-permissions]
 verify_jwt = false
 

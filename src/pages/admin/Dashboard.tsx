@@ -1,4 +1,4 @@
-import { Shield, TrendingUp, Clock, CheckCircle2, FileText, Building2, Users, Map, ScrollText, Gauge, BarChart3 } from "lucide-react";
+import { Shield, TrendingUp, Clock, CheckCircle2, FileText, Building2, Users, Map, ScrollText, Gauge, BarChart3, Brain, Download } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -79,6 +79,8 @@ const AdminDashboard = () => {
     { label: t('admin.users.title'), to: '/admin/users', icon: Users },
     { label: 'Organizations', to: '/admin/organizations', icon: Building2 },
     { label: 'SLA Dashboard', to: '/admin/sla', icon: Gauge },
+    { label: 'AI Analysis', to: '/admin/ai-analysis', icon: Brain },
+    { label: 'Export Data', to: '/admin/export', icon: Download },
     { label: 'Audit Logs', to: '/admin/audit-logs', icon: ScrollText },
     { label: t('nav.map'), to: '/map', icon: Map },
   ];
