@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import logo from "@/assets/cleanafricanow-logo.png";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -13,14 +14,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-6 animate-fade-in">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
-                <MapPin className="w-7 h-7 text-primary-foreground" />
-              </div>
+            <Link to="/" className="flex items-center gap-3">
+              <img src={logo} alt="CleanAfricaNow" className="w-12 h-12 object-contain" />
               <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 CleanAfricaNow
               </h3>
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
               {t('footer.tagline')}
             </p>
