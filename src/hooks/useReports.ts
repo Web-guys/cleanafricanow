@@ -12,6 +12,10 @@ export interface Report {
   photos: string[] | null;
   city_id: string | null;
   user_id: string | null;
+  priority?: string;
+  sla_due_date?: string;
+  verified_at?: string;
+  resolved_at?: string;
 }
 
 interface UseReportsOptions {

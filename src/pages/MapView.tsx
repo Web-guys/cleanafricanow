@@ -8,10 +8,14 @@ import SelectedReportCard from "@/components/map/SelectedReportCard";
 import LeafletMap from "@/components/map/LeafletMap";
 import CreateReportDialog from "@/components/map/CreateReportDialog";
 import CategoryFilterChips from "@/components/map/CategoryFilterChips";
+import ReportBottomSheet from "@/components/map/ReportBottomSheet";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { PanelLeft, Plus, MousePointerClick } from "lucide-react";
+import { Toggle } from "@/components/ui/toggle";
+import { PanelLeft, Plus, MousePointerClick, Flame, MapPin } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SidebarContentProps {
   categoryFilter: string;
@@ -75,10 +79,13 @@ const SidebarContent = ({
 const MapView = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [heatmapEnabled, setHeatmapEnabled] = useState(false);
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   
   // Create report dialog state
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -91,14 +98,21 @@ const MapView = () => {
 
   const handleReportClick = (report: Report) => {
     setSelectedReport(report);
+    if (isMobile) {
+      setBottomSheetOpen(true);
+    }
   };
 
   const handleMarkerClick = (report: Report) => {
     setSelectedReport(report);
+    if (isMobile) {
+      setBottomSheetOpen(true);
+    }
   };
 
   const handleCloseReport = () => {
     setSelectedReport(null);
+    setBottomSheetOpen(false);
   };
 
   const handleMapClick = (lat: number, lng: number) => {
@@ -131,16 +145,36 @@ const MapView = () => {
       {/* Category filter chips - visible on desktop */}
       <div className="hidden lg:block border-b border-border bg-card/50 backdrop-blur-sm px-4 py-3">
         <div className="flex items-center justify-between gap-4">
-          <CategoryFilterChips
-            selectedCategory={categoryFilter}
-            onCategoryChange={setCategoryFilter}
-          />
-          {user && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <MousePointerClick className="h-4 w-4" />
-              <span>Click map to report</span>
-            </div>
-          )}
+          <div className="flex items-center gap-4">
+            <CategoryFilterChips
+              selectedCategory={categoryFilter}
+              onCategoryChange={setCategoryFilter}
+            />
+            <div className="h-6 w-px bg-border" />
+            <Toggle
+              pressed={heatmapEnabled}
+              onPressedChange={setHeatmapEnabled}
+              aria-label="Toggle heatmap"
+              className="gap-2"
+            >
+              <Flame className="h-4 w-4" />
+              Heatmap
+            </Toggle>
+          </div>
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="sm" asChild>
+              <Link to="/cities-map">
+                <MapPin className="mr-2 h-4 w-4" />
+                Cities Map
+              </Link>
+            </Button>
+            {user && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MousePointerClick className="h-4 w-4" />
+                <span>Click map to report</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -164,6 +198,7 @@ const MapView = () => {
             selectedReport={selectedReport}
             onMarkerClick={handleMarkerClick}
             onMapClick={user ? handleMapClick : undefined}
+            showHeatmap={heatmapEnabled}
           />
           
           {/* Mobile floating buttons */}
@@ -217,6 +252,13 @@ const MapView = () => {
           longitude={clickedLocation.lng}
         />
       )}
+
+      {/* Mobile Report Bottom Sheet */}
+      <ReportBottomSheet
+        report={selectedReport}
+        open={bottomSheetOpen}
+        onOpenChange={setBottomSheetOpen}
+      />
     </div>
   );
 };

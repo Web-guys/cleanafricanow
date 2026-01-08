@@ -54,12 +54,20 @@ export const FeaturedCities = () => {
           ))}
         </div>
 
-        <div className="text-center mt-8">
+        <div className="text-center mt-8 flex flex-wrap gap-4 justify-center">
           <Link 
             to="/map" 
             className="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2"
           >
             {t('cities.viewAll', 'View all cities on map')}
+            <span>→</span>
+          </Link>
+          <span className="text-muted-foreground">|</span>
+          <Link 
+            to="/cities-map" 
+            className="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2"
+          >
+            Explore all {cities.length}+ Moroccan cities
             <span>→</span>
           </Link>
         </div>
