@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
-import { Menu, Home, Map, FileText, User, LogOut, Shield, Building2, Heart, X, MapPin } from "lucide-react";
+import { Menu, Home, Map, FileText, User, LogOut, Shield, Building2, Heart, X, MapPin, Trophy } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 
@@ -47,6 +47,7 @@ export const MobileNav = () => {
           <nav className="flex-1 overflow-y-auto p-4 space-y-2">
             <NavLink to="/" icon={Home}>{t('nav.home')}</NavLink>
             <NavLink to="/map" icon={Map}>{t('nav.map')}</NavLink>
+            <NavLink to="/leaderboard" icon={Trophy}>Leaderboard</NavLink>
             <NavLink to="/cities-map" icon={MapPin}>Cities Map</NavLink>
             
             {user && (

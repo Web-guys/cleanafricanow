@@ -35,6 +35,7 @@ import Cookies from "./pages/Cookies";
 import Support from "./pages/Support";
 import Profile from "./pages/Profile";
 import CitiesMapView from "./pages/CitiesMapView";
+import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/map" element={<MapView />} />
             <Route path="/cities-map" element={<CitiesMapView />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/mission" element={<Mission />} />

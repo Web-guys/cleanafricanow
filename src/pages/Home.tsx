@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Trash2, AlertTriangle, MapPin, Map, LogOut, User, TrendingUp } from "lucide-react";
+import { Trash2, AlertTriangle, MapPin, Map, LogOut, User, TrendingUp, Trophy } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
@@ -33,6 +33,12 @@ const Home = () => {
             </Button>
             <Button variant="ghost" asChild>
               <Link to="/map">{t('nav.map')}</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link to="/leaderboard">
+                <Trophy className="mr-2 h-4 w-4" />
+                Leaderboard
+              </Link>
             </Button>
             {user ? (
               <>
