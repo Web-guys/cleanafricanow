@@ -139,8 +139,7 @@ const handler = async (req: Request): Promise<Response> => {
           .from("reports")
           .select(`
             *,
-            cities:city_id (id, name),
-            profiles:user_id (id, full_name)
+            cities:city_id (id, name)
           `, { count: "exact" })
           .lt("sla_due_date", now)
           .not("status", "in", "(resolved,rejected)")
@@ -176,8 +175,7 @@ const handler = async (req: Request): Promise<Response> => {
           .from("reports")
           .select(`
             *,
-            cities:city_id (id, name),
-            profiles:user_id (id, full_name)
+            cities:city_id (id, name)
           `, { count: "exact" })
           .gte("sla_due_date", now)
           .lte("sla_due_date", tomorrow)
