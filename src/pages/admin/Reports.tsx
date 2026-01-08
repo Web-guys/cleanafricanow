@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { MapPin, ArrowLeft, Search, Download } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { MapPin, ArrowLeft, Search, Download, CheckSquare, Square } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -19,6 +20,7 @@ const AdminReports = () => {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedReports, setSelectedReports] = useState<Set<string>>(new Set());
 
   const { data: reports, isLoading } = useQuery({
     queryKey: ['admin-all-reports', categoryFilter, statusFilter],
@@ -51,6 +53,25 @@ const AdminReports = () => {
     );
   }, [reports, searchQuery]);
 
+  // Selection handlers
+  const toggleSelectAll = () => {
+    if (selectedReports.size === filteredReports.length) {
+      setSelectedReports(new Set());
+    } else {
+      setSelectedReports(new Set(filteredReports.map(r => r.id)));
+    }
+  };
+
+  const toggleSelectReport = (id: string) => {
+    const newSelected = new Set(selectedReports);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedReports(newSelected);
+  };
+
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status, oldStatus }: { id: string; status: string; oldStatus: string }) => {
       const { error } = await supabase
@@ -80,6 +101,34 @@ const AdminReports = () => {
       toast({
         title: t('admin.reports.updateSuccess'),
         description: t('admin.reports.updateMessage'),
+      });
+    },
+    onError: () => {
+      toast({
+        title: t('admin.reports.updateFailed'),
+        description: t('admin.reports.updateFailedMessage'),
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Bulk update mutation
+  const bulkUpdateMutation = useMutation({
+    mutationFn: async ({ ids, status }: { ids: string[]; status: string }) => {
+      const { error } = await supabase
+        .from('reports')
+        .update({ status: status as any })
+        .in('id', ids);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-all-reports'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-stats'] });
+      setSelectedReports(new Set());
+      toast({
+        title: t('admin.reports.bulkUpdateSuccess', 'Bulk Update Successful'),
+        description: t('admin.reports.bulkUpdateMessage', 'Selected reports have been updated.'),
       });
     },
     onError: () => {
@@ -163,12 +212,42 @@ const AdminReports = () => {
           <Card>
             <CardHeader>
               <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center gap-4">
                   <CardTitle>{t('admin.reports.manage')} ({filteredReports.length})</CardTitle>
-                  <Button onClick={exportToCSV} variant="outline" disabled={!filteredReports.length}>
-                    <Download className="mr-2 h-4 w-4" />
-                    {t('admin.reports.exportCSV')}
-                  </Button>
+                  <div className="flex gap-2 flex-wrap">
+                    {selectedReports.size > 0 && (
+                      <>
+                        <Select
+                          onValueChange={(status) => 
+                            bulkUpdateMutation.mutate({ 
+                              ids: Array.from(selectedReports), 
+                              status 
+                            })
+                          }
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder={t('admin.reports.bulkUpdateStatus', `Update ${selectedReports.size} selected`)} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">{t('report.status.pending')}</SelectItem>
+                            <SelectItem value="in_progress">{t('report.status.inProgress')}</SelectItem>
+                            <SelectItem value="resolved">{t('report.status.resolved')}</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setSelectedReports(new Set())}
+                        >
+                          {t('common.clearSelection', 'Clear')}
+                        </Button>
+                      </>
+                    )}
+                    <Button onClick={exportToCSV} variant="outline" disabled={!filteredReports.length}>
+                      <Download className="mr-2 h-4 w-4" />
+                      {t('admin.reports.exportCSV')}
+                    </Button>
+                  </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <div className="relative flex-1 min-w-[200px]">
@@ -220,6 +299,12 @@ const AdminReports = () => {
                   <Table>
                     <TableHeader>
                       <TableRow>
+                        <TableHead className="w-[50px]">
+                          <Checkbox
+                            checked={selectedReports.size === filteredReports.length && filteredReports.length > 0}
+                            onCheckedChange={toggleSelectAll}
+                          />
+                        </TableHead>
                         <TableHead>{t('admin.reports.id')}</TableHead>
                         <TableHead>{t('admin.reports.category')}</TableHead>
                         <TableHead>{t('admin.reports.description')}</TableHead>
@@ -231,7 +316,13 @@ const AdminReports = () => {
                     </TableHeader>
                     <TableBody>
                       {filteredReports.map((report) => (
-                        <TableRow key={report.id}>
+                        <TableRow key={report.id} className={selectedReports.has(report.id) ? "bg-muted/50" : ""}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedReports.has(report.id)}
+                              onCheckedChange={() => toggleSelectReport(report.id)}
+                            />
+                          </TableCell>
                           <TableCell className="font-mono text-xs">
                             {report.id.slice(0, 8)}...
                           </TableCell>

@@ -9,7 +9,8 @@
     "edit": "Edit",
     "loading": "Loading...",
     "submit": "Submit",
-    "actions": "Actions"
+    "actions": "Actions",
+    "clearSelection": "Clear"
   },
   "nav": {
     "home": "Home",
@@ -227,7 +228,10 @@
       "exportCSV": "Export CSV",
       "exportSuccess": "Export successful",
       "exportMessage": "Reports have been exported to CSV.",
-      "noResults": "No reports found"
+      "noResults": "No reports found",
+      "bulkUpdateStatus": "Update selected",
+      "bulkUpdateSuccess": "Bulk Update Successful",
+      "bulkUpdateMessage": "Selected reports have been updated."
     },
     "users": {
       "title": "User Management",
@@ -283,7 +287,11 @@
       "reportsOverTime": "Reports Over Time (Last 30 Days)",
       "byCategory": "By Category",
       "byStatus": "By Status",
-      "noData": "No data available"
+      "noData": "No data available",
+      "liveUpdates": "Live updates enabled",
+      "monthlyTrend": "Monthly Report Trend",
+      "topCities": "Top Reporting Cities",
+      "totalReports": "Total Reports"
     }
   },
   "about": {

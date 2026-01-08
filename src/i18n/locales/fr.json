@@ -227,7 +227,10 @@
       "exportCSV": "Exporter CSV",
       "exportSuccess": "Export réussi",
       "exportMessage": "Les signalements ont été exportés en CSV.",
-      "noResults": "Aucun signalement trouvé"
+      "noResults": "Aucun signalement trouvé",
+      "bulkUpdateStatus": "Mettre à jour la sélection",
+      "bulkUpdateSuccess": "Mise à jour groupée réussie",
+      "bulkUpdateMessage": "Les signalements sélectionnés ont été mis à jour."
     },
     "users": {
       "title": "Gestion des Utilisateurs",
@@ -283,7 +286,11 @@
       "reportsOverTime": "Signalements au Fil du Temps (30 Derniers Jours)",
       "byCategory": "Par Catégorie",
       "byStatus": "Par Statut",
-      "noData": "Aucune donnée disponible"
+      "noData": "Aucune donnée disponible",
+      "liveUpdates": "Mises à jour en direct activées",
+      "monthlyTrend": "Tendance mensuelle des signalements",
+      "topCities": "Villes les plus actives",
+      "totalReports": "Total des signalements"
     }
   },
   "about": {
