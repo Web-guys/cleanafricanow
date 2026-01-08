@@ -19,25 +19,34 @@ export type Database = {
           country: string
           created_at: string | null
           id: string
+          is_municipality: boolean | null
           latitude: number
           longitude: number
           name: string
+          population: number | null
+          region: string | null
         }
         Insert: {
           country?: string
           created_at?: string | null
           id?: string
+          is_municipality?: boolean | null
           latitude: number
           longitude: number
           name: string
+          population?: number | null
+          region?: string | null
         }
         Update: {
           country?: string
           created_at?: string | null
           id?: string
+          is_municipality?: boolean | null
           latitude?: number
           longitude?: number
           name?: string
+          population?: number | null
+          region?: string | null
         }
         Relationships: []
       }
