@@ -11,11 +11,12 @@ export interface Report {
   created_at: string;
   photos: string[] | null;
   city_id: string | null;
-  user_id: string | null;
   priority?: string;
   sla_due_date?: string;
   verified_at?: string;
   resolved_at?: string;
+  updated_at?: string;
+  is_deleted?: boolean;
 }
 
 interface UseReportsOptions {
@@ -29,7 +30,8 @@ export const useReports = (options: UseReportsOptions = {}) => {
   return useQuery({
     queryKey: ['reports', categoryFilter, statusFilter],
     queryFn: async () => {
-      let query = supabase.from('reports').select('*');
+      // Use reports_public view which excludes sensitive user_id field
+      let query = supabase.from('reports_public').select('*');
       
       if (categoryFilter !== 'all') {
         query = query.eq('category', categoryFilter as any);
@@ -49,7 +51,8 @@ export const useReportStats = () => {
   return useQuery({
     queryKey: ['report-stats'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('reports').select('status');
+      // Use reports_public view which excludes sensitive user_id field
+      const { data, error } = await supabase.from('reports_public').select('status');
       if (error) throw error;
       
       const stats = {
