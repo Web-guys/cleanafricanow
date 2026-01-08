@@ -15,6 +15,9 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminReports from "./pages/admin/Reports";
 import AdminCities from "./pages/admin/Cities";
 import AdminUsers from "./pages/admin/Users";
+import AdminOrganizations from "./pages/admin/Organizations";
+import AdminSLADashboard from "./pages/admin/SLADashboard";
+import AdminAuditLogs from "./pages/admin/AuditLogs";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
 import Mission from "./pages/Mission";
@@ -102,6 +105,30 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['admin']}>
                   <AdminUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/organizations"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminOrganizations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/sla"
+              element={
+                <ProtectedRoute requiredRoles={['admin', 'municipality', 'ngo']}>
+                  <AdminSLADashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/audit-logs"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminAuditLogs />
                 </ProtectedRoute>
               }
             />
