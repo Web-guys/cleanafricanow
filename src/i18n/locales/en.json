@@ -57,12 +57,15 @@
   },
   "howItWorks": {
     "title": "How It Works",
-    "step1Title": "1. Spot an Issue",
+    "subtitle": "Report environmental issues in just a few steps and track their resolution",
+    "step1Title": "Spot an Issue",
     "step1Desc": "Notice waste, pollution, or environmental danger in your area",
-    "step2Title": "2. Report It",
+    "step2Title": "Report It",
     "step2Desc": "Fill out a quick form with photos and location details",
-    "step3Title": "3. Track Progress",
-    "step3Desc": "See your report on the map and track its resolution status"
+    "step3Title": "Track Progress",
+    "step3Desc": "See your report on the map and track its resolution status",
+    "step4Title": "Issue Resolved",
+    "step4Desc": "Watch as authorities address the problem and mark it resolved"
   },
   "cta": {
     "title": "Ready to Make a Difference?",
