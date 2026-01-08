@@ -9,7 +9,8 @@
     "edit": "Modifier",
     "loading": "Chargement...",
     "submit": "Soumettre",
-    "actions": "Actions"
+    "actions": "Actions",
+    "clearSelection": "Effacer"
   },
   "nav": {
     "home": "Accueil",
@@ -56,12 +57,15 @@
   },
   "howItWorks": {
     "title": "Comment Ça Marche",
-    "step1Title": "1. Repérez un Problème",
+    "subtitle": "Signalez les problèmes environnementaux en quelques étapes et suivez leur résolution",
+    "step1Title": "Repérez un Problème",
     "step1Desc": "Remarquez des déchets, de la pollution ou un danger environnemental dans votre région",
-    "step2Title": "2. Signalez-le",
+    "step2Title": "Signalez-le",
     "step2Desc": "Remplissez un formulaire rapide avec des photos et des détails de localisation",
-    "step3Title": "3. Suivez la Progression",
-    "step3Desc": "Consultez votre signalement sur la carte et suivez son statut de résolution"
+    "step3Title": "Suivez la Progression",
+    "step3Desc": "Consultez votre signalement sur la carte et suivez son statut de résolution",
+    "step4Title": "Problème Résolu",
+    "step4Desc": "Regardez les autorités résoudre le problème et le marquer comme résolu"
   },
   "cta": {
     "title": "Prêt à Faire la Différence ?",
@@ -106,6 +110,13 @@
     "createAccount": "Créer un compte",
     "emailPlaceholder": "votre@email.com",
     "namePlaceholder": "Jean Dupont",
+    "heroTitle": "Rendez Votre Ville Plus Propre",
+    "heroDesc": "Rejoignez notre communauté de défenseurs de l'environnement et aidez à créer des espaces plus propres et plus sûrs pour tous.",
+    "feature1": "Signalez les problèmes environnementaux instantanément",
+    "feature2": "Couvrez les villes à travers l'Afrique",
+    "feature3": "Rejoignez des milliers de citoyens actifs",
+    "feature4": "Suivez la résolution des signalements",
+    "poweredBy": "Propulsé par WebGuys Agency",
     "roles": {
       "citizen": "Citoyen",
       "tourist": "Touriste",
@@ -637,30 +648,54 @@
       "phoneSupport": "Support Téléphonique",
       "phoneSupportDesc": "Lun-Ven, 9h-18h",
       "faq1Q": "Comment soumettre un signalement environnemental ?",
-      "faq1A": "Cliquez sur 'Signaler' dans le menu de navigation, remplissez le formulaire avec les détails du problème, ajoutez des photos si possible, et soumettez. Votre signalement sera examiné et ajouté à la carte.",
+      "faq1A": "Cliquez sur 'Signaler' dans le menu de navigation, remplissez le formulaire avec les détails du problème, ajoutez des photos si possible et soumettez. Votre signalement sera examiné et ajouté à la carte.",
       "faq2Q": "Quels types de problèmes puis-je signaler ?",
-      "faq2A": "Vous pouvez signaler divers problèmes environnementaux incluant le dépôt de déchets, la pollution de l'eau, les problèmes de qualité de l'air, la pollution sonore, le déversement illégal et la déforestation.",
+      "faq2A": "Vous pouvez signaler divers problèmes environnementaux, y compris les décharges sauvages, la pollution de l'eau, les problèmes de qualité de l'air, la pollution sonore, les déversements illégaux et la déforestation.",
       "faq3Q": "Combien de temps faut-il pour traiter un signalement ?",
-      "faq3A": "Les signalements sont généralement examinés sous 24-48 heures. Une fois approuvés, ils apparaissent sur la carte publique. Le temps de résolution dépend des autorités locales et de la nature du problème.",
+      "faq3A": "Les signalements sont généralement examinés dans les 24-48 heures. Une fois approuvés, ils apparaissent sur la carte publique. Le temps de résolution dépend des autorités locales et de la nature du problème.",
       "faq4Q": "Puis-je signaler des problèmes anonymement ?",
-      "faq4A": "Bien que vous ayez besoin d'un compte pour soumettre des signalements, vos informations personnelles ne sont pas affichées publiquement. Seuls les détails du signalement et la localisation sont visibles sur la carte.",
+      "faq4A": "Bien que vous ayez besoin d'un compte pour soumettre des signalements, vos informations personnelles ne sont pas affichées publiquement. Seuls les détails du signalement et l'emplacement sont visibles sur la carte.",
       "faq5Q": "Comment suivre le statut de mon signalement ?",
-      "faq5A": "Connectez-vous à votre compte et visitez la page Carte. Vos signalements afficheront leur statut actuel : En Attente, En Cours ou Résolu.",
+      "faq5A": "Connectez-vous à votre compte et visitez la page Carte. Vos signalements afficheront leur statut actuel : En attente, En cours ou Résolu.",
       "faq6Q": "Que se passe-t-il après avoir soumis un signalement ?",
       "faq6A": "Votre signalement est examiné par notre équipe, puis transmis aux autorités locales ou ONG appropriées. Vous recevrez des mises à jour lorsque le statut change."
     }
   },
   "cities": {
     "featured": "Villes Couvertes",
-    "featuredDesc": "Signalez les problèmes environnementaux dans les grandes villes marocaines",
+    "featuredDesc": "Signalez les problèmes environnementaux dans les principales villes marocaines",
     "viewAll": "Voir toutes les villes sur la carte"
   },
   "dashboard": {
     "quickActions": "Actions Rapides",
     "needsAttention": "Nécessite attention",
-    "beingProcessed": "En cours de traitement",
+    "beingProcessed": "En traitement",
     "resolutionRate": "taux de résolution",
     "inYourCity": "Dans votre ville",
     "inYourRegions": "Dans vos régions"
+  },
+  "testimonials": {
+    "title": "Ce que Disent les Gens",
+    "subtitle": "Des histoires vraies de citoyens et d'officiels qui font la différence"
+  },
+  "partners": {
+    "title": "Approuvé par les Grandes Organisations"
+  },
+  "leaderboard": {
+    "title": "Classement Communautaire",
+    "subtitle": "Célébrons nos meilleurs champions environnementaux",
+    "topContributors": "Meilleurs Contributeurs",
+    "rank": "Rang",
+    "name": "Nom",
+    "reports": "Signalements",
+    "impactScore": "Score d'Impact",
+    "badge": "Badge",
+    "yourRank": "Votre Classement",
+    "howToEarn": "Comment Gagner des Points",
+    "earnPoints": "Soumettez des signalements, faites-les vérifier et voyez les problèmes résolus pour monter dans le classement !",
+    "communityStats": "Statistiques Communautaires",
+    "totalImpact": "Impact Total",
+    "totalContributors": "Total des Contributeurs",
+    "totalReports": "Total des Signalements"
   }
 }

@@ -9,7 +9,8 @@
     "edit": "Editar",
     "loading": "Cargando...",
     "submit": "Enviar",
-    "actions": "Acciones"
+    "actions": "Acciones",
+    "clearSelection": "Limpiar"
   },
   "nav": {
     "home": "Inicio",
@@ -56,12 +57,15 @@
   },
   "howItWorks": {
     "title": "Cómo Funciona",
-    "step1Title": "1. Detecta un Problema",
+    "subtitle": "Reporta problemas ambientales en pocos pasos y sigue su resolución",
+    "step1Title": "Detecta un Problema",
     "step1Desc": "Observa residuos, contaminación o peligros ambientales en tu área",
-    "step2Title": "2. Repórtalo",
+    "step2Title": "Repórtalo",
     "step2Desc": "Completa un formulario rápido con fotos y detalles de ubicación",
-    "step3Title": "3. Sigue el Progreso",
-    "step3Desc": "Ve tu reporte en el mapa y sigue el estado de su resolución"
+    "step3Title": "Sigue el Progreso",
+    "step3Desc": "Ve tu reporte en el mapa y sigue el estado de su resolución",
+    "step4Title": "Problema Resuelto",
+    "step4Desc": "Observa cómo las autoridades abordan el problema y lo marcan como resuelto"
   },
   "cta": {
     "title": "¿Listo para Hacer la Diferencia?",
@@ -106,6 +110,13 @@
     "createAccount": "Crear Cuenta",
     "emailPlaceholder": "tu@correo.com",
     "namePlaceholder": "Juan García",
+    "heroTitle": "Haz Tu Ciudad Más Limpia",
+    "heroDesc": "Únete a nuestra comunidad de defensores ambientales y ayuda a crear espacios más limpios y seguros para todos.",
+    "feature1": "Reporta problemas ambientales al instante",
+    "feature2": "Cubre ciudades en toda África",
+    "feature3": "Únete a miles de ciudadanos activos",
+    "feature4": "Sigue el progreso de resolución de reportes",
+    "poweredBy": "Impulsado por WebGuys Agency",
     "roles": {
       "citizen": "Ciudadano",
       "tourist": "Turista",
@@ -227,7 +238,10 @@
       "exportCSV": "Exportar CSV",
       "exportSuccess": "Exportación exitosa",
       "exportMessage": "Los reportes han sido exportados a CSV.",
-      "noResults": "No se encontraron reportes"
+      "noResults": "No se encontraron reportes",
+      "bulkUpdateStatus": "Actualizar selección",
+      "bulkUpdateSuccess": "Actualización masiva exitosa",
+      "bulkUpdateMessage": "Los reportes seleccionados han sido actualizados."
     },
     "users": {
       "title": "Gestión de Usuarios",
@@ -283,7 +297,11 @@
       "reportsOverTime": "Reportes en el Tiempo (Últimos 30 Días)",
       "byCategory": "Por Categoría",
       "byStatus": "Por Estado",
-      "noData": "Sin datos disponibles"
+      "noData": "Sin datos disponibles",
+      "liveUpdates": "Actualizaciones en vivo activadas",
+      "monthlyTrend": "Tendencia mensual de reportes",
+      "topCities": "Ciudades más activas",
+      "totalReports": "Total de reportes"
     }
   },
   "about": {
@@ -655,5 +673,29 @@
     "resolutionRate": "tasa de resolución",
     "inYourCity": "En tu ciudad",
     "inYourRegions": "En tus regiones"
+  },
+  "testimonials": {
+    "title": "Lo Que Dice la Gente",
+    "subtitle": "Historias reales de ciudadanos y funcionarios haciendo la diferencia"
+  },
+  "partners": {
+    "title": "Respaldado por Organizaciones Líderes"
+  },
+  "leaderboard": {
+    "title": "Clasificación Comunitaria",
+    "subtitle": "Celebrando a nuestros mejores campeones ambientales",
+    "topContributors": "Principales Contribuyentes",
+    "rank": "Posición",
+    "name": "Nombre",
+    "reports": "Reportes",
+    "impactScore": "Puntuación de Impacto",
+    "badge": "Insignia",
+    "yourRank": "Tu Posición",
+    "howToEarn": "Cómo Ganar Puntos",
+    "earnPoints": "¡Envía reportes, haz que sean verificados y ve los problemas resueltos para subir en la clasificación!",
+    "communityStats": "Estadísticas Comunitarias",
+    "totalImpact": "Impacto Total",
+    "totalContributors": "Total de Contribuyentes",
+    "totalReports": "Total de Reportes"
   }
 }
