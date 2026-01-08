@@ -6,9 +6,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, UserCog, Search, Download, MapPin } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { ArrowLeft, UserCog, Search, Download, MapPin, UserPlus, Trash2 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -21,6 +23,13 @@ const Users = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [selectedNgoUser, setSelectedNgoUser] = useState<string | null>(null);
+  
+  // Add user dialog state
+  const [addUserOpen, setAddUserOpen] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserFullName, setNewUserFullName] = useState('');
+  const [newUserRole, setNewUserRole] = useState<string>('citizen');
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['admin-users'],
@@ -173,6 +182,75 @@ const Users = () => {
       });
     }
   });
+
+  // Add user mutation
+  const addUserMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke('admin-user-management', {
+        body: {
+          action: 'create_user',
+          email: newUserEmail,
+          password: newUserPassword,
+          full_name: newUserFullName,
+          role: newUserRole
+        }
+      });
+      
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      setAddUserOpen(false);
+      setNewUserEmail('');
+      setNewUserPassword('');
+      setNewUserFullName('');
+      setNewUserRole('citizen');
+      toast({
+        title: t('admin.users.addSuccess', 'User Added'),
+        description: t('admin.users.addSuccessMessage', 'New user has been created successfully'),
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: t('admin.users.error'),
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Delete user mutation
+  const deleteUserMutation = useMutation({
+    mutationFn: async (userId: string) => {
+      const { data, error } = await supabase.functions.invoke('admin-user-management', {
+        body: {
+          action: 'delete_user',
+          user_id: userId
+        }
+      });
+      
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
+      toast({
+        title: t('admin.users.deleteSuccess', 'User Deleted'),
+        description: t('admin.users.deleteSuccessMessage', 'User has been deleted successfully'),
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: t('admin.users.error'),
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
   const exportToCSV = () => {
     if (!filteredUsers.length) return;
 
@@ -243,10 +321,85 @@ const Users = () => {
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <CardTitle>{t('admin.users.allUsers')} ({filteredUsers.length})</CardTitle>
-                <Button onClick={exportToCSV} variant="outline" disabled={!filteredUsers.length}>
-                  <Download className="mr-2 h-4 w-4" />
-                  {t('admin.users.exportCSV')}
-                </Button>
+                <div className="flex gap-2">
+                  <Dialog open={addUserOpen} onOpenChange={setAddUserOpen}>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        {t('admin.users.addUser', 'Add User')}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>{t('admin.users.addNewUser', 'Add New User')}</DialogTitle>
+                        <DialogDescription>
+                          {t('admin.users.addUserDesc', 'Create a new user account with the specified details.')}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="fullName">{t('admin.users.name')}</Label>
+                          <Input
+                            id="fullName"
+                            placeholder="John Doe"
+                            value={newUserFullName}
+                            onChange={(e) => setNewUserFullName(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">{t('admin.users.email')}</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="user@example.com"
+                            value={newUserEmail}
+                            onChange={(e) => setNewUserEmail(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="password">{t('admin.users.password', 'Password')}</Label>
+                          <Input
+                            id="password"
+                            type="password"
+                            placeholder="••••••••"
+                            value={newUserPassword}
+                            onChange={(e) => setNewUserPassword(e.target.value)}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="role">{t('admin.users.role')}</Label>
+                          <Select value={newUserRole} onValueChange={setNewUserRole}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="citizen">{t('auth.roles.citizen')}</SelectItem>
+                              <SelectItem value="municipality">{t('auth.roles.municipality')}</SelectItem>
+                              <SelectItem value="ngo">{t('auth.roles.ngo', 'NGO')}</SelectItem>
+                              <SelectItem value="admin">{t('auth.roles.admin')}</SelectItem>
+                              <SelectItem value="tourist">{t('auth.roles.tourist')}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setAddUserOpen(false)}>
+                          {t('common.cancel')}
+                        </Button>
+                        <Button 
+                          onClick={() => addUserMutation.mutate()}
+                          disabled={!newUserEmail || !newUserPassword || !newUserFullName || addUserMutation.isPending}
+                        >
+                          {addUserMutation.isPending ? t('common.loading') : t('admin.users.createUser', 'Create User')}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  <Button onClick={exportToCSV} variant="outline" disabled={!filteredUsers.length}>
+                    <Download className="mr-2 h-4 w-4" />
+                    {t('admin.users.exportCSV')}
+                  </Button>
+                </div>
               </div>
               <div className="flex flex-wrap gap-3">
                 <div className="relative flex-1 min-w-[200px]">
@@ -290,6 +443,7 @@ const Users = () => {
                       <TableHead>{t('admin.users.assignedCity')}</TableHead>
                       <TableHead>{t('admin.users.ngoRegions', 'NGO Regions')}</TableHead>
                       <TableHead>{t('admin.users.joined')}</TableHead>
+                      <TableHead className="text-right">{t('admin.users.actions', 'Actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -383,6 +537,34 @@ const Users = () => {
                         </TableCell>
                         <TableCell>
                           {new Date(user.created_at || '').toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>{t('admin.users.deleteUser', 'Delete User')}</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  {t('admin.users.deleteConfirm', 'Are you sure you want to delete this user? This action cannot be undone.')}
+                                  <br />
+                                  <strong className="text-foreground">{user.full_name}</strong> ({user.email})
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteUserMutation.mutate(user.id)}
+                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                  {deleteUserMutation.isPending ? t('common.loading') : t('admin.users.delete', 'Delete')}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </TableCell>
                       </TableRow>
                     ))}
