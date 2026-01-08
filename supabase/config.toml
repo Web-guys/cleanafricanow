@@ -26,3 +26,15 @@ verify_jwt = false
 
 [functions.analytics-export]
 verify_jwt = false
+
+[functions.ai-priority-scoring]
+verify_jwt = false
+
+[functions.ai-duplicate-detection]
+verify_jwt = false
+
+[functions.ai-impact-scoring]
+verify_jwt = false
+
+[functions.ai-analyze-report]
+verify_jwt = false
