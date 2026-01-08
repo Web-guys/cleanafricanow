@@ -1,4 +1,4 @@
-import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin } from "lucide-react";
+import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,10 @@ import { RecentReportsTable } from "@/components/dashboard/RecentReportsTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CollectionEventsPanel } from "@/components/municipality/CollectionEventsPanel";
+import { CollectionRoutesPanel } from "@/components/municipality/CollectionRoutesPanel";
+import { EventRegistrationsPanel } from "@/components/municipality/EventRegistrationsPanel";
 
 interface ProfileWithCity {
   city_id: string | null;
@@ -152,6 +156,8 @@ const MunicipalityDashboard = () => {
   const quickActions = [
     { label: t('municipality.dashboard.manageReports', 'Manage Reports'), to: '/admin/reports', icon: FileText },
     { label: t('nav.map'), to: '/map', icon: Map },
+    { label: 'Schedule Event', to: '#collection', icon: Calendar },
+    { label: 'Manage Routes', to: '#routes', icon: Route },
   ];
 
   return (
@@ -193,15 +199,50 @@ const MunicipalityDashboard = () => {
         {/* Quick Actions */}
         <QuickActions actions={quickActions} />
 
-        {/* Reports Table */}
-        <RecentReportsTable 
-          reports={reports} 
-          isLoading={isLoading}
-          showStatusSelect
-          onStatusChange={(id, status) => updateStatusMutation.mutate({ id, status })}
-          title={t('municipality.dashboard.reportsInCity', 'Reports in Your City')}
-          emptyMessage={t('municipality.dashboard.noReports', 'No reports found in your assigned city.')}
-        />
+        {/* Collection Management Tabs */}
+        <Tabs defaultValue="reports" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="reports" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Reports</span>
+            </TabsTrigger>
+            <TabsTrigger value="events" className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span className="hidden sm:inline">Events</span>
+            </TabsTrigger>
+            <TabsTrigger value="routes" className="flex items-center gap-2">
+              <Route className="h-4 w-4" />
+              <span className="hidden sm:inline">Routes</span>
+            </TabsTrigger>
+            <TabsTrigger value="registrations" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">Registrations</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="reports">
+            <RecentReportsTable 
+              reports={reports} 
+              isLoading={isLoading}
+              showStatusSelect
+              onStatusChange={(id, status) => updateStatusMutation.mutate({ id, status })}
+              title={t('municipality.dashboard.reportsInCity', 'Reports in Your City')}
+              emptyMessage={t('municipality.dashboard.noReports', 'No reports found in your assigned city.')}
+            />
+          </TabsContent>
+
+          <TabsContent value="events">
+            <CollectionEventsPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="routes">
+            <CollectionRoutesPanel cityId={cityId} />
+          </TabsContent>
+
+          <TabsContent value="registrations">
+            <EventRegistrationsPanel cityId={cityId} />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );

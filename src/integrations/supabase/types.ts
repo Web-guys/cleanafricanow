@@ -50,6 +50,196 @@ export type Database = {
         }
         Relationships: []
       }
+      collection_events: {
+        Row: {
+          city_id: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          event_date: string
+          event_type: string
+          id: string
+          latitude: number
+          location_name: string | null
+          longitude: number
+          max_participants: number | null
+          notes: string | null
+          required_equipment: string[] | null
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_date: string
+          event_type?: string
+          id?: string
+          latitude: number
+          location_name?: string | null
+          longitude: number
+          max_participants?: number | null
+          notes?: string | null
+          required_equipment?: string[] | null
+          status?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          latitude?: number
+          location_name?: string | null
+          longitude?: number
+          max_participants?: number | null
+          notes?: string | null
+          required_equipment?: string[] | null
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_events_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collection_routes: {
+        Row: {
+          assigned_team: string | null
+          city_id: string | null
+          created_at: string | null
+          created_by: string | null
+          estimated_duration_minutes: number | null
+          id: string
+          name: string
+          route_type: string
+          schedule_days: string[] | null
+          schedule_time: string | null
+          status: string
+          updated_at: string | null
+          waypoints: Json
+        }
+        Insert: {
+          assigned_team?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          estimated_duration_minutes?: number | null
+          id?: string
+          name: string
+          route_type?: string
+          schedule_days?: string[] | null
+          schedule_time?: string | null
+          status?: string
+          updated_at?: string | null
+          waypoints?: Json
+        }
+        Update: {
+          assigned_team?: string | null
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          estimated_duration_minutes?: number | null
+          id?: string
+          name?: string
+          route_type?: string
+          schedule_days?: string[] | null
+          schedule_time?: string | null
+          status?: string
+          updated_at?: string | null
+          waypoints?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_routes_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          contact_email: string
+          contact_phone: string | null
+          created_at: string | null
+          event_id: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          participant_name: string
+          participant_type: string
+          status: string
+          team_size: number | null
+          user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_email: string
+          contact_phone?: string | null
+          created_at?: string | null
+          event_id: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          participant_name: string
+          participant_type: string
+          status?: string
+          team_size?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_email?: string
+          contact_phone?: string | null
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          participant_name?: string
+          participant_type?: string
+          status?: string
+          team_size?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "collection_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ngo_regions: {
         Row: {
           city_id: string
