@@ -47,7 +47,7 @@ const QuickCategoryFilter = ({
                   "whitespace-nowrap shrink-0",
                   "hover:scale-[1.02] active:scale-[0.98]",
                   isSelected
-                    ? "text-white shadow-md"
+                    ? "text-primary-foreground shadow-md"
                     : "bg-transparent text-foreground hover:bg-muted"
                 )}
                 style={isSelected ? { 

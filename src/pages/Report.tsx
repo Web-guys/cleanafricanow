@@ -61,11 +61,12 @@ const Report = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLatitude(position.coords.latitude.toFixed(6));
-          setLongitude(position.coords.longitude.toFixed(6));
+          // Use 8 decimal places for higher precision (sub-meter accuracy)
+          setLatitude(position.coords.latitude.toFixed(8));
+          setLongitude(position.coords.longitude.toFixed(8));
           toast({
             title: t('report.locationDetected.title'),
-            description: t('report.locationDetected.message'),
+            description: `${t('report.locationDetected.message')} (±${Math.round(position.coords.accuracy)}m)`,
           });
         },
         (error) => {
@@ -74,6 +75,11 @@ const Report = () => {
             description: t('report.errors.locationUnavailable'),
             variant: "destructive",
           });
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
         }
       );
     }
