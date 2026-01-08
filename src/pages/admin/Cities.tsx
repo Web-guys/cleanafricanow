@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MapPin, ArrowLeft, Plus, Pencil, Trash2 } from "lucide-react";
+import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
@@ -37,6 +37,7 @@ const AdminCities = () => {
     population: 0 as number,
   });
   const [regionFilter, setRegionFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const { data: cities } = useQuery({
     queryKey: ['admin-cities'],
@@ -111,7 +112,13 @@ const AdminCities = () => {
   };
 
   const regions = cities ? [...new Set(cities.map(c => c.region).filter(Boolean))] : [];
-  const filteredCities = cities?.filter(c => regionFilter === "all" || c.region === regionFilter);
+  const filteredCities = cities?.filter(c => {
+    const matchesRegion = regionFilter === "all" || c.region === regionFilter;
+    const matchesSearch = !searchQuery || 
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.region?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesRegion && matchesSearch;
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,6 +168,12 @@ const AdminCities = () => {
               <h1 className="text-2xl font-bold">{t('admin.cities.title')}</h1>
             </div>
           </div>
+          <Button variant="outline" asChild>
+            <Link to="/cities-map">
+              <Map className="mr-2 h-4 w-4" />
+              View Map
+            </Link>
+          </Button>
         </div>
       </header>
 
@@ -170,9 +183,19 @@ const AdminCities = () => {
           <Card>
             <CardHeader>
               <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <CardTitle>{t('admin.cities.covered')} ({filteredCities?.length || 0} / {cities?.length || 0})</CardTitle>
-                  <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:w-64">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search cities..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9"
+                      />
+                    </div>
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
                   <DialogTrigger asChild>
                     <Button onClick={resetForm}>
                       <Plus className="mr-2 h-4 w-4" />
@@ -254,6 +277,7 @@ const AdminCities = () => {
                     </form>
                   </DialogContent>
                   </Dialog>
+                  </div>
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   <Button 

@@ -3,20 +3,37 @@ import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.heat';
 import { MAP_CONFIG, getCategoryColor, getCategoryIcon } from '@/utils/mapConfig';
 import type { Report } from '@/hooks/useReports';
+
+// Extend Leaflet types for heatmap
+declare module 'leaflet' {
+  function heatLayer(
+    latlngs: Array<[number, number, number?]>,
+    options?: {
+      radius?: number;
+      blur?: number;
+      maxZoom?: number;
+      max?: number;
+      gradient?: Record<number, string>;
+    }
+  ): L.Layer;
+}
 
 interface LeafletMapProps {
   reports: Report[] | undefined;
   selectedReport: Report | null;
   onMarkerClick: (report: Report) => void;
   onMapClick?: (lat: number, lng: number) => void;
+  showHeatmap?: boolean;
 }
 
-const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick }: LeafletMapProps) => {
+const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick, showHeatmap = false }: LeafletMapProps) => {
   const mapRef = useRef<L.Map | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tempMarkerRef = useRef<L.Marker | null>(null);
+  const heatLayerRef = useRef<L.Layer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Initialize map
@@ -234,6 +251,44 @@ const LeafletMap = ({ reports, selectedReport, onMarkerClick, onMapClick }: Leaf
       clusterGroupRef.current!.addLayer(marker);
     });
   }, [reports, onMarkerClick]);
+
+  // Handle heatmap layer
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Remove existing heat layer
+    if (heatLayerRef.current) {
+      mapRef.current.removeLayer(heatLayerRef.current);
+      heatLayerRef.current = null;
+    }
+
+    if (!showHeatmap || !reports?.length) return;
+
+    // Create heatmap data with intensity based on status
+    const heatData: Array<[number, number, number]> = reports.map(report => {
+      let intensity = 0.5;
+      if (report.status === 'pending') intensity = 1.0;
+      else if (report.status === 'in_progress') intensity = 0.7;
+      else if (report.status === 'resolved') intensity = 0.2;
+      return [report.latitude, report.longitude, intensity];
+    });
+
+    heatLayerRef.current = L.heatLayer(heatData, {
+      radius: 25,
+      blur: 15,
+      maxZoom: 12,
+      max: 1.0,
+      gradient: {
+        0.2: '#22c55e',
+        0.4: '#eab308',
+        0.6: '#f97316',
+        0.8: '#ef4444',
+        1.0: '#dc2626',
+      },
+    });
+
+    heatLayerRef.current.addTo(mapRef.current);
+  }, [reports, showHeatmap]);
 
   // Fly to selected report
   useEffect(() => {
