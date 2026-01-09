@@ -205,40 +205,43 @@ const MunicipalityDashboard = () => {
 
         {/* Collection Management Tabs */}
         <Tabs defaultValue="reports" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-            <TabsTrigger value="reports" className="flex items-center gap-1">
-              <FileText className="h-4 w-4" />
-              <span className="hidden lg:inline">Reports</span>
-            </TabsTrigger>
-            <TabsTrigger value="events" className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              <span className="hidden lg:inline">Events</span>
-            </TabsTrigger>
-            <TabsTrigger value="routes" className="flex items-center gap-1">
-              <Route className="h-4 w-4" />
-              <span className="hidden lg:inline">Routes</span>
-            </TabsTrigger>
-            <TabsTrigger value="registrations" className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span className="hidden lg:inline">Registrations</span>
-            </TabsTrigger>
-            <TabsTrigger value="workers" className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span className="hidden lg:inline">Workers</span>
-            </TabsTrigger>
-            <TabsTrigger value="companies" className="flex items-center gap-1">
-              <Building2 className="h-4 w-4" />
-              <span className="hidden lg:inline">Companies</span>
-            </TabsTrigger>
-            <TabsTrigger value="discharge" className="flex items-center gap-1">
-              <Trash className="h-4 w-4" />
-              <span className="hidden lg:inline">Décharges</span>
-            </TabsTrigger>
-            <TabsTrigger value="sorting" className="flex items-center gap-1">
-              <Recycle className="h-4 w-4" />
-              <span className="hidden lg:inline">Centres tri</span>
-            </TabsTrigger>
-          </TabsList>
+          {/* Mobile-friendly scrollable tabs */}
+          <div className="overflow-x-auto -mx-4 px-4 pb-2">
+            <TabsList className="inline-flex w-max min-w-full lg:grid lg:w-full lg:grid-cols-8 gap-1">
+              <TabsTrigger value="reports" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Signalements</span>
+              </TabsTrigger>
+              <TabsTrigger value="events" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Calendar className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Événements</span>
+              </TabsTrigger>
+              <TabsTrigger value="routes" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Route className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Routes</span>
+              </TabsTrigger>
+              <TabsTrigger value="registrations" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Users className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Inscriptions</span>
+              </TabsTrigger>
+              <TabsTrigger value="workers" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Users className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Équipes</span>
+              </TabsTrigger>
+              <TabsTrigger value="companies" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Building2 className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Partenaires</span>
+              </TabsTrigger>
+              <TabsTrigger value="discharge" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Trash className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Décharges</span>
+              </TabsTrigger>
+              <TabsTrigger value="sorting" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Recycle className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Centres tri</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="reports">
             <RecentReportsTable 
