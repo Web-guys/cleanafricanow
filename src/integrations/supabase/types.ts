@@ -1052,6 +1052,71 @@ export type Database = {
       }
     }
     Views: {
+      discharge_sites_public: {
+        Row: {
+          address: string | null
+          capacity_percentage: number | null
+          city_id: string | null
+          closing_time: string | null
+          created_at: string | null
+          current_capacity_tons: number | null
+          id: string | null
+          latitude: number | null
+          longitude: number | null
+          max_capacity_tons: number | null
+          name: string | null
+          opening_time: string | null
+          operating_days: string[] | null
+          site_type: string | null
+          status: string | null
+          waste_types_accepted: string[] | null
+        }
+        Insert: {
+          address?: string | null
+          capacity_percentage?: number | null
+          city_id?: string | null
+          closing_time?: string | null
+          created_at?: string | null
+          current_capacity_tons?: number | null
+          id?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          max_capacity_tons?: number | null
+          name?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          site_type?: string | null
+          status?: string | null
+          waste_types_accepted?: string[] | null
+        }
+        Update: {
+          address?: string | null
+          capacity_percentage?: number | null
+          city_id?: string | null
+          closing_time?: string | null
+          created_at?: string | null
+          current_capacity_tons?: number | null
+          id?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          max_capacity_tons?: number | null
+          name?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          site_type?: string | null
+          status?: string | null
+          waste_types_accepted?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discharge_sites_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles_public: {
         Row: {
           avatar_url: string | null
@@ -1145,6 +1210,68 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "reports_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sorting_centers_public: {
+        Row: {
+          address: string | null
+          center_type: string | null
+          city_id: string | null
+          closing_time: string | null
+          created_at: string | null
+          current_load_tons: number | null
+          daily_capacity_tons: number | null
+          id: string | null
+          latitude: number | null
+          longitude: number | null
+          materials_processed: string[] | null
+          name: string | null
+          opening_time: string | null
+          operating_days: string[] | null
+          status: string | null
+        }
+        Insert: {
+          address?: string | null
+          center_type?: string | null
+          city_id?: string | null
+          closing_time?: string | null
+          created_at?: string | null
+          current_load_tons?: number | null
+          daily_capacity_tons?: number | null
+          id?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          materials_processed?: string[] | null
+          name?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          status?: string | null
+        }
+        Update: {
+          address?: string | null
+          center_type?: string | null
+          city_id?: string | null
+          closing_time?: string | null
+          created_at?: string | null
+          current_load_tons?: number | null
+          daily_capacity_tons?: number | null
+          id?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          materials_processed?: string[] | null
+          name?: string | null
+          opening_time?: string | null
+          operating_days?: string[] | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sorting_centers_city_id_fkey"
             columns: ["city_id"]
             isOneToOne: false
             referencedRelation: "cities"

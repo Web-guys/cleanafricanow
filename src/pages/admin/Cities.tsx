@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map } from "lucide-react";
+import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map, Users, Building2, ChevronDown } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
@@ -12,6 +12,30 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+// Morocco regions with colors for visual distinction
+const MOROCCO_REGIONS = [
+  { name: "Tanger-Tétouan-Al Hoceïma", color: "bg-blue-500" },
+  { name: "Oriental", color: "bg-orange-500" },
+  { name: "Fès-Meknès", color: "bg-purple-500" },
+  { name: "Rabat-Salé-Kénitra", color: "bg-green-500" },
+  { name: "Béni Mellal-Khénifra", color: "bg-yellow-500" },
+  { name: "Casablanca-Settat", color: "bg-red-500" },
+  { name: "Marrakech-Safi", color: "bg-pink-500" },
+  { name: "Drâa-Tafilalet", color: "bg-amber-600" },
+  { name: "Souss-Massa", color: "bg-teal-500" },
+  { name: "Guelmim-Oued Noun", color: "bg-indigo-500" },
+  { name: "Laâyoune-Sakia El Hamra", color: "bg-cyan-500" },
+  { name: "Dakhla-Oued Ed-Dahab", color: "bg-emerald-500" },
+];
+
+const getRegionColor = (regionName: string | null) => {
+  const region = MOROCCO_REGIONS.find(r => r.name === regionName);
+  return region?.color || "bg-gray-500";
+};
 
 const citySchema = z.object({
   name: z.string().min(1, "City name is required"),
@@ -38,6 +62,7 @@ const AdminCities = () => {
   });
   const [regionFilter, setRegionFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"table" | "regions">("regions");
 
   const { data: cities } = useQuery({
     queryKey: ['admin-cities'],
@@ -111,13 +136,25 @@ const AdminCities = () => {
     setEditingCity(null);
   };
 
-  const regions = cities ? [...new Set(cities.map(c => c.region).filter(Boolean))] : [];
+  const regions = cities ? [...new Set(cities.map(c => c.region).filter(Boolean))].sort() : [];
   const filteredCities = cities?.filter(c => {
     const matchesRegion = regionFilter === "all" || c.region === regionFilter;
     const matchesSearch = !searchQuery || 
       c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.region?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesRegion && matchesSearch;
+  });
+
+  // Group cities by region with stats
+  const regionStats = regions.map(region => {
+    const regionCities = cities?.filter(c => c.region === region) || [];
+    const totalPopulation = regionCities.reduce((sum, c) => sum + (c.population || 0), 0);
+    return {
+      name: region,
+      cityCount: regionCities.length,
+      totalPopulation,
+      cities: regionCities.sort((a, b) => (b.population || 0) - (a.population || 0)),
+    };
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -177,37 +214,89 @@ const AdminCities = () => {
         </div>
       </header>
 
-      {/* Cities Table */}
-      <section className="py-8">
+      {/* Region Overview Stats */}
+      <section className="py-6 border-b">
         <div className="container mx-auto px-4">
-          <Card>
-            <CardHeader>
-              <div className="flex flex-col gap-4">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <CardTitle>{t('admin.cities.covered')} ({filteredCities?.length || 0} / {cities?.length || 0})</CardTitle>
-                  <div className="flex gap-2 w-full sm:w-auto">
-                    <div className="relative flex-1 sm:w-64">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search cities..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9"
-                      />
-                    </div>
-                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                  <DialogTrigger asChild>
-                    <Button onClick={resetForm}>
-                      <Plus className="mr-2 h-4 w-4" />
-                      {t('admin.cities.addNew')}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>{editingCity ? t('admin.cities.editCity') : t('admin.cities.addNew')}</DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="bg-primary/5 border-primary/20">
+              <CardContent className="p-4 text-center">
+                <div className="text-3xl font-bold text-primary">{cities?.length || 0}</div>
+                <div className="text-sm text-muted-foreground">Villes couvertes</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-secondary/5 border-secondary/20">
+              <CardContent className="p-4 text-center">
+                <div className="text-3xl font-bold text-secondary">{regions.length}</div>
+                <div className="text-sm text-muted-foreground">Régions</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-3xl font-bold">
+                  {cities?.reduce((sum, c) => sum + (c.population || 0), 0).toLocaleString()}
+                </div>
+                <div className="text-sm text-muted-foreground">Population totale</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-4 text-center">
+                <div className="text-3xl font-bold">
+                  {Math.round((cities?.reduce((sum, c) => sum + (c.population || 0), 0) || 0) / (cities?.length || 1)).toLocaleString()}
+                </div>
+                <div className="text-sm text-muted-foreground">Pop. moyenne</div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* View Toggle & Search */}
+      <section className="py-4 border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="flex gap-2">
+              <Button 
+                variant={viewMode === "regions" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setViewMode("regions")}
+              >
+                <Building2 className="mr-2 h-4 w-4" />
+                Par région
+              </Button>
+              <Button 
+                variant={viewMode === "table" ? "default" : "outline"} 
+                size="sm"
+                onClick={() => setViewMode("table")}
+              >
+                <MapPin className="mr-2 h-4 w-4" />
+                Liste complète
+              </Button>
+            </div>
+            <div className="flex gap-2 w-full sm:w-auto">
+              <div className="relative flex-1 sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Rechercher une ville..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={resetForm}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    <span className="hidden sm:inline">{t('admin.cities.addNew')}</span>
+                    <span className="sm:hidden">Ajouter</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>{editingCity ? t('admin.cities.editCity') : t('admin.cities.addNew')}</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="col-span-2">
                         <Label htmlFor="name">{t('admin.cities.cityName')}</Label>
                         <Input
                           id="name"
@@ -226,13 +315,25 @@ const AdminCities = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="region">Region</Label>
-                        <Input
-                          id="region"
+                        <Label htmlFor="region">Région</Label>
+                        <Select
                           value={formData.region}
-                          onChange={(e) => setFormData({ ...formData, region: e.target.value })}
-                          placeholder="Casablanca-Settat"
-                        />
+                          onValueChange={(value) => setFormData({ ...formData, region: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Sélectionner..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {MOROCCO_REGIONS.map(r => (
+                              <SelectItem key={r.name} value={r.name}>
+                                <span className="flex items-center gap-2">
+                                  <span className={`w-2 h-2 rounded-full ${r.color}`} />
+                                  {r.name}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div>
                         <Label htmlFor="population">Population</Label>
@@ -266,95 +367,226 @@ const AdminCities = () => {
                           placeholder="-7.5898"
                         />
                       </div>
-                      <div className="flex justify-end gap-2">
-                        <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-                          {t('common.cancel')}
-                        </Button>
-                        <Button type="submit">
-                          {editingCity ? t('common.update') : t('common.create')}
-                        </Button>
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                        {t('common.cancel')}
+                      </Button>
+                      <Button type="submit">
+                        {editingCity ? t('common.update') : t('common.create')}
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-6">
+        <div className="container mx-auto px-4">
+          {viewMode === "regions" ? (
+            /* Region Cards View */
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {regionStats
+                .filter(r => !searchQuery || r.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                  r.cities.some(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())))
+                .map((region) => (
+                <Card key={region.name} className="overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3 h-3 rounded-full ${getRegionColor(region.name)}`} />
+                        <CardTitle className="text-lg">{region.name}</CardTitle>
                       </div>
-                    </form>
-                  </DialogContent>
-                  </Dialog>
+                      <Badge variant="secondary">{region.cityCount} villes</Badge>
+                    </div>
+                    <CardDescription>
+                      Population: {region.totalPopulation.toLocaleString()}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <ScrollArea className="h-32">
+                      <div className="space-y-1">
+                        {region.cities
+                          .filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                          .map((city) => (
+                          <div 
+                            key={city.id} 
+                            className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-muted/50 group"
+                          >
+                            <div className="flex items-center gap-2 min-w-0">
+                              <MapPin className="h-3 w-3 text-muted-foreground shrink-0" />
+                              <span className="text-sm truncate">{city.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-muted-foreground">
+                                {city.population?.toLocaleString() || '-'}
+                              </span>
+                              <div className="opacity-0 group-hover:opacity-100 flex gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6"
+                                  onClick={() => handleEdit(city)}
+                                >
+                                  <Pencil className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            /* Table View */
+            <Card>
+              <CardHeader>
+                <div className="flex flex-col gap-4">
+                  <CardTitle>{t('admin.cities.covered')} ({filteredCities?.length || 0})</CardTitle>
+                  {/* Mobile Region Filter */}
+                  <div className="md:hidden">
+                    <Select value={regionFilter} onValueChange={setRegionFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Filtrer par région" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Toutes les régions</SelectItem>
+                        {regions.map(region => (
+                          <SelectItem key={region} value={region!}>
+                            <span className="flex items-center gap-2">
+                              <span className={`w-2 h-2 rounded-full ${getRegionColor(region)}`} />
+                              {region}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {/* Desktop Region Pills */}
+                  <div className="hidden md:flex gap-2 flex-wrap">
+                    <Button 
+                      variant={regionFilter === "all" ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setRegionFilter("all")}
+                    >
+                      Toutes
+                    </Button>
+                    {regions.map(region => (
+                      <Button
+                        key={region}
+                        variant={regionFilter === region ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setRegionFilter(region!)}
+                        className="gap-1.5"
+                      >
+                        <span className={`w-2 h-2 rounded-full ${getRegionColor(region)}`} />
+                        {region}
+                      </Button>
+                    ))}
                   </div>
                 </div>
-                <div className="flex gap-2 flex-wrap">
-                  <Button 
-                    variant={regionFilter === "all" ? "default" : "outline"} 
-                    size="sm"
-                    onClick={() => setRegionFilter("all")}
-                  >
-                    All Regions
-                  </Button>
-                  {regions.map(region => (
-                    <Button
-                      key={region}
-                      variant={regionFilter === region ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setRegionFilter(region!)}
-                    >
-                      {region}
-                    </Button>
+              </CardHeader>
+              <CardContent className="p-0 md:p-6">
+                {/* Mobile List */}
+                <div className="md:hidden divide-y">
+                  {filteredCities?.map((city) => (
+                    <div key={city.id} className="p-4 flex items-center justify-between">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${getRegionColor(city.region)}`} />
+                          <span className="font-medium truncate">{city.name}</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {city.region} • {city.population?.toLocaleString() || '-'} hab.
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => handleEdit(city)}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-destructive"
+                          onClick={() => deleteCityMutation.mutate(city.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>{t('admin.cities.cityName')}</TableHead>
-                    <TableHead>Region</TableHead>
-                    <TableHead>Population</TableHead>
-                    <TableHead>{t('admin.cities.latitude')}</TableHead>
-                    <TableHead>{t('admin.cities.longitude')}</TableHead>
-                    <TableHead className="text-right">{t('common.actions')}</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredCities?.map((city) => (
-                    <TableRow key={city.id}>
-                      <TableCell>
-                        <div>
-                          <span className="font-semibold">{city.name}</span>
-                          <span className="text-muted-foreground text-xs ml-2">{city.country}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-sm">{city.region || '-'}</TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {city.population?.toLocaleString() || '-'}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {Number(city.latitude).toFixed(4)}
-                      </TableCell>
-                      <TableCell className="font-mono text-sm">
-                        {Number(city.longitude).toFixed(4)}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleEdit(city)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteCityMutation.mutate(city.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                {/* Desktop Table */}
+                <div className="hidden md:block">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{t('admin.cities.cityName')}</TableHead>
+                        <TableHead>Région</TableHead>
+                        <TableHead>Population</TableHead>
+                        <TableHead>{t('admin.cities.latitude')}</TableHead>
+                        <TableHead>{t('admin.cities.longitude')}</TableHead>
+                        <TableHead className="text-right">{t('common.actions')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredCities?.map((city) => (
+                        <TableRow key={city.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <span className={`w-2 h-2 rounded-full ${getRegionColor(city.region)}`} />
+                              <span className="font-semibold">{city.name}</span>
+                              <span className="text-muted-foreground text-xs">{city.country}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-sm">{city.region || '-'}</TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {city.population?.toLocaleString() || '-'}
+                          </TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {Number(city.latitude).toFixed(4)}
+                          </TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {Number(city.longitude).toFixed(4)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEdit(city)}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => deleteCityMutation.mutate(city.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </section>
     </div>
