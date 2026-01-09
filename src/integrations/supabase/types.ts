@@ -1162,6 +1162,7 @@ export type Database = {
         Args: { _profile_id: string; _viewer_id: string }
         Returns: boolean
       }
+      get_profile_city_id: { Args: { _user_id: string }; Returns: string }
       get_report_with_submitter: {
         Args: { report_id: string }
         Returns: {
