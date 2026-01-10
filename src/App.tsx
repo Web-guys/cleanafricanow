@@ -38,6 +38,7 @@ import Profile from "./pages/Profile";
 import CitiesMapView from "./pages/CitiesMapView";
 import Leaderboard from "./pages/Leaderboard";
 import CollectionEvents from "./pages/CollectionEvents";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +57,7 @@ const App = () => (
             <Route path="/map" element={<MapView />} />
             <Route path="/cities-map" element={<CitiesMapView />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/install" element={<Install />} />
             <Route path="/events" element={<CollectionEvents />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
