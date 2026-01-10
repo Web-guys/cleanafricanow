@@ -6,6 +6,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
 
 interface MapHeaderProps {
   onToggleSidebar?: () => void;
@@ -50,6 +51,7 @@ const MapHeader = ({ onToggleSidebar, showSidebarToggle }: MapHeaderProps) => {
         
         {/* Right Section */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          <NetworkStatusIndicator className="hidden sm:flex" />
           <LanguageSwitcher />
           <ThemeToggle />
           

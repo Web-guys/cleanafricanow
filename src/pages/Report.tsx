@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, ArrowLeft } from "lucide-react";
+import { MapPin, ArrowLeft, WifiOff, Cloud } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -14,6 +14,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { z } from 'zod';
 import { PhotoUpload } from "@/components/PhotoUpload";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { saveOfflineReport, saveOfflinePhoto } from "@/lib/offlineDb";
+import { OfflineReportBanner } from "@/components/OfflineReportBanner";
+import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
 
 const reportSchema = z.object({
   category: z.enum(['waste', 'pollution', 'danger', 'noise', 'water', 'air', 'illegal_dumping', 'deforestation']),
@@ -28,6 +32,7 @@ const Report = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { isOnline } = useNetworkStatus();
   
   // Pre-fill from URL params (from map click)
   const urlLat = searchParams.get('lat');
@@ -39,6 +44,7 @@ const Report = () => {
   const [longitude, setLongitude] = useState(urlLng || '');
   const [cityId, setCityId] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Show location pre-filled message if coords came from URL
@@ -54,14 +60,14 @@ const Report = () => {
       
       if (error) throw error;
       return data;
-    }
+    },
+    staleTime: 1000 * 60 * 60, // Cache for 1 hour
   });
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // Use 8 decimal places for higher precision (sub-meter accuracy)
           setLatitude(position.coords.latitude.toFixed(8));
           setLongitude(position.coords.longitude.toFixed(8));
           toast({
@@ -82,6 +88,13 @@ const Report = () => {
           maximumAge: 0
         }
       );
+    }
+  };
+
+  const handlePhotosChange = (urls: string[], files?: File[]) => {
+    setPhotos(urls);
+    if (files) {
+      setPhotoFiles(files);
     }
   };
 
@@ -108,24 +121,51 @@ const Report = () => {
         longitude: parseFloat(longitude),
       });
 
-      const { error } = await supabase
-        .from('reports')
-        .insert([{
+      // Check if online or offline
+      if (isOnline) {
+        // Online: Submit directly to Supabase
+        const { error } = await supabase
+          .from('reports')
+          .insert([{
+            category: validated.category,
+            description: validated.description,
+            latitude: validated.latitude,
+            longitude: validated.longitude,
+            city_id: cityId || null,
+            user_id: user?.id,
+            photos: photos,
+          }]);
+
+        if (error) throw error;
+
+        toast({
+          title: t('report.success.title'),
+          description: t('report.success.message'),
+        });
+      } else {
+        // Offline: Save to IndexedDB
+        const offlinePhotos: string[] = [];
+        
+        // Convert files to base64 for offline storage
+        for (const file of photoFiles) {
+          const base64 = await saveOfflinePhoto('temp', file);
+          offlinePhotos.push(base64);
+        }
+
+        await saveOfflineReport({
           category: validated.category,
           description: validated.description,
           latitude: validated.latitude,
           longitude: validated.longitude,
-          city_id: cityId || null,
-          user_id: user?.id,
-          photos: photos,
-        }]);
+          cityId: cityId || null,
+          photos: offlinePhotos,
+        });
 
-      if (error) throw error;
-
-      toast({
-        title: t('report.success.title'),
-        description: t('report.success.message'),
-      });
+        toast({
+          title: t('report.savedOffline.title', '📱 Saved Offline'),
+          description: t('report.savedOffline.message', 'Your report will be submitted when you\'re back online.'),
+        });
+      }
 
       navigate('/map');
     } catch (error) {
@@ -161,24 +201,36 @@ const Report = () => {
               CleanAfricaNow
             </h1>
           </div>
-          <Button variant="ghost" asChild>
-            <Link to="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t('common.back')}
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <NetworkStatusIndicator showDetails />
+            <Button variant="ghost" asChild>
+              <Link to="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t('common.back')}
+              </Link>
+            </Button>
+          </div>
         </div>
       </header>
 
       {/* Report Form */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* Offline Banner */}
+            <OfflineReportBanner />
+
             <Card className="border-2 border-primary/20 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl">{t('report.title')}</CardTitle>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  {!isOnline && <WifiOff className="h-5 w-5 text-warning" />}
+                  {t('report.title')}
+                </CardTitle>
                 <p className="text-muted-foreground">
-                  {t('report.subtitle')}
+                  {isOnline 
+                    ? t('report.subtitle')
+                    : t('report.offlineSubtitle', 'Your report will be saved locally and synced when you\'re online.')
+                  }
                 </p>
               </CardHeader>
               <CardContent>
@@ -287,8 +339,22 @@ const Report = () => {
                     </div>
                   )}
 
-                  <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? t('report.submitting') : t('report.submitReport')}
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    size="lg" 
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      t('report.submitting')
+                    ) : !isOnline ? (
+                      <>
+                        <Cloud className="mr-2 h-4 w-4" />
+                        {t('report.saveOffline', 'Save Offline')}
+                      </>
+                    ) : (
+                      t('report.submitReport')
+                    )}
                   </Button>
                 </form>
               </CardContent>
