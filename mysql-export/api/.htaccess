@@ -1,0 +1,72 @@
+# CleanAfricaNow API - Apache Configuration
+# Place this file in the /api directory
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Handle Authorization header
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+# API Routing
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Auth endpoints
+RewriteRule ^auth/(.*)$ auth.php?action=$1 [QSA,L]
+
+# Reports endpoints
+RewriteRule ^reports/stats$ reports.php?action=stats [QSA,L]
+RewriteRule ^reports/([a-f0-9-]+)/history$ reports.php?id=$1&action=history [QSA,L]
+RewriteRule ^reports/([a-f0-9-]+)$ reports.php?id=$1 [QSA,L]
+RewriteRule ^reports$ reports.php [QSA,L]
+
+# Cities endpoints
+RewriteRule ^cities/regions$ cities.php?action=regions [QSA,L]
+RewriteRule ^cities/([a-f0-9-]+)$ cities.php?id=$1 [QSA,L]
+RewriteRule ^cities$ cities.php [QSA,L]
+
+# Users endpoints
+RewriteRule ^users/leaderboard$ users.php?action=leaderboard [QSA,L]
+RewriteRule ^users/([a-f0-9-]+)/public$ users.php?id=$1&action=public [QSA,L]
+RewriteRule ^users/([a-f0-9-]+)/roles$ users.php?id=$1&action=roles [QSA,L]
+RewriteRule ^users/([a-f0-9-]+)$ users.php?id=$1 [QSA,L]
+RewriteRule ^users$ users.php [QSA,L]
+
+# Upload endpoints
+RewriteRule ^upload/(.*)$ upload.php?filename=$1 [QSA,L]
+RewriteRule ^upload$ upload.php [QSA,L]
+
+# Organizations endpoints
+RewriteRule ^organizations/([a-f0-9-]+)$ organizations.php?id=$1 [QSA,L]
+RewriteRule ^organizations$ organizations.php [QSA,L]
+
+# Events endpoints
+RewriteRule ^events/([a-f0-9-]+)/register$ events.php?id=$1&action=register [QSA,L]
+RewriteRule ^events/([a-f0-9-]+)$ events.php?id=$1 [QSA,L]
+RewriteRule ^events$ events.php [QSA,L]
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Prevent access to PHP files directly (except entry points)
+<FilesMatch "^(config)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Disable directory listing
+Options -Indexes
+
+# PHP settings
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+    php_value memory_limit 128M
+</IfModule>
