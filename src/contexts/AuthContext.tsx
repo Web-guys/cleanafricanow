@@ -110,7 +110,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error };
   };
 
-  const signUp = async (email: string, password: string, fullName: string, role: AppRole = 'citizen') => {
+  const signUp = async (email: string, password: string, fullName: string, _role: AppRole = 'citizen') => {
+    // NOTE: Role parameter is ignored for security - all users get 'citizen' role by default
+    // Only admins can assign elevated roles through the admin panel
     const redirectUrl = `${window.location.origin}/`;
     
     const { data, error } = await supabase.auth.signUp({
@@ -120,7 +122,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: redirectUrl,
         data: {
           full_name: fullName,
-          role: role,
         }
       }
     });
@@ -134,25 +135,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error };
     }
 
-    // If signup successful and user is created, update their role
-    if (data.user && role !== 'citizen') {
-      setTimeout(async () => {
-        try {
-          // Delete default citizen role
-          await supabase
-            .from('user_roles')
-            .delete()
-            .eq('user_id', data.user.id);
-          
-          // Insert selected role
-          await supabase
-            .from('user_roles')
-            .insert([{ user_id: data.user.id, role: role }]);
-        } catch (err) {
-          console.error('Error updating role:', err);
-        }
-      }, 1000);
-    }
+    // Role is now assigned server-side via database trigger - no client-side role manipulation
+    // All new users get 'citizen' role by default for security
     
     return { error };
   };

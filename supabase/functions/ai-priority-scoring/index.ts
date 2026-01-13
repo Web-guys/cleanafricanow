@@ -26,12 +26,67 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    // === AUTHORIZATION CHECK ===
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const supabaseClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: `Bearer ${token}` } }
+    });
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Invalid authentication" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     const { report_id, category, description, latitude, longitude, photos }: PriorityScoringRequest = await req.json();
+
+    // If report_id is provided, verify authorization
+    if (report_id) {
+      const { data: report } = await supabaseAdmin
+        .from("reports")
+        .select("user_id, city_id")
+        .eq("id", report_id)
+        .single();
+
+      if (report) {
+        const { data: isAdmin } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'admin' });
+        const { data: isMunicipality } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'municipality' });
+        const { data: isNgo } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'ngo' });
+        
+        const isReportOwner = report.user_id === user.id;
+        
+        let hasTerritory = false;
+        if ((isMunicipality || isNgo) && report.city_id) {
+          const { data: canAccess } = await supabaseAdmin.rpc('can_access_territory', { 
+            _city_id: report.city_id, 
+            _user_id: user.id 
+          });
+          hasTerritory = canAccess === true;
+        }
+
+        if (!isAdmin && !isReportOwner && !hasTerritory) {
+          return new Response(
+            JSON.stringify({ error: "Unauthorized to score this report" }),
+            { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+          );
+        }
+      }
+    }
 
     // Build context for AI
     const prompt = `You are an environmental report priority scoring system for CleanAfricaNow, an environmental monitoring platform in Africa.
@@ -161,6 +216,7 @@ Return your analysis using the priority_analysis function.`;
       await supabaseAdmin.from("report_history").insert({
         report_id,
         action: "ai_priority_scored",
+        changed_by: user.id,
         notes: `AI Priority: ${analysis.priority_level} (${analysis.priority_score}/100). ${analysis.reasoning}`,
         new_data: analysis,
       });

@@ -36,7 +36,6 @@ const getStatusColor = (status: string): string => {
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -45,16 +44,38 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // === AUTHORIZATION CHECK ===
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const supabaseClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
+      global: { headers: { Authorization: `Bearer ${token}` } }
+    });
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Invalid authentication" }),
+        { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
 
     const { report_id, old_status, new_status }: StatusChangeRequest = await req.json();
 
     console.log(`Processing status change for report ${report_id}: ${old_status} -> ${new_status}`);
 
     // Fetch report details with user info
-    const { data: report, error: reportError } = await supabase
+    const { data: report, error: reportError } = await supabaseAdmin
       .from("reports")
-      .select("id, description, category, user_id")
+      .select("id, description, category, user_id, city_id")
       .eq("id", report_id)
       .single();
 
@@ -63,6 +84,30 @@ const handler = async (req: Request): Promise<Response> => {
       return new Response(
         JSON.stringify({ error: "Report not found" }),
         { status: 404, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    // === AUTHORIZATION: Check if user can send notifications for this report ===
+    // User must be: admin, report owner, or municipality/ngo with territory access
+    const { data: isAdmin } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'admin' });
+    const { data: isMunicipality } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'municipality' });
+    const { data: isNgo } = await supabaseAdmin.rpc('has_role', { _user_id: user.id, _role: 'ngo' });
+    
+    const isReportOwner = report.user_id === user.id;
+    
+    let hasTerritory = false;
+    if ((isMunicipality || isNgo) && report.city_id) {
+      const { data: canAccess } = await supabaseAdmin.rpc('can_access_territory', { 
+        _city_id: report.city_id, 
+        _user_id: user.id 
+      });
+      hasTerritory = canAccess === true;
+    }
+
+    if (!isAdmin && !isReportOwner && !hasTerritory) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized to send notifications for this report" }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -75,7 +120,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Fetch user email from profiles
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from("profiles")
       .select("email, full_name")
       .eq("id", report.user_id)
