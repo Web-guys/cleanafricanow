@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { LogOut, User, Trophy } from "lucide-react";
+import { SEOHead, pageSEO } from "@/components/seo/SEOHead";
+import { StructuredData } from "@/components/seo/StructuredData";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
@@ -22,6 +24,11 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEOHead {...pageSEO.home} />
+      <StructuredData type="Organization" />
+      <StructuredData type="WebSite" />
+      <StructuredData type="FAQPage" />
+      
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
