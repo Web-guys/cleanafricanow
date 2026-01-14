@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback } from "react";
 import type L from "leaflet";
 import { useTranslation } from "react-i18next";
+import { SEOHead, pageSEO } from "@/components/seo/SEOHead";
+import { StructuredData } from "@/components/seo/StructuredData";
 import { useReports, type Report } from "@/hooks/useReports";
 import { useRealtimeReports } from "@/hooks/useRealtimeReports";
 import MapHeader from "@/components/map/MapHeader";
@@ -102,7 +104,10 @@ const MapView = () => {
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
-      <MapHeader 
+      <SEOHead {...pageSEO.map} />
+      <StructuredData type="WebApplication" />
+      
+      <MapHeader
         onToggleSidebar={() => setSidebarOpen(true)} 
         showSidebarToggle={true}
       />

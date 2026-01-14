@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { SEOHead, pageSEO } from "@/components/seo/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -124,6 +125,8 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <SEOHead {...pageSEO.leaderboard} />
+      
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
