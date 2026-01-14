@@ -67,8 +67,10 @@ export const AdminSidebar = ({ mobile = false, onNavigate }: AdminSidebarProps) 
   ];
 
   const toolsLinks = [
+    { to: '/admin/analytics', label: 'Analytics', icon: Activity },
     { to: '/admin/export', label: 'Export Data', icon: Download },
     { to: '/admin/audit-logs', label: 'Audit Logs', icon: ScrollText },
+    { to: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   const NavLink = ({ to, icon: Icon, children, badge, badgeVariant = 'secondary', exact = false }: { 

@@ -21,6 +21,8 @@ import AdminSLADashboard from "./pages/admin/SLADashboard";
 import AdminAuditLogs from "./pages/admin/AuditLogs";
 import AdminAIAnalysis from "./pages/admin/AIAnalysis";
 import AdminExport from "./pages/admin/Export";
+import AdminSettings from "./pages/admin/Settings";
+import AdminAnalytics from "./pages/admin/Analytics";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
 import Mission from "./pages/Mission";
@@ -157,6 +159,22 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['admin']}>
                   <AdminExport />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/analytics"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminAnalytics />
                 </ProtectedRoute>
               }
             />

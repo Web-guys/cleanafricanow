@@ -88,11 +88,11 @@ const Home = () => {
             <LanguageSwitcher />
             <ThemeToggle />
           </nav>
-          <div className="md:hidden flex items-center gap-2">
-            <LanguageSwitcher />
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
             <MobileNav />
-          </div>
         </div>
       </header>
 
