@@ -8,6 +8,7 @@ import { ReportAnalytics } from "@/components/admin/ReportAnalytics";
 import { SystemHealthCard } from "@/components/admin/SystemHealthCard";
 import { RecentActivityFeed } from "@/components/admin/RecentActivityFeed";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -120,6 +121,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <LanguageSwitcher />
               <ThemeToggle />
             </div>
