@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { MapPin, Mail, Phone, Clock, ArrowLeft, Send } from "lucide-react";
+import { Mail, ArrowLeft, Send, MapPin } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Footer from "@/components/Footer";
@@ -92,44 +92,12 @@ const Contact = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold mb-1">{t('contact.info.email')}</h4>
-                      <p className="text-muted-foreground">contact@cleanafricanow.org</p>
-                      <p className="text-muted-foreground">support@cleanafricanow.org</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="flex items-start gap-4 pt-6">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-                      <Phone className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">{t('contact.info.phone')}</h4>
-                      <p className="text-muted-foreground">+212 522 123 456</p>
-                      <p className="text-muted-foreground">+212 600 123 456</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="flex items-start gap-4 pt-6">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-                      <MapPin className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">{t('contact.info.address')}</h4>
-                      <p className="text-muted-foreground">123 Avenue Mohammed V</p>
-                      <p className="text-muted-foreground">Casablanca, Morocco</p>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="flex items-start gap-4 pt-6">
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-                      <Clock className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold mb-1">{t('contact.info.hours')}</h4>
-                      <p className="text-muted-foreground">{t('contact.info.weekdays')}</p>
-                      <p className="text-muted-foreground">{t('contact.info.weekend')}</p>
+                      <a 
+                        href="mailto:Cleanafricanow@gmail.com" 
+                        className="text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Cleanafricanow@gmail.com
+                      </a>
                     </div>
                   </CardContent>
                 </Card>
