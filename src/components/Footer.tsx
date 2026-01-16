@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Mail, Phone, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/cleanafricanow-logo.png";
 
@@ -26,19 +26,9 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground group">
                 <Mail className="w-4 h-4 group-hover:text-primary transition-colors" />
-                <a href="mailto:info@cleanafricanow.com" className="hover:text-primary transition-colors">
-                  info@cleanafricanow.com
+                <a href="mailto:Cleanafricanow@gmail.com" className="hover:text-primary transition-colors">
+                  Cleanafricanow@gmail.com
                 </a>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground group">
-                <Phone className="w-4 h-4 group-hover:text-primary transition-colors" />
-                <a href="tel:+212123456789" className="hover:text-primary transition-colors">
-                  +212 779633123
-                </a>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <MapPin className="w-4 h-4" />
-                <span>Agadir, Morocco</span>
               </div>
             </div>
           </div>
