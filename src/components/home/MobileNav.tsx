@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
-import { Menu, Home, Map, FileText, User, LogOut, Shield, Building2, Heart, X, MapPin, Trophy } from "lucide-react";
+import { Menu, Home, Map, FileText, User, LogOut, Shield, Building2, Heart, X, MapPin, Trophy, Calendar, Info, Mail } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 
@@ -44,14 +44,20 @@ export const MobileNav = () => {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+          <nav className="flex-1 overflow-y-auto p-4 space-y-1">
             <NavLink to="/" icon={Home}>{t('nav.home')}</NavLink>
             <NavLink to="/map" icon={Map}>{t('nav.map')}</NavLink>
             <NavLink to="/leaderboard" icon={Trophy}>Leaderboard</NavLink>
             <NavLink to="/cities-map" icon={MapPin}>Cities Map</NavLink>
+            <NavLink to="/events" icon={Calendar}>Collection Events</NavLink>
             
             {user && (
               <>
+                <div className="pt-2 pb-1">
+                  <p className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Your Account
+                  </p>
+                </div>
                 <NavLink to="/report" icon={FileText}>{t('nav.reportIssue')}</NavLink>
                 <NavLink to="/profile" icon={User}>Profile</NavLink>
                 
@@ -69,10 +75,13 @@ export const MobileNav = () => {
               </>
             )}
             
-            <div className="pt-4 border-t">
-              <NavLink to="/about" icon={User}>{t('nav.about')}</NavLink>
-              <NavLink to="/contact" icon={FileText}>{t('nav.contact')}</NavLink>
+            <div className="pt-2 pb-1">
+              <p className="px-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                More
+              </p>
             </div>
+            <NavLink to="/about" icon={Info}>{t('nav.about')}</NavLink>
+            <NavLink to="/contact" icon={Mail}>{t('nav.contact')}</NavLink>
           </nav>
 
           {/* Footer Actions */}

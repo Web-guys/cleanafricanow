@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, ArrowLeft, Plus, Menu, Home } from "lucide-react";
+import { Plus, Menu, Home } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
+import { MobileNav } from "@/components/home/MobileNav";
+import logo from "@/assets/cleanafricanow-logo.png";
 
 interface MapHeaderProps {
   onToggleSidebar?: () => void;
@@ -37,9 +39,7 @@ const MapHeader = ({ onToggleSidebar, showSidebarToggle }: MapHeaderProps) => {
           )}
           
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary/70 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:shadow-primary/20 transition-all duration-200">
-              <MapPin className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="CleanAfricaNow" className="w-9 h-9 object-contain" />
             <div className="hidden sm:block">
               <h1 className="text-lg font-bold leading-tight bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 CleanAfricaNow
@@ -83,6 +83,8 @@ const MapHeader = ({ onToggleSidebar, showSidebarToggle }: MapHeaderProps) => {
               <span className="sm:hidden">Report</span>
             </Link>
           </Button>
+          
+          <MobileNav />
         </div>
       </div>
     </header>
