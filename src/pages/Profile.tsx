@@ -15,8 +15,11 @@ import {
   Plus,
   Pencil,
   Bell,
-  FileText
+  FileText,
+  ArrowLeft
 } from "lucide-react";
+import { MobileNav } from "@/components/home/MobileNav";
+import logo from "@/assets/cleanafricanow-logo.png";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -165,17 +168,23 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              CleanAfricaNow
-            </h1>
-          </Link>
-          <nav className="flex gap-2 items-center">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
+              <Link to="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                {t("common.back", "Back")}
+              </Link>
+            </Button>
+            <Link to="/" className="flex items-center gap-2">
+              <img src={logo} alt="CleanAfricaNow" className="w-10 h-10 object-contain" />
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                CleanAfricaNow
+              </h1>
+            </Link>
+          </div>
+          <nav className="hidden md:flex gap-2 items-center">
             <Button variant="ghost" asChild>
               <Link to="/">{t("nav.home")}</Link>
             </Button>
@@ -188,6 +197,11 @@ const Profile = () => {
             <LanguageSwitcher />
             <ThemeToggle />
           </nav>
+          <div className="flex items-center gap-2 md:hidden">
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <MobileNav />
+          </div>
         </div>
       </header>
 

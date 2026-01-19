@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { 
   Trophy, 
@@ -30,6 +29,8 @@ import {
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Footer from "@/components/Footer";
+import { MobileNav } from "@/components/home/MobileNav";
+import logo from "@/assets/cleanafricanow-logo.png";
 
 // Badge definitions
 const BADGES = {
@@ -128,30 +129,36 @@ const Leaderboard = () => {
       <SEOHead {...pageSEO.leaderboard} />
       
       {/* Header */}
-      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
               <Link to="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Home
               </Link>
             </Button>
-            <div className="h-6 w-px bg-border" />
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
+              <img src={logo} alt="CleanAfricaNow" className="w-10 h-10 object-contain" />
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hidden sm:block">
+                CleanAfricaNow
+              </h1>
+            </Link>
+            <div className="flex items-center gap-2 sm:hidden">
               <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
                 <Trophy className="w-4 h-4 text-white" />
               </div>
-              <h1 className="text-lg font-bold hidden sm:block">Leaderboard</h1>
+              <span className="font-bold">Leaderboard</span>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="sm" asChild className="hidden sm:flex">
               <Link to="/map">View Map</Link>
             </Button>
             <LanguageSwitcher />
             <ThemeToggle />
+            <MobileNav />
           </div>
         </div>
       </header>

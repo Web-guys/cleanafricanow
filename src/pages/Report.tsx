@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, ArrowLeft, WifiOff, Cloud } from "lucide-react";
+import { ArrowLeft, WifiOff, Cloud, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,10 @@ import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { saveOfflineReport, saveOfflinePhoto } from "@/lib/offlineDb";
 import { OfflineReportBanner } from "@/components/OfflineReportBanner";
 import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { MobileNav } from "@/components/home/MobileNav";
+import logo from "@/assets/cleanafricanow-logo.png";
 
 const reportSchema = z.object({
   category: z.enum(['waste', 'pollution', 'danger', 'noise', 'water', 'air', 'illegal_dumping', 'deforestation']),
@@ -194,24 +198,27 @@ const Report = () => {
       <SEOHead {...pageSEO.report} />
       
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-primary-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              CleanAfricaNow
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            <NetworkStatusIndicator showDetails />
-            <Button variant="ghost" asChild>
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
               <Link to="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t('common.back')}
               </Link>
             </Button>
+            <Link to="/" className="flex items-center gap-2">
+              <img src={logo} alt="CleanAfricaNow" className="w-10 h-10 object-contain" />
+              <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                CleanAfricaNow
+              </h1>
+            </Link>
+          </div>
+          <div className="flex items-center gap-2">
+            <NetworkStatusIndicator showDetails />
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <MobileNav />
           </div>
         </div>
       </header>
