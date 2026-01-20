@@ -130,7 +130,16 @@
       "nameMin": "El nombre debe tener al menos 2 caracteres",
       "passwordMismatch": "Las contraseñas no coinciden",
       "roleRequired": "Por favor selecciona un rol"
-    }
+    },
+    "orContinueWith": "O continuar con",
+    "continueWithGoogle": "Continuar con Google",
+    "continueWithFacebook": "Continuar con Facebook",
+    "facebookComingSoon": "Inicio de sesión con Facebook próximamente",
+    "comingSoon": "Pronto",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "resetPassword": "Restablecer contraseña",
+    "resetPasswordDesc": "Ingresa tu correo y te enviaremos un enlace de restablecimiento.",
+    "sendResetLink": "Enviar enlace"
   },
   "map": {
     "title": "Vista del Mapa",

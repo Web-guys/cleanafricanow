@@ -13,6 +13,7 @@ interface AuthContextType {
   profile: any | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signInWithGoogle: () => Promise<{ error: any }>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, fullName: string, role?: AppRole) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -102,6 +103,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) {
       toast({
         title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+    
+    return { error };
+  };
+
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+    
+    if (error) {
+      toast({
+        title: "Google sign-in failed",
         description: error.message,
         variant: "destructive",
       });
@@ -200,6 +220,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         profile,
         loading,
         signIn,
+        signInWithGoogle,
         signUp,
         signOut,
         resetPassword,

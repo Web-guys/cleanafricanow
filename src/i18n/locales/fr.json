@@ -130,7 +130,16 @@
       "nameMin": "Le nom doit contenir au moins 2 caractères",
       "passwordMismatch": "Les mots de passe ne correspondent pas",
       "roleRequired": "Veuillez sélectionner un rôle"
-    }
+    },
+    "orContinueWith": "Ou continuer avec",
+    "continueWithGoogle": "Continuer avec Google",
+    "continueWithFacebook": "Continuer avec Facebook",
+    "facebookComingSoon": "Connexion Facebook bientôt disponible",
+    "comingSoon": "Bientôt",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetPasswordDesc": "Entrez votre email et nous vous enverrons un lien de réinitialisation.",
+    "sendResetLink": "Envoyer le lien"
   },
   "map": {
     "title": "Vue Carte",

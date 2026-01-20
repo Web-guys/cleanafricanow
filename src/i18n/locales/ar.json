@@ -130,7 +130,16 @@
       "nameMin": "يجب أن يتكون الاسم من حرفين على الأقل",
       "passwordMismatch": "كلمات المرور غير متطابقة",
       "roleRequired": "يرجى اختيار دور"
-    }
+    },
+    "orContinueWith": "أو المتابعة باستخدام",
+    "continueWithGoogle": "المتابعة مع جوجل",
+    "continueWithFacebook": "المتابعة مع فيسبوك",
+    "facebookComingSoon": "تسجيل الدخول عبر فيسبوك قريباً",
+    "comingSoon": "قريباً",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "resetPasswordDesc": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+    "sendResetLink": "إرسال رابط إعادة التعيين"
   },
   "map": {
     "title": "عرض الخريطة",
