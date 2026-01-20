@@ -9,7 +9,7 @@ declare global {
 }
 
 // GA Measurement ID - this is a publishable key, safe for frontend
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "";
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-J2XLQBJY47";
 
 let isInitialized = false;
 
