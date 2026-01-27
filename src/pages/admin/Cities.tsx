@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map, Users, Building2, ChevronDown } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,25 +16,91 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-// Morocco regions with colors for visual distinction
-const MOROCCO_REGIONS = [
-  { name: "Tanger-Tétouan-Al Hoceïma", color: "bg-blue-500" },
-  { name: "Oriental", color: "bg-orange-500" },
-  { name: "Fès-Meknès", color: "bg-purple-500" },
-  { name: "Rabat-Salé-Kénitra", color: "bg-green-500" },
-  { name: "Béni Mellal-Khénifra", color: "bg-yellow-500" },
-  { name: "Casablanca-Settat", color: "bg-red-500" },
-  { name: "Marrakech-Safi", color: "bg-pink-500" },
-  { name: "Drâa-Tafilalet", color: "bg-amber-600" },
-  { name: "Souss-Massa", color: "bg-teal-500" },
-  { name: "Guelmim-Oued Noun", color: "bg-indigo-500" },
-  { name: "Laâyoune-Sakia El Hamra", color: "bg-cyan-500" },
-  { name: "Dakhla-Oued Ed-Dahab", color: "bg-emerald-500" },
-];
+// Country-specific regions configuration
+const COUNTRY_REGIONS: Record<string, { name: string; color: string }[]> = {
+  "Morocco": [
+    { name: "Tanger-Tétouan-Al Hoceïma", color: "bg-blue-500" },
+    { name: "Oriental", color: "bg-orange-500" },
+    { name: "Fès-Meknès", color: "bg-purple-500" },
+    { name: "Rabat-Salé-Kénitra", color: "bg-green-500" },
+    { name: "Béni Mellal-Khénifra", color: "bg-yellow-500" },
+    { name: "Casablanca-Settat", color: "bg-red-500" },
+    { name: "Marrakech-Safi", color: "bg-pink-500" },
+    { name: "Drâa-Tafilalet", color: "bg-amber-600" },
+    { name: "Souss-Massa", color: "bg-teal-500" },
+    { name: "Guelmim-Oued Noun", color: "bg-indigo-500" },
+    { name: "Laâyoune-Sakia El Hamra", color: "bg-cyan-500" },
+    { name: "Dakhla-Oued Ed-Dahab", color: "bg-emerald-500" },
+  ],
+  "Algeria": [
+    { name: "Alger", color: "bg-green-500" },
+    { name: "Oran", color: "bg-blue-500" },
+    { name: "Constantine", color: "bg-red-500" },
+    { name: "Annaba", color: "bg-purple-500" },
+    { name: "Blida", color: "bg-yellow-500" },
+  ],
+  "Tunisia": [
+    { name: "Tunis", color: "bg-red-500" },
+    { name: "Sfax", color: "bg-blue-500" },
+    { name: "Sousse", color: "bg-green-500" },
+    { name: "Kairouan", color: "bg-orange-500" },
+  ],
+  "Egypt": [
+    { name: "Cairo", color: "bg-yellow-500" },
+    { name: "Alexandria", color: "bg-blue-500" },
+    { name: "Giza", color: "bg-amber-500" },
+    { name: "Luxor", color: "bg-orange-500" },
+  ],
+  "Senegal": [
+    { name: "Dakar", color: "bg-green-500" },
+    { name: "Thiès", color: "bg-yellow-500" },
+    { name: "Saint-Louis", color: "bg-blue-500" },
+  ],
+  "Nigeria": [
+    { name: "Lagos", color: "bg-green-500" },
+    { name: "Abuja", color: "bg-blue-500" },
+    { name: "Kano", color: "bg-red-500" },
+    { name: "Ibadan", color: "bg-purple-500" },
+  ],
+  "Kenya": [
+    { name: "Nairobi", color: "bg-green-500" },
+    { name: "Mombasa", color: "bg-blue-500" },
+    { name: "Kisumu", color: "bg-red-500" },
+  ],
+  "South Africa": [
+    { name: "Gauteng", color: "bg-yellow-500" },
+    { name: "Western Cape", color: "bg-blue-500" },
+    { name: "KwaZulu-Natal", color: "bg-green-500" },
+    { name: "Eastern Cape", color: "bg-red-500" },
+  ],
+  "Ghana": [
+    { name: "Greater Accra", color: "bg-yellow-500" },
+    { name: "Ashanti", color: "bg-green-500" },
+    { name: "Western", color: "bg-blue-500" },
+  ],
+  "Ivory Coast": [
+    { name: "Abidjan", color: "bg-orange-500" },
+    { name: "Bouaké", color: "bg-green-500" },
+    { name: "Yamoussoukro", color: "bg-blue-500" },
+  ],
+};
 
-const getRegionColor = (regionName: string | null) => {
-  const region = MOROCCO_REGIONS.find(r => r.name === regionName);
+// Keep Morocco regions for backward compatibility
+const MOROCCO_REGIONS = COUNTRY_REGIONS["Morocco"];
+
+const getRegionColor = (regionName: string | null, country?: string) => {
+  if (!regionName) return "bg-gray-500";
+  const regions = country ? COUNTRY_REGIONS[country] : MOROCCO_REGIONS;
+  const region = regions?.find(r => r.name === regionName);
   return region?.color || "bg-gray-500";
+};
+
+type Country = {
+  id: string;
+  name: string;
+  code: string;
+  flag_emoji: string | null;
+  is_active: boolean;
 };
 
 const citySchema = z.object({
@@ -64,6 +130,21 @@ const AdminCities = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"table" | "regions">("regions");
 
+  // Fetch countries from database
+  const { data: countries } = useQuery({
+    queryKey: ['countries-list'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('countries')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
+      
+      if (error) throw error;
+      return data as Country[];
+    }
+  });
+
   const { data: cities } = useQuery({
     queryKey: ['admin-cities'],
     queryFn: async () => {
@@ -76,6 +157,12 @@ const AdminCities = () => {
       return data;
     }
   });
+
+  // Get regions for selected country
+  const availableRegions = useMemo(() => {
+    return COUNTRY_REGIONS[formData.country] || [];
+  }, [formData.country]);
+
 
   const createCityMutation = useMutation({
     mutationFn: async (data: { name: string; country: string; latitude: number; longitude: number }) => {
@@ -307,12 +394,24 @@ const AdminCities = () => {
                       </div>
                       <div>
                         <Label htmlFor="country">{t('admin.cities.country')}</Label>
-                        <Input
-                          id="country"
+                        <Select
                           value={formData.country}
-                          onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                          placeholder="Morocco"
-                        />
+                          onValueChange={(value) => setFormData({ ...formData, country: value, region: "" })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select country..." />
+                          </SelectTrigger>
+                          <SelectContent className="bg-popover z-50">
+                            {countries?.map(c => (
+                              <SelectItem key={c.id} value={c.name}>
+                                <span className="flex items-center gap-2">
+                                  {c.flag_emoji && <span>{c.flag_emoji}</span>}
+                                  {c.name}
+                                </span>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div>
                         <Label htmlFor="region">Région</Label>
@@ -321,17 +420,23 @@ const AdminCities = () => {
                           onValueChange={(value) => setFormData({ ...formData, region: value })}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Sélectionner..." />
+                            <SelectValue placeholder={availableRegions.length ? "Sélectionner..." : "No regions defined"} />
                           </SelectTrigger>
-                          <SelectContent>
-                            {MOROCCO_REGIONS.map(r => (
-                              <SelectItem key={r.name} value={r.name}>
-                                <span className="flex items-center gap-2">
-                                  <span className={`w-2 h-2 rounded-full ${r.color}`} />
-                                  {r.name}
-                                </span>
+                          <SelectContent className="bg-popover z-50">
+                            {availableRegions.length > 0 ? (
+                              availableRegions.map(r => (
+                                <SelectItem key={r.name} value={r.name}>
+                                  <span className="flex items-center gap-2">
+                                    <span className={`w-2 h-2 rounded-full ${r.color}`} />
+                                    {r.name}
+                                  </span>
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem value="other" disabled>
+                                No regions for this country
                               </SelectItem>
-                            ))}
+                            )}
                           </SelectContent>
                         </Select>
                       </div>
