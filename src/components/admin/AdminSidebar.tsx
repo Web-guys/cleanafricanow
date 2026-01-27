@@ -15,7 +15,8 @@ import {
   Settings,
   Bell,
   Shield,
-  Activity
+  Activity,
+  Globe
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
@@ -63,6 +64,7 @@ export const AdminSidebar = ({ mobile = false, onNavigate }: AdminSidebarProps) 
   const managementLinks = [
     { to: '/admin/users', label: t('admin.users.title'), icon: Users },
     { to: '/admin/organizations', label: 'Organizations', icon: Building2 },
+    { to: '/admin/countries', label: 'Countries', icon: Globe },
     { to: '/admin/cities', label: t('nav.cities'), icon: Map },
   ];
 
