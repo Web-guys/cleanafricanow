@@ -15,6 +15,7 @@ import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminReports from "./pages/admin/Reports";
 import AdminCities from "./pages/admin/Cities";
+import AdminCountries from "./pages/admin/Countries";
 import AdminUsers from "./pages/admin/Users";
 import AdminOrganizations from "./pages/admin/Organizations";
 import AdminSLADashboard from "./pages/admin/SLADashboard";
@@ -127,6 +128,14 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['admin']}>
                   <AdminOrganizations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/countries"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminCountries />
                 </ProtectedRoute>
               }
             />

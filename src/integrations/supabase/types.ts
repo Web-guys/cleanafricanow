@@ -207,6 +207,39 @@ export type Database = {
           },
         ]
       }
+      countries: {
+        Row: {
+          code: string
+          continent: string | null
+          created_at: string | null
+          flag_emoji: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          continent?: string | null
+          created_at?: string | null
+          flag_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          continent?: string | null
+          created_at?: string | null
+          flag_emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       discharge_sites: {
         Row: {
           address: string | null
