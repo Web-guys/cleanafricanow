@@ -52,6 +52,7 @@ export type Database = {
           country: string
           created_at: string | null
           id: string
+          is_featured: boolean | null
           is_municipality: boolean | null
           latitude: number
           longitude: number
@@ -63,6 +64,7 @@ export type Database = {
           country?: string
           created_at?: string | null
           id?: string
+          is_featured?: boolean | null
           is_municipality?: boolean | null
           latitude: number
           longitude: number
@@ -74,6 +76,7 @@ export type Database = {
           country?: string
           created_at?: string | null
           id?: string
+          is_featured?: boolean | null
           is_municipality?: boolean | null
           latitude?: number
           longitude?: number

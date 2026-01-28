@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map, Users, Building2, ChevronDown } from "lucide-react";
+import { MapPin, ArrowLeft, Plus, Pencil, Trash2, Search, Map, Users, Building2, ChevronDown, Star } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useMemo } from "react";
@@ -110,6 +111,7 @@ const citySchema = z.object({
   latitude: z.coerce.number().min(-90).max(90),
   longitude: z.coerce.number().min(-180).max(180),
   population: z.coerce.number().optional(),
+  is_featured: z.boolean().optional(),
 });
 
 const AdminCities = () => {
@@ -125,6 +127,7 @@ const AdminCities = () => {
     latitude: 0 as number,
     longitude: 0 as number,
     population: 0 as number,
+    is_featured: false,
   });
   const [regionFilter, setRegionFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -219,9 +222,27 @@ const AdminCities = () => {
   });
 
   const resetForm = () => {
-    setFormData({ name: "", country: "Morocco", region: "", latitude: 0, longitude: 0, population: 0 });
+    setFormData({ name: "", country: "Morocco", region: "", latitude: 0, longitude: 0, population: 0, is_featured: false });
     setEditingCity(null);
   };
+
+  const toggleFeaturedMutation = useMutation({
+    mutationFn: async ({ id, is_featured }: { id: string; is_featured: boolean }) => {
+      const { error } = await supabase
+        .from('cities')
+        .update({ is_featured })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-cities'] });
+      queryClient.invalidateQueries({ queryKey: ['featured-cities'] });
+      toast({ title: "Featured status updated" });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error updating featured status", description: error.message, variant: "destructive" });
+    },
+  });
 
   const regions = cities ? [...new Set(cities.map(c => c.region).filter(Boolean))].sort() : [];
   const filteredCities = cities?.filter(c => {
@@ -269,9 +290,12 @@ const AdminCities = () => {
       latitude: Number(city.latitude),
       longitude: Number(city.longitude),
       population: city.population || 0,
+      is_featured: city.is_featured || false,
     });
     setIsOpen(true);
   };
+
+  const featuredCount = cities?.filter(c => c.is_featured).length || 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -325,12 +349,13 @@ const AdminCities = () => {
                 <div className="text-sm text-muted-foreground">Population totale</div>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="bg-amber-500/5 border-amber-500/20">
               <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold">
-                  {Math.round((cities?.reduce((sum, c) => sum + (c.population || 0), 0) || 0) / (cities?.length || 1)).toLocaleString()}
+                <div className="flex items-center justify-center gap-1">
+                  <Star className="h-5 w-5 text-amber-500 fill-amber-500" />
+                  <span className="text-3xl font-bold text-amber-600">{featuredCount}</span>
                 </div>
-                <div className="text-sm text-muted-foreground">Pop. moyenne</div>
+                <div className="text-sm text-muted-foreground">Featured Cities</div>
               </CardContent>
             </Card>
           </div>
@@ -473,6 +498,17 @@ const AdminCities = () => {
                         />
                       </div>
                     </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <Star className="h-4 w-4 text-amber-500" />
+                        <Label htmlFor="is_featured" className="cursor-pointer">Featured on Homepage</Label>
+                      </div>
+                      <Switch
+                        id="is_featured"
+                        checked={formData.is_featured}
+                        onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })}
+                      />
+                    </div>
                     <div className="flex justify-end gap-2">
                       <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
                         {t('common.cancel')}
@@ -523,6 +559,7 @@ const AdminCities = () => {
                             className="flex items-center justify-between py-1.5 px-2 rounded hover:bg-muted/50 group"
                           >
                             <div className="flex items-center gap-2 min-w-0">
+                              {city.is_featured && <Star className="h-3 w-3 text-amber-500 fill-amber-500 shrink-0" />}
                               <MapPin className="h-3 w-3 text-muted-foreground shrink-0" />
                               <span className="text-sm truncate">{city.name}</span>
                             </div>
@@ -641,6 +678,7 @@ const AdminCities = () => {
                         <TableHead>{t('admin.cities.cityName')}</TableHead>
                         <TableHead>Région</TableHead>
                         <TableHead>Population</TableHead>
+                        <TableHead>Featured</TableHead>
                         <TableHead>{t('admin.cities.latitude')}</TableHead>
                         <TableHead>{t('admin.cities.longitude')}</TableHead>
                         <TableHead className="text-right">{t('common.actions')}</TableHead>
@@ -659,6 +697,15 @@ const AdminCities = () => {
                           <TableCell className="text-sm">{city.region || '-'}</TableCell>
                           <TableCell className="font-mono text-sm">
                             {city.population?.toLocaleString() || '-'}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Switch
+                                checked={city.is_featured || false}
+                                onCheckedChange={(checked) => toggleFeaturedMutation.mutate({ id: city.id, is_featured: checked })}
+                              />
+                              {city.is_featured && <Star className="h-4 w-4 text-amber-500 fill-amber-500" />}
+                            </div>
                           </TableCell>
                           <TableCell className="font-mono text-sm">
                             {Number(city.latitude).toFixed(4)}
