@@ -110,7 +110,7 @@ const App = () => (
             <Route
               path="/admin/cities"
               element={
-                <ProtectedRoute requiredRoles={['admin']}>
+                <ProtectedRoute requiredRoles={['admin', 'municipality', 'ngo']}>
                   <AdminCities />
                 </ProtectedRoute>
               }
