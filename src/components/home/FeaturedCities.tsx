@@ -14,6 +14,7 @@ export const FeaturedCities = () => {
       const { data, error } = await supabase
         .from("cities")
         .select("*")
+        .eq("is_featured", true)
         .order("name")
         .limit(8);
 
