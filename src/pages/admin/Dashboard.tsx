@@ -1,4 +1,4 @@
-import { Shield, TrendingUp, Clock, CheckCircle2, AlertTriangle, BarChart3, Menu } from "lucide-react";
+import { Shield, TrendingUp, Clock, CheckCircle2, AlertTriangle, BarChart3, Menu, Activity } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -9,8 +9,11 @@ import { SystemHealthCard } from "@/components/admin/SystemHealthCard";
 import { RecentActivityFeed } from "@/components/admin/RecentActivityFeed";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { QuickActionsCard } from "@/components/admin/QuickActionsCard";
+import { PerformanceMetricsCard } from "@/components/admin/PerformanceMetricsCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -37,9 +40,10 @@ const AdminDashboard = () => {
   const { data: stats } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      const { data: allReports } = await supabase.from('reports').select('status, sla_due_date');
+      const { data: allReports } = await supabase.from('reports').select('status, sla_due_date, created_at');
       const { count: citiesCount } = await supabase.from('cities').select('*', { count: 'exact', head: true });
       const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+      const { count: orgsCount } = await supabase.from('organizations').select('*', { count: 'exact', head: true });
       
       const total = allReports?.length || 0;
       const pending = allReports?.filter(r => r.status === 'pending').length || 0;
@@ -48,8 +52,23 @@ const AdminDashboard = () => {
       const overdue = allReports?.filter(r => 
         r.sla_due_date && new Date(r.sla_due_date) < new Date() && r.status !== 'resolved'
       ).length || 0;
+
+      // Calculate today's reports
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayReports = allReports?.filter(r => new Date(r.created_at!) >= today).length || 0;
       
-      return { total, pending, inProgress, resolved, cities: citiesCount || 0, users: usersCount || 0, overdue };
+      return { 
+        total, 
+        pending, 
+        inProgress, 
+        resolved, 
+        cities: citiesCount || 0, 
+        users: usersCount || 0, 
+        organizations: orgsCount || 0,
+        overdue,
+        todayReports
+      };
     }
   });
 
@@ -59,7 +78,7 @@ const AdminDashboard = () => {
       value: stats?.total || 0,
       icon: TrendingUp,
       color: 'primary' as const,
-      subtitle: `${stats?.users || 0} active users`,
+      subtitle: `+${stats?.todayReports || 0} today`,
     },
     {
       title: t('admin.dashboard.pending'),
@@ -112,7 +131,9 @@ const AdminDashboard = () => {
               </Sheet>
               
               <div className="flex items-center gap-3">
-                <Shield className="h-6 w-6 text-primary" />
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/60 rounded-xl flex items-center justify-center shadow-lg">
+                  <Shield className="h-5 w-5 text-primary-foreground" />
+                </div>
                 <div>
                   <h1 className="text-xl lg:text-2xl font-bold">{t('admin.dashboard.title')}</h1>
                   <p className="text-sm text-muted-foreground hidden md:block">Welcome back, Administrator</p>
@@ -121,6 +142,11 @@ const AdminDashboard = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Live indicator */}
+              <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
+                <Activity className="h-3 w-3 text-green-500 animate-pulse" />
+                <span>Live</span>
+              </div>
               <NotificationBell />
               <LanguageSwitcher />
               <ThemeToggle />
@@ -132,6 +158,9 @@ const AdminDashboard = () => {
         <main className="flex-1 p-4 lg:p-8 space-y-6">
           {/* Stats Grid */}
           <StatsGrid stats={statsData} />
+
+          {/* Quick Actions */}
+          <QuickActionsCard />
 
           {/* Main Content Grid */}
           <div className="grid lg:grid-cols-3 gap-6">
@@ -157,8 +186,9 @@ const AdminDashboard = () => {
               />
             </div>
 
-            {/* Right Column - System Health & Activity */}
+            {/* Right Column - Metrics, System Health & Activity */}
             <div className="space-y-6">
+              <PerformanceMetricsCard />
               <SystemHealthCard />
               <RecentActivityFeed />
             </div>
