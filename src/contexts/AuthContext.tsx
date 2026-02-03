@@ -3,7 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-type AppRole = 'admin' | 'municipality' | 'citizen' | 'tourist' | 'ngo';
+type AppRole = 'admin' | 'municipality' | 'citizen' | 'tourist' | 'ngo' | 'volunteer' | 'partner';
 
 interface AuthContextType {
   user: User | null;
@@ -205,6 +205,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return '/municipality';
     } else if (userRoles.includes('ngo')) {
       return '/ngo';
+    } else if (userRoles.includes('partner')) {
+      return '/partner';
+    } else if (userRoles.includes('volunteer')) {
+      return '/volunteer';
     } else {
       return '/';
     }

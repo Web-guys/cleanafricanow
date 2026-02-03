@@ -25,7 +25,7 @@ interface DashboardLayoutProps {
   children: ReactNode;
   title: string;
   icon?: ReactNode;
-  role: 'admin' | 'municipality' | 'ngo';
+  role: 'admin' | 'municipality' | 'ngo' | 'volunteer' | 'partner';
 }
 
 export const DashboardLayout = ({ children, title, icon, role }: DashboardLayoutProps) => {
@@ -48,9 +48,29 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
 
   const ngoLinks = [
     { to: '/ngo', label: t('nav.dashboard'), icon: LayoutDashboard },
+    { to: '/admin/reports', label: t('municipality.dashboard.manageReports', 'Manage Reports'), icon: FileText },
   ];
 
-  const links = role === 'admin' ? adminLinks : role === 'municipality' ? municipalityLinks : ngoLinks;
+  const volunteerLinks = [
+    { to: '/volunteer', label: t('nav.dashboard'), icon: LayoutDashboard },
+  ];
+
+  const partnerLinks = [
+    { to: '/partner', label: t('nav.dashboard'), icon: LayoutDashboard },
+  ];
+
+  const getLinks = () => {
+    switch (role) {
+      case 'admin': return adminLinks;
+      case 'municipality': return municipalityLinks;
+      case 'ngo': return ngoLinks;
+      case 'volunteer': return volunteerLinks;
+      case 'partner': return partnerLinks;
+      default: return [];
+    }
+  };
+
+  const links = getLinks();
 
   const NavLink = ({ to, icon: Icon, children }: { to: string; icon: React.ElementType; children: React.ReactNode }) => {
     const isActive = location.pathname === to;
