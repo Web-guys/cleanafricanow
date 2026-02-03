@@ -24,7 +24,85 @@ serve(async (req) => {
       }
     });
 
-    // Create regular client to verify the requesting user
+    const { action, ...payload } = await req.json();
+
+    // Special action for bootstrapping test users (no auth required, uses service key)
+    if (action === "bootstrap_test_users") {
+      const testUsers = [
+        { email: "admin@cleanafricanow.com", password: "Admin123!", full_name: "Admin User", role: "admin" },
+        { email: "municipality@cleanafricanow.com", password: "Municipality123!", full_name: "Municipality User", role: "municipality" },
+        { email: "ngo@cleanafricanow.com", password: "Ngo123456!", full_name: "NGO User", role: "ngo" },
+        { email: "volunteer@cleanafricanow.com", password: "Volunteer123!", full_name: "Volunteer User", role: "volunteer" },
+        { email: "partner@cleanafricanow.com", password: "Partner123!", full_name: "Partner Company", role: "partner" },
+        { email: "citizen@cleanafricanow.com", password: "Citizen123!", full_name: "Citizen User", role: "citizen" },
+      ];
+
+      const results = [];
+
+      for (const testUser of testUsers) {
+        try {
+          // Check if user already exists
+          const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
+          const userExists = existingUsers?.users?.some(u => u.email === testUser.email);
+
+          if (userExists) {
+            results.push({ email: testUser.email, status: "already_exists" });
+            continue;
+          }
+
+          // Create user
+          const { data: newUser, error: createError } = await supabaseAdmin.auth.admin.createUser({
+            email: testUser.email,
+            password: testUser.password,
+            email_confirm: true,
+            user_metadata: { full_name: testUser.full_name }
+          });
+
+          if (createError) {
+            results.push({ email: testUser.email, status: "error", error: createError.message });
+            continue;
+          }
+
+          // Profile is created by trigger, but let's ensure it exists
+          const { error: profileError } = await supabaseAdmin
+            .from("profiles")
+            .upsert({
+              id: newUser.user.id,
+              email: testUser.email,
+              full_name: testUser.full_name,
+            }, { onConflict: 'id' });
+
+          if (profileError) {
+            console.error("Profile upsert error:", profileError);
+          }
+
+          // Assign role (trigger assigns citizen, we need to add additional roles)
+          if (testUser.role !== "citizen") {
+            const { error: roleError } = await supabaseAdmin
+              .from("user_roles")
+              .insert({
+                user_id: newUser.user.id,
+                role: testUser.role
+              });
+
+            if (roleError && !roleError.message.includes("duplicate")) {
+              console.error("Role assignment error:", roleError);
+            }
+          }
+
+          results.push({ email: testUser.email, status: "created", role: testUser.role });
+        } catch (err) {
+          results.push({ email: testUser.email, status: "error", error: String(err) });
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, users: results }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // For other actions, require admin authentication
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(
@@ -59,8 +137,6 @@ serve(async (req) => {
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
-
-    const { action, ...payload } = await req.json();
 
     switch (action) {
       case "create_user": {
