@@ -1,4 +1,4 @@
-import { Heart, TrendingUp, Clock, CheckCircle2, Building2, Map, MapPin } from "lucide-react";
+import { Heart, TrendingUp, Clock, CheckCircle2, Building2, Map, MapPin, FileText, Calendar, Users, Route, Recycle } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,9 @@ import { RecentReportsTable } from "@/components/dashboard/RecentReportsTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CollectionEventsPanel } from "@/components/municipality/CollectionEventsPanel";
+import { EventRegistrationsPanel } from "@/components/municipality/EventRegistrationsPanel";
 
 interface NgoRegion {
   id: string;
@@ -64,6 +67,7 @@ const NgoDashboard = () => {
   });
 
   const cityIds = assignedRegions?.map(r => r.city_id) || [];
+  const primaryCityId = cityIds[0] || null;
 
   const { data: reports, isLoading } = useQuery({
     queryKey: ['ngo-reports', cityIds],
@@ -90,6 +94,14 @@ const NgoDashboard = () => {
         .eq('id', id);
       
       if (error) throw error;
+
+      try {
+        await supabase.functions.invoke('send-status-notification', {
+          body: { report_id: id, new_status: status },
+        });
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ngo-reports'] });
@@ -148,6 +160,8 @@ const NgoDashboard = () => {
 
   const quickActions = [
     { label: t('nav.map'), to: '/map', icon: Map },
+    { label: 'Organiser un événement', to: '#events', icon: Calendar },
+    { label: 'Voir les inscriptions', to: '#registrations', icon: Users },
   ];
 
   return (
@@ -193,16 +207,102 @@ const NgoDashboard = () => {
         {/* Quick Actions */}
         <QuickActions actions={quickActions} />
 
-        {/* Reports Table */}
-        <RecentReportsTable 
-          reports={reports} 
-          isLoading={isLoading}
-          showCity
-          showStatusSelect
-          onStatusChange={(id, status) => updateStatusMutation.mutate({ id, status })}
-          title={t('ngo.dashboard.reportsInRegions', 'Reports in Your Regions')}
-          emptyMessage={t('ngo.dashboard.noReports', 'No reports found in your assigned regions.')}
-        />
+        {/* Management Tabs */}
+        <Tabs defaultValue="reports" className="space-y-4">
+          <div className="overflow-x-auto -mx-4 px-4 pb-2">
+            <TabsList className="inline-flex w-max min-w-full lg:grid lg:w-full lg:grid-cols-4 gap-1">
+              <TabsTrigger value="reports" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Signalements</span>
+              </TabsTrigger>
+              <TabsTrigger value="events" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Calendar className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Événements</span>
+              </TabsTrigger>
+              <TabsTrigger value="registrations" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <Users className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Inscriptions</span>
+              </TabsTrigger>
+              <TabsTrigger value="impact" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
+                <TrendingUp className="h-4 w-4 shrink-0" />
+                <span className="text-xs lg:text-sm">Impact</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value="reports">
+            <RecentReportsTable 
+              reports={reports} 
+              isLoading={isLoading}
+              showCity
+              showStatusSelect
+              onStatusChange={(id, status) => updateStatusMutation.mutate({ id, status })}
+              title={t('ngo.dashboard.reportsInRegions', 'Reports in Your Regions')}
+              emptyMessage={t('ngo.dashboard.noReports', 'No reports found in your assigned regions.')}
+            />
+          </TabsContent>
+
+          <TabsContent value="events">
+            {primaryCityId ? (
+              <CollectionEventsPanel cityId={primaryCityId} />
+            ) : (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <Calendar className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground">Aucune région assignée pour gérer les événements.</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="registrations">
+            {primaryCityId ? (
+              <EventRegistrationsPanel cityId={primaryCityId} />
+            ) : (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <Users className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
+                  <p className="text-muted-foreground">Aucune région assignée pour voir les inscriptions.</p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="impact">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  Impact Environnemental
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <div className="p-6 rounded-xl bg-green-50 dark:bg-green-900/20 text-center">
+                    <p className="text-3xl font-bold text-green-600">{stats.resolved}</p>
+                    <p className="text-sm text-muted-foreground">Problèmes résolus</p>
+                  </div>
+                  <div className="p-6 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-center">
+                    <p className="text-3xl font-bold text-blue-600">{stats.regions}</p>
+                    <p className="text-sm text-muted-foreground">Régions couvertes</p>
+                  </div>
+                  <div className="p-6 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-center">
+                    <p className="text-3xl font-bold text-purple-600">
+                      {stats.total > 0 ? Math.round((stats.resolved / stats.total) * 100) : 0}%
+                    </p>
+                    <p className="text-sm text-muted-foreground">Taux de résolution</p>
+                  </div>
+                </div>
+                <div className="mt-6 p-4 rounded-lg bg-muted">
+                  <p className="text-sm text-muted-foreground">
+                    Votre ONG contribue activement à la protection de l'environnement dans {stats.regions} région(s).
+                    Continuez votre excellent travail !
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );

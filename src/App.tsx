@@ -26,6 +26,8 @@ import AdminSettings from "./pages/admin/Settings";
 import AdminAnalytics from "./pages/admin/Analytics";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
+import VolunteerDashboard from "./pages/volunteer/Dashboard";
+import PartnerDashboard from "./pages/partner/Dashboard";
 import Mission from "./pages/Mission";
 import Team from "./pages/Team";
 import Careers from "./pages/Careers";
@@ -200,6 +202,22 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['municipality']}>
                   <MunicipalityDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/volunteer"
+              element={
+                <ProtectedRoute requiredRoles={['volunteer']}>
+                  <VolunteerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/partner"
+              element={
+                <ProtectedRoute requiredRoles={['partner']}>
+                  <PartnerDashboard />
                 </ProtectedRoute>
               }
             />
