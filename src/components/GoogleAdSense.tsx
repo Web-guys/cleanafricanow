@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { fetchIntegrationSettings, getIntegrationSettings } from "@/hooks/useIntegrationSettings";
 
 declare global {
   interface Window {
@@ -6,17 +7,29 @@ declare global {
   }
 }
 
-// AdSense Publisher ID - will be set via environment variable
-const ADSENSE_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID || "";
-
 let isInitialized = false;
 
+// Get AdSense client ID from settings or env
+const getAdSenseClientId = () => {
+  const settings = getIntegrationSettings();
+  if (settings.google_adsense_enabled && settings.google_adsense_id) {
+    return settings.google_adsense_id;
+  }
+  // Fallback to env variable
+  return import.meta.env.VITE_ADSENSE_CLIENT_ID || "";
+};
+
 // Initialize AdSense script - only runs once
-export const initGoogleAdSense = () => {
-  if (!ADSENSE_CLIENT_ID || isInitialized) {
-    if (!ADSENSE_CLIENT_ID) {
+export const initGoogleAdSense = async () => {
+  // Fetch settings from DB first
+  await fetchIntegrationSettings();
+  
+  const clientId = getAdSenseClientId();
+  
+  if (!clientId || isInitialized) {
+    if (!clientId) {
       console.info(
-        "[Google AdSense] Not configured. Add VITE_ADSENSE_CLIENT_ID to enable ads."
+        "[Google AdSense] Not configured. Configure in Admin → Settings → Integrations."
       );
     }
     return;
@@ -31,12 +44,12 @@ export const initGoogleAdSense = () => {
   // Add AdSense script
   const script = document.createElement("script");
   script.async = true;
-  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`;
+  script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${clientId}`;
   script.crossOrigin = "anonymous";
 
   script.onload = () => {
     isInitialized = true;
-    console.info(`[Google AdSense] Initialized with client: ${ADSENSE_CLIENT_ID}`);
+    console.info(`[Google AdSense] Initialized with client: ${clientId}`);
   };
 
   script.onerror = () => {
@@ -71,8 +84,10 @@ export const AdUnit = ({
   className = "",
   style,
 }: AdUnitProps) => {
+  const clientId = getAdSenseClientId();
+
   useEffect(() => {
-    if (!ADSENSE_CLIENT_ID) return;
+    if (!clientId) return;
 
     try {
       // Push the ad to display
@@ -80,9 +95,9 @@ export const AdUnit = ({
     } catch (error) {
       console.error("[Google AdSense] Error displaying ad:", error);
     }
-  }, []);
+  }, [clientId]);
 
-  if (!ADSENSE_CLIENT_ID) {
+  if (!clientId) {
     return null; // Don't render anything if AdSense is not configured
   }
 
@@ -94,7 +109,7 @@ export const AdUnit = ({
           display: "block",
           ...style,
         }}
-        data-ad-client={ADSENSE_CLIENT_ID}
+        data-ad-client={clientId}
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive ? "true" : "false"}

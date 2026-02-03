@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { fetchIntegrationSettings, getIntegrationSettings } from "./useIntegrationSettings";
 
 declare global {
   interface Window {
@@ -8,21 +9,31 @@ declare global {
   }
 }
 
-// GA Measurement ID - this is a publishable key, safe for frontend
-const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-J2XLQBJY47";
+// Fallback to env variable if DB setting is not available
+const getGAMeasurementId = () => {
+  const settings = getIntegrationSettings();
+  if (settings.google_analytics_enabled && settings.google_analytics_id) {
+    return settings.google_analytics_id;
+  }
+  // Fallback to env variable
+  return import.meta.env.VITE_GA_MEASUREMENT_ID || "G-J2XLQBJY47";
+};
 
 let isInitialized = false;
+let currentMeasurementId = "";
 
 export const useGoogleAnalytics = () => {
   const location = useLocation();
   const isFirstRender = useRef(true);
 
   useEffect(() => {
+    const measurementId = getGAMeasurementId();
+    
     // Skip if no measurement ID configured
-    if (!GA_MEASUREMENT_ID) {
+    if (!measurementId) {
       if (isFirstRender.current) {
         console.info(
-          "[Google Analytics] Not configured. Add VITE_GA_MEASUREMENT_ID to enable tracking."
+          "[Google Analytics] Not configured. Configure in Admin → Settings → Integrations."
         );
         isFirstRender.current = false;
       }
@@ -31,7 +42,7 @@ export const useGoogleAnalytics = () => {
 
     // Track page view on route change
     if (window.gtag && isInitialized) {
-      window.gtag("config", GA_MEASUREMENT_ID, {
+      window.gtag("config", measurementId, {
         page_path: location.pathname + location.search,
         page_title: document.title,
       });
@@ -44,21 +55,36 @@ export const useGoogleAnalytics = () => {
 };
 
 // Initialize GA script - only runs once
-export const initGoogleAnalytics = () => {
-  if (!GA_MEASUREMENT_ID || isInitialized) {
+export const initGoogleAnalytics = async () => {
+  // First fetch settings from DB
+  await fetchIntegrationSettings();
+  
+  const settings = getIntegrationSettings();
+  
+  // Check if enabled via DB settings
+  let measurementId = "";
+  if (settings.google_analytics_enabled && settings.google_analytics_id) {
+    measurementId = settings.google_analytics_id;
+  } else {
+    // Fallback to env variable
+    measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || "G-J2XLQBJY47";
+  }
+
+  if (!measurementId || isInitialized) {
     return;
   }
 
   // Prevent duplicate initialization
   if (document.querySelector(`script[src*="googletagmanager.com/gtag"]`)) {
     isInitialized = true;
+    currentMeasurementId = measurementId;
     return;
   }
 
   // Add gtag script
   const script = document.createElement("script");
   script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
   
   script.onload = () => {
     // Initialize dataLayer
@@ -67,12 +93,13 @@ export const initGoogleAnalytics = () => {
       window.dataLayer.push(args);
     };
     window.gtag("js", new Date());
-    window.gtag("config", GA_MEASUREMENT_ID, {
+    window.gtag("config", measurementId, {
       send_page_view: true,
     });
     
     isInitialized = true;
-    console.info(`[Google Analytics] Initialized with ID: ${GA_MEASUREMENT_ID}`);
+    currentMeasurementId = measurementId;
+    console.info(`[Google Analytics] Initialized with ID: ${measurementId}`);
   };
 
   script.onerror = () => {
@@ -87,7 +114,9 @@ export const trackEvent = (
   eventName: string,
   eventParams?: Record<string, unknown>
 ) => {
-  if (!GA_MEASUREMENT_ID) {
+  const measurementId = getGAMeasurementId();
+  
+  if (!measurementId) {
     return;
   }
   
