@@ -8,7 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Settings, Clock, Bell, Brain, Shield, Save, Loader2 } from "lucide-react";
+import { Settings, Clock, Bell, Brain, Shield, Save, Loader2, Plug } from "lucide-react";
+import { IntegrationSettingsPanel } from "./IntegrationSettingsPanel";
 
 interface AdminSetting {
   id: string;
@@ -132,15 +133,19 @@ export const SystemSettingsPanel = () => {
         )}
       </div>
 
-      <Tabs defaultValue="sla">
-        <TabsList className="grid grid-cols-5 w-full max-w-2xl">
+      <Tabs defaultValue="integrations">
+        <TabsList className="grid grid-cols-6 w-full max-w-3xl">
+          <TabsTrigger value="integrations" className="flex items-center gap-2">
+            <Plug className="h-4 w-4" />
+            Integrations
+          </TabsTrigger>
           <TabsTrigger value="sla" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
             SLA
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2">
             <Bell className="h-4 w-4" />
-            Notifications
+            Notifs
           </TabsTrigger>
           <TabsTrigger value="ai" className="flex items-center gap-2">
             <Brain className="h-4 w-4" />
@@ -155,6 +160,10 @@ export const SystemSettingsPanel = () => {
             System
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="integrations" className="mt-6">
+          <IntegrationSettingsPanel />
+        </TabsContent>
 
         <TabsContent value="sla" className="mt-6">
           <Card>
