@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 import { 
   BarChart3, 
   Megaphone, 
@@ -17,7 +18,11 @@ import {
   Info,
   CheckCircle,
   AlertTriangle,
-  LogIn
+  LogIn,
+  Mail,
+  Clock,
+  Sparkles,
+  Bell
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useIntegrationSettings } from "@/hooks/useIntegrationSettings";
@@ -404,6 +409,95 @@ export const IntegrationSettingsPanel = () => {
                 Open Google Cloud Console
               </a>
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Gmail API - Coming Soon */}
+        <Card className="relative overflow-hidden border-dashed border-2 border-muted-foreground/30">
+          <div className="absolute inset-0 bg-gradient-to-br from-muted/50 to-transparent pointer-events-none" />
+          <div className="absolute top-4 right-4">
+            <Badge variant="secondary" className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30 animate-pulse">
+              <Clock className="h-3 w-3 mr-1" />
+              Coming Soon
+            </Badge>
+          </div>
+          <CardHeader className="relative">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 rounded-lg">
+                <Mail className="h-5 w-5 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <CardTitle className="text-base flex items-center gap-2">
+                  Gmail API Integration
+                  <Sparkles className="h-4 w-4 text-amber-500" />
+                </CardTitle>
+                <CardDescription>Send transactional emails and notifications via Gmail</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="relative space-y-4">
+            <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+              <p className="text-sm text-muted-foreground">
+                <strong className="text-foreground">What's coming:</strong>
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-2">
+                <li className="flex items-start gap-2">
+                  <Bell className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                  <span>Automated email notifications for report updates</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                  <span>Report resolution confirmations to users</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Mail className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                  <span>Weekly digest emails for community updates</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                  <span>SLA breach alerts for municipalities</span>
+                </li>
+              </ul>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg border border-primary/10">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                <span className="text-sm font-medium">In Development</span>
+              </div>
+              <span className="text-xs text-muted-foreground">ETA: Q2 2026</span>
+            </div>
+            <Button variant="outline" size="sm" disabled className="opacity-60">
+              <ExternalLink className="h-3 w-3 mr-2" />
+              Configure Gmail (Coming Soon)
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Future Integrations Preview */}
+        <Card className="border-dashed border-muted-foreground/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+              <Sparkles className="h-4 w-4" />
+              More Integrations Coming
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { name: "WhatsApp", icon: "💬", color: "bg-green-500/10" },
+                { name: "Slack", icon: "📣", color: "bg-purple-500/10" },
+                { name: "Stripe", icon: "💳", color: "bg-blue-500/10" },
+                { name: "Twilio SMS", icon: "📱", color: "bg-red-500/10" },
+              ].map((integration) => (
+                <div
+                  key={integration.name}
+                  className={`${integration.color} rounded-lg p-3 text-center opacity-60 hover:opacity-80 transition-opacity`}
+                >
+                  <span className="text-2xl">{integration.icon}</span>
+                  <p className="text-xs font-medium mt-1">{integration.name}</p>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
