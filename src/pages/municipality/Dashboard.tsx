@@ -1,4 +1,4 @@
-import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route, Recycle, Trash, Building2 } from "lucide-react";
+import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route, Recycle, Trash, Building2, AlertTriangle } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -8,10 +8,14 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { StatsGrid } from "@/components/dashboard/StatsGrid";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentReportsTable } from "@/components/dashboard/RecentReportsTable";
+import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
+import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
+import { OperationalOverview } from "@/components/dashboard/OperationalOverview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { CollectionEventsPanel } from "@/components/municipality/CollectionEventsPanel";
 import { CollectionRoutesPanel } from "@/components/municipality/CollectionRoutesPanel";
 import { EventRegistrationsPanel } from "@/components/municipality/EventRegistrationsPanel";
@@ -86,6 +90,29 @@ const MunicipalityDashboard = () => {
     enabled: !!cityId
   });
 
+  // Fetch pending registrations count for badge
+  const { data: pendingRegistrations } = useQuery({
+    queryKey: ['pending-registrations', cityId],
+    queryFn: async () => {
+      if (!cityId) return 0;
+      const { data: events } = await supabase
+        .from('collection_events')
+        .select('id')
+        .eq('city_id', cityId);
+      
+      if (!events?.length) return 0;
+      
+      const { count } = await supabase
+        .from('event_registrations')
+        .select('id', { count: 'exact', head: true })
+        .in('event_id', events.map(e => e.id))
+        .eq('status', 'pending');
+      
+      return count || 0;
+    },
+    enabled: !!cityId
+  });
+
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       const { error } = await supabase
@@ -126,6 +153,8 @@ const MunicipalityDashboard = () => {
     resolved: reports?.filter(r => r.status === 'resolved').length || 0
   };
 
+  const resolutionRate = stats.total > 0 ? Math.round((stats.resolved / stats.total) * 100) : 0;
+
   const statsData = [
     {
       title: t('admin.dashboard.totalReports'),
@@ -153,15 +182,15 @@ const MunicipalityDashboard = () => {
       value: stats.resolved,
       icon: CheckCircle2,
       color: 'success' as const,
-      subtitle: stats.total ? `${Math.round((stats.resolved / stats.total) * 100)}% ${t('dashboard.resolutionRate', 'resolution rate')}` : undefined,
+      subtitle: `${resolutionRate}% ${t('dashboard.resolutionRate', 'resolution rate')}`,
     },
   ];
 
   const quickActions = [
-    { label: t('municipality.dashboard.manageReports', 'Manage Reports'), to: '/admin/reports', icon: FileText },
+    { label: t('municipality.dashboard.manageReports', 'Manage Reports'), to: '/admin/reports', icon: FileText, variant: 'default' as const },
     { label: t('nav.map'), to: '/map', icon: Map },
-    { label: 'Schedule Event', to: '#collection', icon: Calendar },
-    { label: 'Manage Routes', to: '#routes', icon: Route },
+    { label: t('dashboard.scheduleEvent', 'Schedule Event'), to: '#collection', icon: Calendar },
+    { label: t('dashboard.manageRoutes', 'Manage Routes'), to: '#routes', icon: Route },
   ];
 
   return (
@@ -170,26 +199,19 @@ const MunicipalityDashboard = () => {
       icon={<Building className="h-6 w-6 text-primary" />}
       role="municipality"
     >
-      <div className="p-4 lg:p-8 space-y-8">
-        {/* Assigned City Banner */}
+      <div className="p-4 lg:p-8 space-y-6">
+        {/* Welcome Banner */}
         {profile?.cities ? (
-          <Card className="border-2 border-primary/20 bg-primary/5">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                  <MapPin className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">{t('municipality.dashboard.assignedCity', 'Your Assigned City')}</p>
-                  <h2 className="text-2xl font-bold">{profile.cities.name}</h2>
-                  <p className="text-sm text-muted-foreground">{profile.cities.country}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <WelcomeBanner
+            icon={<MapPin className="h-7 w-7 text-primary" />}
+            title={profile.cities.name}
+            subtitle={t('municipality.dashboard.assignedCity', 'Your Assigned City')}
+            locationCountry={profile.cities.country}
+            gradient="primary"
+          />
         ) : (
           <Alert>
-            <MapPin className="h-4 w-4" />
+            <AlertTriangle className="h-4 w-4" />
             <AlertTitle>{t('municipality.dashboard.noCity', 'No city assigned')}</AlertTitle>
             <AlertDescription>
               {t('municipality.dashboard.noCityDesc', 'Contact an administrator to be assigned to a city.')}
@@ -200,45 +222,75 @@ const MunicipalityDashboard = () => {
         {/* Stats Grid */}
         <StatsGrid stats={statsData} />
 
+        {/* Performance Bar */}
+        {stats.total > 0 && (
+          <Card className="border-primary/20">
+            <CardContent className="py-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">{t('dashboard.overallPerformance', 'Overall Performance')}</span>
+                </div>
+                <span className="text-sm font-bold text-primary">{resolutionRate}%</span>
+              </div>
+              <Progress value={resolutionRate} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-2">
+                {stats.resolved} {t('dashboard.outOf', 'out of')} {stats.total} {t('dashboard.issuesResolved', 'issues resolved')}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Quick Actions */}
         <QuickActions actions={quickActions} />
 
+        {/* Two Column Layout for Activity Feed and Operational Overview */}
+        <div className="grid lg:grid-cols-2 gap-6">
+          <ActivityFeed cityIds={cityId ? [cityId] : []} />
+          <OperationalOverview cityId={cityId} />
+        </div>
+
         {/* Collection Management Tabs */}
         <Tabs defaultValue="reports" className="space-y-4">
-          {/* Mobile-friendly scrollable tabs */}
           <div className="overflow-x-auto -mx-4 px-4 pb-2">
             <TabsList className="inline-flex w-max min-w-full lg:grid lg:w-full lg:grid-cols-8 gap-1">
               <TabsTrigger value="reports" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <FileText className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Signalements</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.reports', 'Reports')}</span>
+                {stats.pending > 0 && (
+                  <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">{stats.pending}</Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger value="events" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Calendar className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Événements</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.events', 'Events')}</span>
               </TabsTrigger>
               <TabsTrigger value="routes" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Route className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Routes</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.routes', 'Routes')}</span>
               </TabsTrigger>
               <TabsTrigger value="registrations" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Users className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Inscriptions</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.registrations', 'Registrations')}</span>
+                {(pendingRegistrations || 0) > 0 && (
+                  <Badge variant="destructive" className="h-5 px-1.5 text-[10px]">{pendingRegistrations}</Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger value="workers" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Users className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Équipes</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.teams', 'Teams')}</span>
               </TabsTrigger>
               <TabsTrigger value="companies" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Building2 className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Partenaires</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.partners', 'Partners')}</span>
               </TabsTrigger>
               <TabsTrigger value="discharge" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Trash className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Décharges</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.dischargeSites', 'Discharge')}</span>
               </TabsTrigger>
               <TabsTrigger value="sorting" className="flex items-center gap-1.5 px-3 py-2 whitespace-nowrap">
                 <Recycle className="h-4 w-4 shrink-0" />
-                <span className="text-xs lg:text-sm">Centres tri</span>
+                <span className="text-xs lg:text-sm">{t('dashboard.sortingCenters', 'Sorting')}</span>
               </TabsTrigger>
             </TabsList>
           </div>
