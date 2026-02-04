@@ -16,7 +16,9 @@ import {
   Pencil,
   Bell,
   FileText,
-  ArrowLeft
+  ArrowLeft,
+  LogOut,
+  Settings
 } from "lucide-react";
 
 import logo from "@/assets/cleanafricanow-logo.png";
@@ -43,7 +45,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { t } = useTranslation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -208,14 +210,26 @@ const Profile = () => {
         <div className="container mx-auto px-4">
           {/* Profile Header */}
           <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">{profile?.full_name || t("profile.citizen")}</h2>
+                  <p className="text-muted-foreground">{user?.email}</p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-2xl font-bold">{profile?.full_name || t("profile.citizen")}</h2>
-                <p className="text-muted-foreground">{user?.email}</p>
-              </div>
+              {/* Sign Out Button - visible on mobile */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={signOut}
+                className="md:hidden flex items-center gap-2 text-destructive border-destructive/30 hover:bg-destructive/10"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">{t("nav.signOut", "Sign Out")}</span>
+              </Button>
             </div>
           </div>
 
