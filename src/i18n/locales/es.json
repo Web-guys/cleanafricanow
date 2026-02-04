@@ -706,5 +706,21 @@
     "totalImpact": "Impacto Total",
     "totalContributors": "Total de Contribuyentes",
     "totalReports": "Total de Reportes"
+  },
+  "events": {
+    "upcoming": "Próximos Eventos",
+    "upcomingDesc": "Únete a eventos de limpieza comunitaria y haz una diferencia real en tu vecindario",
+    "noUpcoming": "No hay eventos próximos por el momento. ¡Vuelve pronto u organiza tu propio evento de limpieza!",
+    "viewAll": "Ver Todos los Eventos",
+    "register": "Registrarse",
+    "spotsLeft": "lugares disponibles",
+    "full": "Lleno",
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "thisWeek": "Esta Semana",
+    "cleanup": "Limpieza",
+    "awareness": "Concientización",
+    "recycling": "Reciclaje",
+    "collection": "Recolección"
   }
 }

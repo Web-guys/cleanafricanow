@@ -706,5 +706,21 @@
     "totalImpact": "Total Impact",
     "totalContributors": "Total Contributors",
     "totalReports": "Total Reports"
+  },
+  "events": {
+    "upcoming": "Upcoming Events",
+    "upcomingDesc": "Join community cleanup events and make a real difference in your neighborhood",
+    "noUpcoming": "No upcoming events at the moment. Check back soon or organize your own cleanup event!",
+    "viewAll": "View All Events",
+    "register": "Register",
+    "spotsLeft": "spots left",
+    "full": "Full",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "thisWeek": "This Week",
+    "cleanup": "Cleanup",
+    "awareness": "Awareness",
+    "recycling": "Recycling",
+    "collection": "Collection"
   }
 }

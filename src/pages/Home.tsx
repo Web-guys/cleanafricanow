@@ -16,6 +16,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { PartnersSection } from "@/components/home/PartnersSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { CTASection } from "@/components/home/CTASection";
+import { UpcomingEvents } from "@/components/home/UpcomingEvents";
 import logo from "@/assets/cleanafricanow-logo.png";
 
 const Home = () => {
@@ -110,6 +111,9 @@ const Home = () => {
 
       {/* Featured Cities */}
       <FeaturedCities />
+
+      {/* Upcoming Events */}
+      <UpcomingEvents />
 
       {/* Testimonials */}
       <TestimonialsSection />

@@ -706,5 +706,21 @@
     "totalImpact": "Impact Total",
     "totalContributors": "Total des Contributeurs",
     "totalReports": "Total des Signalements"
+  },
+  "events": {
+    "upcoming": "Événements à Venir",
+    "upcomingDesc": "Participez aux événements de nettoyage communautaire et faites une vraie différence dans votre quartier",
+    "noUpcoming": "Aucun événement à venir pour le moment. Revenez bientôt ou organisez votre propre événement de nettoyage !",
+    "viewAll": "Voir Tous les Événements",
+    "register": "S'inscrire",
+    "spotsLeft": "places restantes",
+    "full": "Complet",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "thisWeek": "Cette Semaine",
+    "cleanup": "Nettoyage",
+    "awareness": "Sensibilisation",
+    "recycling": "Recyclage",
+    "collection": "Collecte"
   }
 }
