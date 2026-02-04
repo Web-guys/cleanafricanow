@@ -27,6 +27,7 @@ import AdminSettings from "./pages/admin/Settings";
 import AdminAnalytics from "./pages/admin/Analytics";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
+import WasteBinsDashboard from "./pages/municipality/WasteBinsDashboard";
 import VolunteerDashboard from "./pages/volunteer/Dashboard";
 import PartnerDashboard from "./pages/partner/Dashboard";
 import Mission from "./pages/Mission";
@@ -206,6 +207,18 @@ const App = () => (
                   <MunicipalityDashboard />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/municipality/bins"
+              element={
+                <ProtectedRoute requiredRoles={['admin', 'municipality']}>
+                  <WasteBinsDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bins"
+              element={<WasteBinsDashboard />}
             />
             <Route
               path="/volunteer"
