@@ -4,6 +4,7 @@ import { ArrowRight, Smartphone, Bell, BarChart3, Shield, Zap, Globe, CheckCircl
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
+import { MoroccanPattern, MoroccanCorner } from "@/components/ui/moroccan-pattern";
 
 const features = [
   { icon: Smartphone, label: "Mobile-First" },
@@ -28,18 +29,18 @@ export const CTASection = () => {
   return (
     <section className="relative py-32 overflow-hidden" ref={ref}>
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-secondary" />
+      <div className="absolute inset-0 bg-gradient-to-br from-moroccan-teal via-primary to-moroccan-blue" />
       
-      {/* Animated Patterns */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_50%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.1),transparent_50%)]" />
-      </div>
+      {/* Moroccan Pattern Overlay */}
+      <MoroccanPattern variant="arabesque" opacity={0.06} color="white" className="z-0" />
       
-      {/* Floating Orbs */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
+      {/* Corner Decorations */}
+      <MoroccanCorner position="top-left" size={100} className="text-moroccan-gold/25" />
+      <MoroccanCorner position="bottom-right" size={100} className="text-moroccan-gold/25" />
+      
+      {/* Floating Orbs with Moroccan colors */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-moroccan-gold/15 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-moroccan-terracotta/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
       <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-white/5 rounded-full blur-2xl animate-float" style={{ animationDelay: '0.5s' }} />
       
       <div className="container mx-auto px-4 relative z-10">
@@ -51,8 +52,8 @@ export const CTASection = () => {
               isVisible && "animate-slide-in-left"
             )}>
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-5 py-2 rounded-full mb-8 border border-white/20">
-                <Zap className="h-4 w-4 animate-pulse" />
+              <div className="inline-flex items-center gap-2 bg-moroccan-gold/20 backdrop-blur-sm px-5 py-2 rounded-full mb-8 border border-moroccan-gold/30">
+                <Zap className="h-4 w-4 animate-pulse text-moroccan-gold" />
                 <span className="text-sm font-semibold">Join the Movement</span>
               </div>
 

@@ -12,6 +12,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+import { MoroccanPattern, MoroccanCorner } from '@/components/ui/moroccan-pattern';
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email address" }),
@@ -145,17 +146,21 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
-      {/* Left side - Animated Features Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary to-secondary relative">
-        {/* Animated Background Blobs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute top-1/3 -right-20 w-60 h-60 bg-white/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Left side - Moroccan styled Features Panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-moroccan-teal via-primary to-moroccan-blue relative">
+        {/* Moroccan Pattern Overlay */}
+        <MoroccanPattern variant="zellige" opacity={0.08} color="white" className="z-0" />
+        
+        {/* Corner Decorations */}
+        <MoroccanCorner position="top-left" size={100} className="text-moroccan-gold/30 z-10" />
+        <MoroccanCorner position="bottom-right" size={100} className="text-moroccan-gold/30 z-10" />
+        
+        {/* Animated Background Blobs with Moroccan colors */}
+        <div className="absolute inset-0 overflow-hidden z-0">
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-moroccan-gold/15 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-1/3 -right-20 w-60 h-60 bg-moroccan-terracotta/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
           <div className="absolute -bottom-20 left-1/4 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
         </div>
-
-        {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
         
         <div className="relative z-10 flex flex-col justify-between p-12 lg:p-16 text-primary-foreground h-full w-full">
           {/* Logo & Branding */}
@@ -172,8 +177,8 @@ const Auth = () => {
           {/* Main Content */}
           <div className="space-y-8">
             <div>
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/10">
-                <Sparkles className="h-4 w-4" />
+              <div className="inline-flex items-center gap-2 bg-moroccan-gold/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-moroccan-gold/30">
+                <Sparkles className="h-4 w-4 text-moroccan-gold" />
                 <span className="text-sm font-medium">AI-Powered Platform</span>
               </div>
               <h2 className="text-4xl xl:text-5xl font-bold mb-4 leading-tight">

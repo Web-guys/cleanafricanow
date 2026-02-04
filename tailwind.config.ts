@@ -70,6 +70,16 @@ export default {
           DEFAULT: "hsl(var(--info))",
           foreground: "hsl(var(--info-foreground))",
         },
+        // Moroccan color palette
+        moroccan: {
+          terracotta: "hsl(var(--moroccan-terracotta))",
+          gold: "hsl(var(--moroccan-gold))",
+          sand: "hsl(var(--moroccan-sand))",
+          blue: "hsl(var(--moroccan-blue))",
+          teal: "hsl(var(--moroccan-teal))",
+          olive: "hsl(var(--moroccan-olive))",
+          burgundy: "hsl(var(--moroccan-burgundy))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
