@@ -212,7 +212,7 @@ const MapView = () => {
           
           {/* Mobile floating buttons */}
           <div className={cn(
-            "lg:hidden absolute bottom-4 left-4 right-4 z-[1000] flex justify-between items-end",
+            "lg:hidden absolute bottom-24 left-4 right-4 z-[1000] flex justify-between items-end",
             "transition-opacity duration-200",
             bottomSheetOpen && "opacity-0 pointer-events-none"
           )}>

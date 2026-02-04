@@ -212,6 +212,17 @@ All colors MUST be HSL.
   }
 }
 
+/* Safe area insets for mobile devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .pb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
+
 /* Arabic font stack */
 .font-arabic {
   font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
@@ -219,4 +230,14 @@ All colors MUST be HSL.
 
 [dir="rtl"] body {
   font-family: 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

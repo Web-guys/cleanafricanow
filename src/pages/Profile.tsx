@@ -18,7 +18,7 @@ import {
   FileText,
   ArrowLeft
 } from "lucide-react";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -166,7 +166,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20 md:pb-0">
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -200,7 +200,6 @@ const Profile = () => {
           <div className="flex items-center gap-2 md:hidden">
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>

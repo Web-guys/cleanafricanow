@@ -11,7 +11,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Footer from "@/components/Footer";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 
 const Contact = () => {
@@ -42,7 +42,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20 md:pb-0">
       {/* Header */}
       <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -63,7 +63,6 @@ const Contact = () => {
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>

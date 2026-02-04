@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 
 interface MapHeaderProps {
@@ -83,8 +83,6 @@ const MapHeader = ({ onToggleSidebar, showSidebarToggle }: MapHeaderProps) => {
               <span className="sm:hidden">Report</span>
             </Link>
           </Button>
-          
-          <MobileNav />
         </div>
       </div>
     </header>
