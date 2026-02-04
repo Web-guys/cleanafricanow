@@ -97,8 +97,8 @@ export const FeaturedCities = () => {
       
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
         <div className={cn(
-          "text-center mb-12 opacity-0",
-          isVisible && "animate-fade-in"
+          "text-center mb-12 transition-all duration-700",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <MapPin className="h-4 w-4 text-primary" />
@@ -121,10 +121,10 @@ export const FeaturedCities = () => {
                 key={city.id} 
                 to={`/map?city=${city.id}`}
                 className={cn(
-                  "opacity-0",
-                  isVisible && "animate-slide-up"
+                  "transition-all duration-500",
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 )}
-                style={{ animationDelay: `${index * 75}ms` }}
+                style={{ transitionDelay: isVisible ? `${index * 75}ms` : '0ms' }}
               >
                 <Card className={cn(
                   "group relative overflow-hidden transition-all duration-300 cursor-pointer h-full",
@@ -179,9 +179,9 @@ export const FeaturedCities = () => {
         </div>
 
         <div className={cn(
-          "text-center mt-10 opacity-0",
-          isVisible && "animate-fade-in"
-        )} style={{ animationDelay: "600ms" }}>
+          "text-center mt-10 transition-all duration-700 delay-500",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        )}>
           <div className="flex flex-wrap gap-4 justify-center items-center">
             <Link 
               to="/map" 

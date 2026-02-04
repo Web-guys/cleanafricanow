@@ -150,8 +150,8 @@ export const UpcomingEvents = () => {
       
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
         <div className={cn(
-          "text-center mb-14 opacity-0",
-          isVisible && "animate-fade-in"
+          "text-center mb-14 transition-all duration-700",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <Sparkles className="h-4 w-4 text-primary animate-pulse" />
@@ -179,10 +179,10 @@ export const UpcomingEvents = () => {
               <div
                 key={event.id}
                 className={cn(
-                  "opacity-0",
-                  isVisible && "animate-slide-up"
+                  "transition-all duration-500",
+                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
                 )}
-                style={{ animationDelay: `${200 + index * 100}ms` }}
+                style={{ transitionDelay: isVisible ? `${200 + index * 100}ms` : '0ms' }}
               >
                 <Card className={cn(
                   "group h-full overflow-hidden transition-all duration-300 cursor-pointer",
@@ -277,9 +277,9 @@ export const UpcomingEvents = () => {
         </div>
 
         <div className={cn(
-          "text-center mt-12 opacity-0",
-          isVisible && "animate-fade-in"
-        )} style={{ animationDelay: "700ms" }}>
+          "text-center mt-12 transition-all duration-700 delay-500",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        )}>
           <Button size="lg" asChild className="shadow-lg hover:shadow-xl transition-all group">
             <Link to="/events">
               <Calendar className="mr-2 h-5 w-5" />
