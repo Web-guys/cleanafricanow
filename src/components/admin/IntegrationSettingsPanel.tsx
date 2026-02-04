@@ -16,7 +16,8 @@ import {
   ExternalLink,
   Info,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  LogIn
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useIntegrationSettings } from "@/hooks/useIntegrationSettings";
@@ -39,6 +40,8 @@ export const IntegrationSettingsPanel = () => {
     google_analytics_enabled: false,
     google_adsense_id: "",
     google_adsense_enabled: false,
+    google_oauth_client_id: "",
+    google_oauth_enabled: false,
   });
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -50,6 +53,8 @@ export const IntegrationSettingsPanel = () => {
         google_analytics_enabled: currentSettings.google_analytics_enabled || false,
         google_adsense_id: currentSettings.google_adsense_id || "",
         google_adsense_enabled: currentSettings.google_adsense_enabled || false,
+        google_oauth_client_id: currentSettings.google_oauth_client_id || "",
+        google_oauth_enabled: currentSettings.google_oauth_enabled || false,
       });
     }
   }, [currentSettings]);
@@ -134,6 +139,20 @@ export const IntegrationSettingsPanel = () => {
         key: "google_adsense_enabled",
         value: settings.google_adsense_enabled,
         description: "Enable Google AdSense ads",
+        category: "integrations",
+        is_public: true,
+      },
+      {
+        key: "google_oauth_client_id",
+        value: settings.google_oauth_client_id,
+        description: "Google OAuth Client ID for Sign-In",
+        category: "integrations",
+        is_public: true,
+      },
+      {
+        key: "google_oauth_enabled",
+        value: settings.google_oauth_enabled,
+        description: "Enable Google OAuth Sign-In",
         category: "integrations",
         is_public: true,
       },
@@ -311,6 +330,78 @@ export const IntegrationSettingsPanel = () => {
               >
                 <ExternalLink className="h-3 w-3" />
                 Open Google AdSense
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Google OAuth Sign-In */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                  <LogIn className="h-5 w-5 text-red-600 dark:text-red-400" />
+                </div>
+                <div>
+                  <CardTitle className="text-base">Google OAuth Sign-In</CardTitle>
+                  <CardDescription>Allow users to sign in with their Google account</CardDescription>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {settings.google_oauth_enabled && settings.google_oauth_client_id ? (
+                  <span className="flex items-center gap-1 text-xs text-green-600 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-full">
+                    <CheckCircle className="h-3 w-3" />
+                    Active
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 text-xs text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30 px-2 py-1 rounded-full">
+                    <AlertTriangle className="h-3 w-3" />
+                    Inactive
+                  </span>
+                )}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="oauth_enabled">Enable Google Sign-In</Label>
+              <Switch
+                id="oauth_enabled"
+                checked={settings.google_oauth_enabled}
+                onCheckedChange={(checked) => updateSetting("google_oauth_enabled", checked)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="oauth_client_id">OAuth Client ID</Label>
+              <Input
+                id="oauth_client_id"
+                placeholder="XXXXXXXX.apps.googleusercontent.com"
+                value={settings.google_oauth_client_id}
+                onChange={(e) => updateSetting("google_oauth_client_id", e.target.value)}
+                disabled={!settings.google_oauth_enabled}
+              />
+              <p className="text-xs text-muted-foreground">
+                Found in Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client IDs
+              </p>
+            </div>
+            <Alert className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+              <AlertTriangle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-amber-800 dark:text-amber-200">
+                <strong>Important:</strong> Le Client Secret doit être configuré dans Lovable Cloud → Users → Authentication Settings → Google.
+                <br />
+                <strong>Redirect URI:</strong> <code className="bg-amber-100 dark:bg-amber-800 px-1 rounded">https://csmdggopddxjixwsqnom.supabase.co/auth/v1/callback</code>
+              </AlertDescription>
+            </Alert>
+            <Button variant="outline" size="sm" asChild>
+              <a 
+                href="https://console.cloud.google.com/apis/credentials" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Open Google Cloud Console
               </a>
             </Button>
           </CardContent>

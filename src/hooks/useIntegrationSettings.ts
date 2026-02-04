@@ -6,6 +6,8 @@ export interface IntegrationSettings {
   google_adsense_id: string;
   google_adsense_enabled: boolean;
   google_analytics_enabled: boolean;
+  google_oauth_client_id: string;
+  google_oauth_enabled: boolean;
 }
 
 const DEFAULT_SETTINGS: IntegrationSettings = {
@@ -13,6 +15,8 @@ const DEFAULT_SETTINGS: IntegrationSettings = {
   google_adsense_id: "",
   google_adsense_enabled: false,
   google_analytics_enabled: false,
+  google_oauth_client_id: "",
+  google_oauth_enabled: false,
 };
 
 // Cache for synchronous access
@@ -30,6 +34,8 @@ export const useIntegrationSettings = () => {
           "google_adsense_id",
           "google_adsense_enabled",
           "google_analytics_enabled",
+          "google_oauth_client_id",
+          "google_oauth_enabled",
         ]);
 
       if (error) {
@@ -46,6 +52,8 @@ export const useIntegrationSettings = () => {
           if (item.key === "google_adsense_id") settings.google_adsense_id = value || "";
           if (item.key === "google_adsense_enabled") settings.google_adsense_enabled = value === true || value === "true";
           if (item.key === "google_analytics_enabled") settings.google_analytics_enabled = value === true || value === "true";
+          if (item.key === "google_oauth_client_id") settings.google_oauth_client_id = value || "";
+          if (item.key === "google_oauth_enabled") settings.google_oauth_enabled = value === true || value === "true";
         } catch {
           // Handle parse errors gracefully
         }
@@ -78,6 +86,8 @@ export const fetchIntegrationSettings = async (): Promise<IntegrationSettings> =
         "google_adsense_id",
         "google_adsense_enabled",
         "google_analytics_enabled",
+        "google_oauth_client_id",
+        "google_oauth_enabled",
       ]);
 
     if (error) throw error;
@@ -91,6 +101,8 @@ export const fetchIntegrationSettings = async (): Promise<IntegrationSettings> =
         if (item.key === "google_adsense_id") settings.google_adsense_id = value || "";
         if (item.key === "google_adsense_enabled") settings.google_adsense_enabled = value === true || value === "true";
         if (item.key === "google_analytics_enabled") settings.google_analytics_enabled = value === true || value === "true";
+        if (item.key === "google_oauth_client_id") settings.google_oauth_client_id = value || "";
+        if (item.key === "google_oauth_enabled") settings.google_oauth_enabled = value === true || value === "true";
       } catch {
         // Handle parse errors gracefully
       }
