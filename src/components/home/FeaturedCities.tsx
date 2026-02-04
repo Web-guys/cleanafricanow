@@ -1,17 +1,22 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin } from "lucide-react";
+import { MapPin, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { cn } from "@/lib/utils";
 
 export const FeaturedCities = () => {
   const { t } = useTranslation();
+  const { ref, isVisible } = useScrollAnimation();
 
   const { data: cities } = useQuery({
-    queryKey: ["featured-cities"],
+    queryKey: ["featured-cities-enhanced"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Fetch cities
+      const { data: citiesData, error } = await supabase
         .from("cities")
         .select("*")
         .eq("is_featured", true)
@@ -19,16 +24,44 @@ export const FeaturedCities = () => {
         .limit(8);
 
       if (error) throw error;
-      return data;
+
+      // Fetch report counts for each city
+      const citiesWithCounts = await Promise.all(
+        (citiesData || []).map(async (city) => {
+          const { count } = await supabase
+            .from("reports_public")
+            .select("*", { count: "exact", head: true })
+            .eq("city_id", city.id);
+          
+          return { ...city, reportCount: count || 0 };
+        })
+      );
+
+      return citiesWithCounts;
     },
   });
 
   if (!cities?.length) return null;
 
+  // Sort by report count for visual hierarchy
+  const sortedCities = [...cities].sort((a, b) => (b.reportCount || 0) - (a.reportCount || 0));
+  const topCity = sortedCities[0];
+
   return (
-    <section className="py-16 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
+    <section className="py-20 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+      
+      <div className="container mx-auto px-4 relative z-10" ref={ref}>
+        <div className={cn(
+          "text-center mb-12 opacity-0",
+          isVisible && "animate-fade-in"
+        )}>
+          <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
+            <MapPin className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Active Coverage</span>
+          </div>
           <h3 className="text-3xl md:text-4xl font-bold mb-4">
             {t('cities.featured', 'Cities We Cover')}
           </h3>
@@ -37,40 +70,93 @@ export const FeaturedCities = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-          {cities.map((city) => (
-            <Link key={city.id} to={`/map?city=${city.id}`}>
-              <Card className="group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-primary/20">
-                <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <MapPin className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm md:text-base">{city.name}</p>
-                    <p className="text-xs text-muted-foreground">{city.country}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
+          {sortedCities.map((city, index) => {
+            const isTop = city.id === topCity?.id;
+            
+            return (
+              <Link 
+                key={city.id} 
+                to={`/map?city=${city.id}`}
+                className={cn(
+                  "opacity-0",
+                  isVisible && "animate-slide-up"
+                )}
+                style={{ animationDelay: `${index * 75}ms` }}
+              >
+                <Card className={cn(
+                  "group relative overflow-hidden transition-all duration-300 cursor-pointer h-full",
+                  "hover:shadow-xl hover:-translate-y-2",
+                  "border-2",
+                  isTop 
+                    ? "border-primary/30 bg-gradient-to-br from-primary/5 to-transparent" 
+                    : "border-transparent hover:border-primary/20"
+                )}>
+                  {/* Shimmer effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  
+                  {isTop && (
+                    <div className="absolute top-2 right-2">
+                      <Badge className="bg-primary/90 text-primary-foreground text-[10px] px-2">
+                        <Sparkles className="h-3 w-3 mr-1" />
+                        Most Active
+                      </Badge>
+                    </div>
+                  )}
+                  
+                  <CardContent className="p-4 flex flex-col gap-3 relative">
+                    <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300",
+                        "group-hover:scale-110",
+                        isTop ? "bg-primary text-primary-foreground" : "bg-primary/10"
+                      )}>
+                        <MapPin className={cn("w-6 h-6", !isTop && "text-primary")} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-sm md:text-base truncate group-hover:text-primary transition-colors">
+                          {city.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{city.country}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Report count */}
+                    <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        <span>{city.reportCount} reports</span>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            );
+          })}
         </div>
 
-        <div className="text-center mt-8 flex flex-wrap gap-4 justify-center">
-          <Link 
-            to="/map" 
-            className="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2"
-          >
-            {t('cities.viewAll', 'View all cities on map')}
-            <span>→</span>
-          </Link>
-          <span className="text-muted-foreground">|</span>
-          <Link 
-            to="/cities-map" 
-            className="text-primary hover:text-primary/80 font-medium inline-flex items-center gap-2"
-          >
-            Explore all {cities.length}+ Moroccan cities
-            <span>→</span>
-          </Link>
+        <div className={cn(
+          "text-center mt-10 opacity-0",
+          isVisible && "animate-fade-in"
+        )} style={{ animationDelay: "600ms" }}>
+          <div className="flex flex-wrap gap-4 justify-center items-center">
+            <Link 
+              to="/map" 
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors group"
+            >
+              {t('cities.viewAll', 'View all cities on map')}
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <span className="text-muted-foreground hidden sm:inline">|</span>
+            <Link 
+              to="/cities-map" 
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors group"
+            >
+              Explore all {cities.length}+ Moroccan cities
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
