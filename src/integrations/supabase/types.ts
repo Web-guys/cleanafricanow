@@ -47,6 +47,166 @@ export type Database = {
         }
         Relationships: []
       }
+      bin_alerts: {
+        Row: {
+          alert_type: string
+          bin_id: string
+          created_at: string | null
+          id: string
+          is_resolved: boolean | null
+          message: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+        }
+        Insert: {
+          alert_type: string
+          bin_id: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          message: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+        }
+        Update: {
+          alert_type?: string
+          bin_id?: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          message?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bin_alerts_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bin_alerts_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bin_collection_logs: {
+        Row: {
+          bin_id: string
+          collected_at: string | null
+          collected_by: string | null
+          collection_route_id: string | null
+          id: string
+          notes: string | null
+          status_after: Database["public"]["Enums"]["bin_status"] | null
+          status_before: Database["public"]["Enums"]["bin_status"] | null
+        }
+        Insert: {
+          bin_id: string
+          collected_at?: string | null
+          collected_by?: string | null
+          collection_route_id?: string | null
+          id?: string
+          notes?: string | null
+          status_after?: Database["public"]["Enums"]["bin_status"] | null
+          status_before?: Database["public"]["Enums"]["bin_status"] | null
+        }
+        Update: {
+          bin_id?: string
+          collected_at?: string | null
+          collected_by?: string | null
+          collection_route_id?: string | null
+          id?: string
+          notes?: string | null
+          status_after?: Database["public"]["Enums"]["bin_status"] | null
+          status_before?: Database["public"]["Enums"]["bin_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bin_collection_logs_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bin_collection_logs_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bin_collection_logs_collection_route_id_fkey"
+            columns: ["collection_route_id"]
+            isOneToOne: false
+            referencedRelation: "collection_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bin_status_reports: {
+        Row: {
+          bin_id: string
+          created_at: string | null
+          id: string
+          is_verified: boolean | null
+          notes: string | null
+          photo_url: string | null
+          reported_by: string | null
+          reported_status: Database["public"]["Enums"]["bin_status"]
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          bin_id: string
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          notes?: string | null
+          photo_url?: string | null
+          reported_by?: string | null
+          reported_status: Database["public"]["Enums"]["bin_status"]
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          bin_id?: string
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          notes?: string | null
+          photo_url?: string | null
+          reported_by?: string | null
+          reported_status?: Database["public"]["Enums"]["bin_status"]
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bin_status_reports_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bin_status_reports_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "waste_bins_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cities: {
         Row: {
           country: string
@@ -1225,6 +1385,80 @@ export type Database = {
         }
         Relationships: []
       }
+      waste_bins: {
+        Row: {
+          address: string | null
+          bin_code: string
+          bin_type: Database["public"]["Enums"]["bin_type"]
+          capacity: Database["public"]["Enums"]["bin_capacity"]
+          city_id: string | null
+          created_at: string | null
+          created_by: string | null
+          current_status: Database["public"]["Enums"]["bin_status"]
+          district: string | null
+          id: string
+          installed_at: string | null
+          is_active: boolean | null
+          last_collection_at: string | null
+          last_status_update_at: string | null
+          latitude: number
+          longitude: number
+          notes: string | null
+          street: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          bin_code: string
+          bin_type?: Database["public"]["Enums"]["bin_type"]
+          capacity?: Database["public"]["Enums"]["bin_capacity"]
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_status?: Database["public"]["Enums"]["bin_status"]
+          district?: string | null
+          id?: string
+          installed_at?: string | null
+          is_active?: boolean | null
+          last_collection_at?: string | null
+          last_status_update_at?: string | null
+          latitude: number
+          longitude: number
+          notes?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          bin_code?: string
+          bin_type?: Database["public"]["Enums"]["bin_type"]
+          capacity?: Database["public"]["Enums"]["bin_capacity"]
+          city_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_status?: Database["public"]["Enums"]["bin_status"]
+          district?: string | null
+          id?: string
+          installed_at?: string | null
+          is_active?: boolean | null
+          last_collection_at?: string | null
+          last_status_update_at?: string | null
+          latitude?: number
+          longitude?: number
+          notes?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_bins_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       discharge_sites_public: {
@@ -1487,6 +1721,62 @@ export type Database = {
           },
         ]
       }
+      waste_bins_public: {
+        Row: {
+          bin_code: string | null
+          bin_type: Database["public"]["Enums"]["bin_type"] | null
+          capacity: Database["public"]["Enums"]["bin_capacity"] | null
+          city_id: string | null
+          current_status: Database["public"]["Enums"]["bin_status"] | null
+          district: string | null
+          id: string | null
+          is_active: boolean | null
+          last_collection_at: string | null
+          last_status_update_at: string | null
+          latitude: number | null
+          longitude: number | null
+          street: string | null
+        }
+        Insert: {
+          bin_code?: string | null
+          bin_type?: Database["public"]["Enums"]["bin_type"] | null
+          capacity?: Database["public"]["Enums"]["bin_capacity"] | null
+          city_id?: string | null
+          current_status?: Database["public"]["Enums"]["bin_status"] | null
+          district?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          last_collection_at?: string | null
+          last_status_update_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          street?: string | null
+        }
+        Update: {
+          bin_code?: string | null
+          bin_type?: Database["public"]["Enums"]["bin_type"] | null
+          capacity?: Database["public"]["Enums"]["bin_capacity"] | null
+          city_id?: string | null
+          current_status?: Database["public"]["Enums"]["bin_status"] | null
+          district?: string | null
+          id?: string | null
+          is_active?: boolean | null
+          last_collection_at?: string | null
+          last_status_update_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          street?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_bins_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       can_access_territory: {
@@ -1561,6 +1851,23 @@ export type Database = {
         | "ngo"
         | "volunteer"
         | "partner"
+      bin_capacity: "small" | "medium" | "large" | "extra_large"
+      bin_status:
+        | "empty"
+        | "half_full"
+        | "almost_full"
+        | "full"
+        | "overflowing"
+        | "damaged"
+        | "missing"
+      bin_type:
+        | "plastic"
+        | "organic"
+        | "mixed"
+        | "glass"
+        | "paper"
+        | "metal"
+        | "electronic"
       organization_type:
         | "municipality"
         | "ngo"
@@ -1729,6 +2036,25 @@ export const Constants = {
         "ngo",
         "volunteer",
         "partner",
+      ],
+      bin_capacity: ["small", "medium", "large", "extra_large"],
+      bin_status: [
+        "empty",
+        "half_full",
+        "almost_full",
+        "full",
+        "overflowing",
+        "damaged",
+        "missing",
+      ],
+      bin_type: [
+        "plastic",
+        "organic",
+        "mixed",
+        "glass",
+        "paper",
+        "metal",
+        "electronic",
       ],
       organization_type: [
         "municipality",
