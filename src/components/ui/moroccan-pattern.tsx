@@ -140,18 +140,25 @@ export const MoroccanCorner = ({
   position = "top-left",
   size = 80 
 }: MoroccanCornerProps) => {
-  const rotations = {
-    "top-left": "rotate(0)",
-    "top-right": "rotate(90)",
-    "bottom-right": "rotate(180)",
-    "bottom-left": "rotate(270)",
-  };
 
   const positions = {
     "top-left": "top-0 left-0",
     "top-right": "top-0 right-0",
     "bottom-left": "bottom-0 left-0",
     "bottom-right": "bottom-0 right-0",
+  };
+
+  // Calculate the proper transform including origin
+  const getTransform = () => {
+    const rotation = {
+      "top-left": 0,
+      "top-right": 90,
+      "bottom-right": 180,
+      "bottom-left": 270,
+    }[position];
+    
+    // Using rotate around center point (40, 40)
+    return `rotate(${rotation}, 40, 40)`;
   };
 
   return (
@@ -161,7 +168,7 @@ export const MoroccanCorner = ({
       viewBox="0 0 80 80"
       className={cn("absolute pointer-events-none", positions[position], className)}
     >
-      <g transform={`${rotations[position]} translate(${position.includes("right") ? -80 : 0}, ${position.includes("bottom") ? -80 : 0})`} transformOrigin="40 40">
+      <g transform={getTransform()}>
         <g fill="none" stroke="currentColor" strokeWidth="1.5">
           {/* Corner arch */}
           <path d="M0,0 Q40,0 40,40 Q40,80 80,80" />
