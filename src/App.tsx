@@ -25,6 +25,8 @@ import AdminAIAnalysis from "./pages/admin/AIAnalysis";
 import AdminExport from "./pages/admin/Export";
 import AdminSettings from "./pages/admin/Settings";
 import AdminAnalytics from "./pages/admin/Analytics";
+import AdminRegistrationRequests from "./pages/admin/RegistrationRequests";
+import RequestAccess from "./pages/RequestAccess";
 import NgoDashboard from "./pages/ngo/Dashboard";
 import MunicipalityDashboard from "./pages/municipality/Dashboard";
 import WasteBinsDashboard from "./pages/municipality/WasteBinsDashboard";
@@ -189,6 +191,22 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['admin']}>
                   <AdminAnalytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/registration-requests"
+              element={
+                <ProtectedRoute requiredRoles={['admin']}>
+                  <AdminRegistrationRequests />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/request-access"
+              element={
+                <ProtectedRoute>
+                  <RequestAccess />
                 </ProtectedRoute>
               }
             />

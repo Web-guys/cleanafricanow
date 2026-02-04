@@ -13,10 +13,10 @@ import {
   LogOut,
   ChevronRight,
   Settings,
-  Bell,
-  Shield,
   Activity,
-  Globe
+  Globe,
+  UserCheck,
+  Shield
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
@@ -44,12 +44,18 @@ export const AdminSidebar = ({ mobile = false, onNavigate }: AdminSidebarProps) 
         .select('status, sla_due_date')
         .in('status', ['pending', 'in_progress']);
       
+      const { data: registrationRequests } = await supabase
+        .from('registration_requests')
+        .select('status')
+        .eq('status', 'pending');
+      
       const pending = reports?.filter(r => r.status === 'pending').length || 0;
       const overdue = reports?.filter(r => 
         r.sla_due_date && new Date(r.sla_due_date) < new Date()
       ).length || 0;
+      const pendingRegistrations = registrationRequests?.length || 0;
       
-      return { pending, overdue };
+      return { pending, overdue, pendingRegistrations };
     },
     refetchInterval: 60000, // Refresh every minute
   });
@@ -63,6 +69,7 @@ export const AdminSidebar = ({ mobile = false, onNavigate }: AdminSidebarProps) 
 
   const managementLinks = [
     { to: '/admin/users', label: t('admin.users.title'), icon: Users },
+    { to: '/admin/registration-requests', label: 'Registration Requests', icon: UserCheck, badge: pendingCounts?.pendingRegistrations },
     { to: '/admin/organizations', label: 'Organizations', icon: Building2 },
     { to: '/admin/countries', label: 'Countries', icon: Globe },
     { to: '/admin/cities', label: t('nav.cities'), icon: Map },

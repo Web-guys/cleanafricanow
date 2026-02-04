@@ -929,6 +929,98 @@ export type Database = {
           },
         ]
       }
+      registration_requests: {
+        Row: {
+          address: string | null
+          admin_notes: string | null
+          city_id: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          id_document_url: string | null
+          license_document_url: string | null
+          official_document_url: string | null
+          organization_name: string
+          organization_type:
+            | Database["public"]["Enums"]["organization_type"]
+            | null
+          region: string | null
+          rejection_reason: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["registration_status"]
+          updated_at: string | null
+          user_id: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          admin_notes?: string | null
+          city_id?: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          id_document_url?: string | null
+          license_document_url?: string | null
+          official_document_url?: string | null
+          organization_name: string
+          organization_type?:
+            | Database["public"]["Enums"]["organization_type"]
+            | null
+          region?: string | null
+          rejection_reason?: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          admin_notes?: string | null
+          city_id?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          id_document_url?: string | null
+          license_document_url?: string | null
+          official_document_url?: string | null
+          organization_name?: string
+          organization_type?:
+            | Database["public"]["Enums"]["organization_type"]
+            | null
+          region?: string | null
+          rejection_reason?: string | null
+          requested_role?: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          updated_at?: string | null
+          user_id?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registration_requests_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       report_assignments: {
         Row: {
           assigned_by: string
@@ -1875,6 +1967,7 @@ export type Database = {
         | "private"
         | "international"
       priority_level: "low" | "medium" | "high" | "critical"
+      registration_status: "pending" | "approved" | "rejected" | "under_review"
       report_category:
         | "waste"
         | "pollution"
@@ -2064,6 +2157,7 @@ export const Constants = {
         "international",
       ],
       priority_level: ["low", "medium", "high", "critical"],
+      registration_status: ["pending", "approved", "rejected", "under_review"],
       report_category: [
         "waste",
         "pollution",
