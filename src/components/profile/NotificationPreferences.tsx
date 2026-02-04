@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import { Bell, Mail, Smartphone, AlertTriangle, FileText, Calendar, Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Bell, Mail, Smartphone, AlertTriangle, FileText, Calendar, Loader2, Clock, Sparkles } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -174,6 +175,33 @@ const NotificationPreferences = () => {
               checked={preferences.in_app_enabled}
               onCheckedChange={() => handleToggle("in_app_enabled")}
             />
+          </div>
+
+          {/* Gmail Integration Coming Soon */}
+          <div className="relative flex items-center justify-between p-3 rounded-lg border border-dashed border-muted-foreground/30 bg-muted/30">
+            <div className="absolute -top-2 right-3">
+              <Badge variant="secondary" className="text-xs bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30">
+                <Clock className="h-2.5 w-2.5 mr-1" />
+                Coming Soon
+              </Badge>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-red-500/10">
+                <svg className="h-4 w-4 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                </svg>
+              </div>
+              <div>
+                <Label className="font-medium text-muted-foreground flex items-center gap-2">
+                  Gmail Notifications
+                  <Sparkles className="h-3 w-3 text-amber-500" />
+                </Label>
+                <p className="text-sm text-muted-foreground/70">
+                  Send emails directly via your Gmail account
+                </p>
+              </div>
+            </div>
+            <Switch disabled className="opacity-50" />
           </div>
         </div>
 
