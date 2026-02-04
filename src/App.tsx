@@ -32,6 +32,7 @@ import MunicipalityDashboard from "./pages/municipality/Dashboard";
 import WasteBinsDashboard from "./pages/municipality/WasteBinsDashboard";
 import VolunteerDashboard from "./pages/volunteer/Dashboard";
 import PartnerDashboard from "./pages/partner/Dashboard";
+import TouristDashboard from "./pages/tourist/Dashboard";
 import Mission from "./pages/Mission";
 import Team from "./pages/Team";
 import Careers from "./pages/Careers";
@@ -251,6 +252,14 @@ const App = () => (
               element={
                 <ProtectedRoute requiredRoles={['partner']}>
                   <PartnerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tourist"
+              element={
+                <ProtectedRoute requiredRoles={['tourist']}>
+                  <TouristDashboard />
                 </ProtectedRoute>
               }
             />

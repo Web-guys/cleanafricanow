@@ -10,7 +10,13 @@
     "loading": "Chargement...",
     "submit": "Soumettre",
     "actions": "Actions",
-    "clearSelection": "Effacer"
+    "clearSelection": "Effacer",
+    "dismiss": "Fermer",
+    "welcome": "Bienvenue"
+  },
+  "dashboard": {
+    "keyBenefits": "Avantages Clés",
+    "howItWorks": "Comment Ça Marche"
   },
   "nav": {
     "home": "Accueil",
@@ -387,7 +393,41 @@
       "reportsInRegions": "Signalements dans Vos Régions",
       "noRegionsAssigned": "Aucune région assignée. Contactez un administrateur pour accéder aux signalements.",
       "noReports": "Aucun signalement trouvé dans vos régions assignées.",
-      "city": "Ville"
+      "city": "Ville",
+      "welcomeTitle": "Bienvenue",
+      "managingRegions": "Gérant la protection environnementale dans",
+      "noRegionsDesc": "Contactez un administrateur pour être assigné à des régions."
+    },
+    "intro": {
+      "title": "Votre Centre d'Action Environnementale",
+      "subtitle": "Pour les ONGs",
+      "description": "CleanAfricaNow connecte votre ONG aux communautés qui ont besoin de soutien environnemental. Coordonnez des bénévoles, organisez des événements de nettoyage et démontrez votre impact avec des données réelles.",
+      "feature1Title": "Couverture Multi-Régions",
+      "feature1Desc": "Surveillez et répondez aux problèmes environnementaux dans plusieurs villes et régions assignées à votre organisation.",
+      "feature2Title": "Coordination des Bénévoles",
+      "feature2Desc": "Recrutez, organisez et gérez des bénévoles pour des campagnes de nettoyage et des initiatives environnementales.",
+      "feature3Title": "Organisation d'Événements",
+      "feature3Desc": "Planifiez et exécutez des événements de nettoyage communautaire avec suivi des inscriptions et de la participation.",
+      "feature4Title": "Collaboration Municipale",
+      "feature4Desc": "Travaillez aux côtés des autorités municipales pour assurer une action environnementale coordonnée.",
+      "feature5Title": "Rapports d'Impact",
+      "feature5Desc": "Générez des rapports détaillés montrant l'impact environnemental de votre organisation pour les parties prenantes et les donateurs.",
+      "feature6Title": "Traitement des Signalements",
+      "feature6Desc": "Examinez et agissez sur les signalements citoyens dans vos territoires assignés.",
+      "benefit1": "Portée étendue sur plusieurs régions",
+      "benefit2": "Données d'impact environnemental mesurables",
+      "benefit3": "Gestion simplifiée des bénévoles",
+      "benefit4": "Crédibilité renforcée avec des métriques d'impact",
+      "benefit5": "Meilleure coordination avec les autorités",
+      "benefit6": "Engagement communautaire à grande échelle",
+      "step1Title": "Obtenir des Régions Assignées",
+      "step1Desc": "Les administrateurs assignent des villes et régions à votre ONG selon vos zones d'opération.",
+      "step2Title": "Surveiller les Signalements",
+      "step2Desc": "Consultez tous les signalements environnementaux dans vos régions. Priorisez selon l'urgence et l'impact.",
+      "step3Title": "Organiser l'Action",
+      "step3Desc": "Créez des événements de nettoyage, coordonnez les bénévoles et travaillez avec les municipalités pour résoudre les problèmes.",
+      "step4Title": "Mesurer l'Impact",
+      "step4Desc": "Suivez vos progrès, célébrez les succès et partagez des rapports d'impact avec votre communauté."
     }
   },
   "municipality": {
@@ -398,8 +438,142 @@
       "reportsInCity": "Signalements dans Votre Ville",
       "noCityAssigned": "Aucune ville assignée. Contactez un administrateur pour accéder aux signalements.",
       "noReports": "Aucun signalement trouvé dans votre ville assignée.",
-      "manageReports": "Gérer les Signalements"
+      "manageReports": "Gérer les Signalements",
+      "noCityDesc": "Contactez un administrateur pour être assigné à une ville."
+    },
+    "intro": {
+      "title": "Votre Centre de Gestion Municipale",
+      "subtitle": "Pour les Municipalités",
+      "description": "CleanAfricaNow permet aux municipalités de gérer efficacement les signalements environnementaux, de coordonner les opérations de nettoyage et d'engager les citoyens. Suivez les problèmes de la réception à la résolution.",
+      "feature1Title": "Gestion des Signalements",
+      "feature1Desc": "Recevez, suivez et résolvez les signalements environnementaux soumis par les citoyens de votre ville.",
+      "feature2Title": "Itinéraires de Collecte",
+      "feature2Desc": "Planifiez et optimisez les itinéraires de collecte des déchets pour une efficacité maximale.",
+      "feature3Title": "Gestion des Équipes",
+      "feature3Desc": "Gérez les agents de terrain, assignez des tâches et suivez les performances de l'équipe.",
+      "feature4Title": "Événements de Nettoyage",
+      "feature4Desc": "Organisez des événements de nettoyage communautaire et gérez les inscriptions des bénévoles.",
+      "feature5Title": "Analytique & SLA",
+      "feature5Desc": "Surveillez les taux de résolution, la conformité SLA et les métriques d'impact environnemental.",
+      "feature6Title": "Entreprises Partenaires",
+      "feature6Desc": "Coordonnez avec les entreprises de gestion des déchets et les prestataires de services.",
+      "benefit1": "Réponse plus rapide aux signalements citoyens",
+      "benefit2": "Transparence et responsabilité améliorées",
+      "benefit3": "Allocation optimisée des ressources",
+      "benefit4": "Surveillance et alertes en temps réel",
+      "benefit5": "Satisfaction citoyenne améliorée",
+      "benefit6": "Prise de décision basée sur les données",
+      "step1Title": "Recevoir les Signalements",
+      "step1Desc": "Les citoyens signalent des problèmes via l'application mobile ou le site web. Vous les recevez instantanément dans votre tableau de bord.",
+      "step2Title": "Prioriser & Assigner",
+      "step2Desc": "Examinez les signalements, définissez les priorités selon l'urgence et assignez-les aux équipes de terrain ou aux entreprises partenaires.",
+      "step3Title": "Agir",
+      "step3Desc": "Les équipes résolvent les problèmes sur le terrain. Mettez à jour le statut en temps réel et les citoyens sont automatiquement notifiés.",
+      "step4Title": "Suivre & Améliorer",
+      "step4Desc": "Surveillez les métriques de performance, identifiez les tendances et améliorez continuellement la propreté de votre ville."
     }
+  },
+  "citizen": {
+    "dashboard": {
+      "title": "Espace Citoyen",
+      "citizen": "Citoyen",
+      "thanksParticipation": "Merci pour vos {{count}} participation(s) !",
+      "readyToMakeDifference": "Prêt à faire la différence ?",
+      "viewEvents": "Voir les Événements"
+    },
+    "intro": {
+      "title": "Soyez le Changement que Vous Voulez Voir",
+      "subtitle": "Pour les Citoyens",
+      "description": "CleanAfricaNow vous permet de signaler les problèmes environnementaux directement aux autorités. Vos signalements créent un vrai changement dans votre communauté. Rejoignez des milliers de citoyens actifs qui rendent l'Afrique plus propre.",
+      "feature1Title": "Signaler des Problèmes",
+      "feature1Desc": "Pollution, déchets ou dangers environnementaux ? Signalez-les instantanément avec photos et localisation.",
+      "feature2Title": "Suivre la Progression",
+      "feature2Desc": "Suivez vos signalements sur la carte et soyez notifié quand ils sont traités.",
+      "feature3Title": "Participer aux Événements",
+      "feature3Desc": "Participez aux événements de nettoyage communautaire organisés dans votre ville.",
+      "feature4Title": "Gagner des Distinctions",
+      "feature4Desc": "Collectez des badges et montez dans le classement en contribuant à un environnement plus propre.",
+      "feature5Title": "Impact Communautaire",
+      "feature5Desc": "Rejoignez des milliers de citoyens qui font une vraie différence dans leurs communautés.",
+      "feature6Title": "Sensibilisation Environnementale",
+      "feature6Desc": "Apprenez les enjeux environnementaux et les bonnes pratiques pour un mode de vie durable.",
+      "benefit1": "Impact direct sur la propreté de votre communauté",
+      "benefit2": "Mises à jour en temps réel sur la résolution",
+      "benefit3": "Connectez-vous avec des citoyens engagés",
+      "benefit4": "Gratuit et facile à utiliser",
+      "benefit5": "Votre voix compte pour les autorités",
+      "benefit6": "Contribuez à une Afrique plus propre",
+      "step1Title": "Repérer un Problème",
+      "step1Desc": "Voyez des dépôts sauvages, de la pollution ou des dangers environnementaux dans votre quartier.",
+      "step2Title": "Prendre une Photo",
+      "step2Desc": "Capturez le problème avec votre téléphone. L'application enregistre automatiquement votre position.",
+      "step3Title": "Soumettre le Signalement",
+      "step3Desc": "Ajoutez une description et soumettez. Il est envoyé instantanément aux autorités compétentes.",
+      "step4Title": "Voir les Résultats",
+      "step4Desc": "Suivez la progression de votre signalement et soyez notifié quand il est résolu. Vous avez fait la différence !"
+    }
+  },
+  "tourist": {
+    "dashboard": {
+      "title": "Informations Touristes",
+      "visitor": "Visiteur",
+      "welcomeTitle": "Bienvenue en Afrique !",
+      "welcomeSubtitle": "Aidez-nous à garder les beaux endroits que vous visitez propres et sûrs pour tous.",
+      "safetyTips": "Conseils de Voyage Éco-Responsable",
+      "safetyTipsDesc": "Des façons simples de protéger l'environnement pendant vos voyages",
+      "emergency": "Informations d'Urgence",
+      "emergencyDesc": "Si vous rencontrez une urgence environnementale grave (déversements toxiques, incendies, etc.), contactez immédiatement les autorités locales.",
+      "civilProtection": "Protection Civile",
+      "ambulance": "Ambulance",
+      "ctaTitle": "Prêt à Aider ?",
+      "ctaDesc": "Chaque signalement fait la différence. Aidez-nous à garder l'Afrique propre et belle.",
+      "ctaButton": "Signaler un Problème"
+    },
+    "intro": {
+      "title": "Voyagez Responsable, Signalez Facilement",
+      "subtitle": "Pour les Touristes & Visiteurs",
+      "description": "CleanAfricaNow vous aide à explorer l'Afrique tout en contribuant à la protection de l'environnement. Trouvez des destinations propres, signalez les problèmes que vous rencontrez et aidez à préserver la beauté naturelle des lieux que vous visitez.",
+      "feature1Title": "Signaler en Voyageant",
+      "feature1Desc": "Remarqué de la pollution sur une belle plage ou un parc ? Signalez-le pour protéger les endroits que vous aimez.",
+      "feature2Title": "Découvrir des Zones Propres",
+      "feature2Desc": "Utilisez la carte pour trouver des zones bien entretenues et éviter les zones polluées pendant vos voyages.",
+      "feature3Title": "Rester en Sécurité",
+      "feature3Desc": "Consultez les dangers environnementaux et les avertissements dans votre destination pour planifier des voyages plus sûrs.",
+      "feature4Title": "Support Multilingue",
+      "feature4Desc": "Disponible en anglais, français, arabe et espagnol pour une utilisation facile partout.",
+      "feature5Title": "Soutenir les Communautés Locales",
+      "feature5Desc": "Vos signalements aident les communautés locales à maintenir des environnements propres et sains.",
+      "feature6Title": "En Savoir Plus sur les Problèmes",
+      "feature6Desc": "Comprenez les défis environnementaux locaux et comment vous pouvez aider.",
+      "benefit1": "Aidez à protéger les destinations touristiques",
+      "benefit2": "Trouvez des plages, parcs et espaces naturels propres",
+      "benefit3": "Pas de compte requis pour les fonctionnalités de base",
+      "benefit4": "Disponible en plusieurs langues",
+      "benefit5": "Laissez un impact positif sur les lieux que vous visitez",
+      "benefit6": "Facile à utiliser sur mobile"
+    },
+    "actions": {
+      "viewMap": "Explorer la Carte",
+      "viewMapDesc": "Voir les conditions environnementales à travers l'Afrique",
+      "report": "Signaler un Problème",
+      "reportDesc": "Aidez en signalant les problèmes environnementaux",
+      "cities": "Parcourir les Villes",
+      "citiesDesc": "Découvrez les villes et leur état environnemental"
+    },
+    "tips": {
+      "tip1": "Vérifiez toujours la carte pour les dangers environnementaux avant de visiter des zones isolées.",
+      "tip2": "Emportez un sac pour vos déchets quand vous visitez des plages et espaces naturels.",
+      "tip3": "Signalez la pollution immédiatement - votre contribution aide les communautés locales.",
+      "tip4": "Respectez les réglementations environnementales locales et les zones protégées."
+    }
+  },
+  "common": {
+    "dismiss": "Fermer",
+    "welcome": "Bienvenue"
+  },
+  "dashboard": {
+    "keyBenefits": "Avantages Clés",
+    "howItWorks": "Comment Ça Marche"
   },
   "profile": {
     "citizen": "Citoyen",

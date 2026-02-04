@@ -1,4 +1,4 @@
-import { Heart, TrendingUp, Clock, CheckCircle2, Building2, Map, MapPin, FileText, Calendar, Users, Leaf, AlertTriangle, Sparkles, Target } from "lucide-react";
+import { Heart, TrendingUp, Clock, CheckCircle2, Building2, Map, MapPin, FileText, Calendar, Users, Leaf, AlertTriangle, Sparkles, Target, Globe, Handshake, BarChart3, Eye, Zap } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,8 @@ import { RecentReportsTable } from "@/components/dashboard/RecentReportsTable";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { ImpactMetrics } from "@/components/dashboard/ImpactMetrics";
+import PlatformIntroCard from "@/components/dashboard/PlatformIntroCard";
+import HowItWorksSection from "@/components/dashboard/HowItWorksSection";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -18,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { CollectionEventsPanel } from "@/components/municipality/CollectionEventsPanel";
 import { EventRegistrationsPanel } from "@/components/municipality/EventRegistrationsPanel";
+import { useState } from "react";
 
 interface NgoRegion {
   id: string;
@@ -54,6 +57,14 @@ const NgoDashboard = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [showIntro, setShowIntro] = useState(() => {
+    return localStorage.getItem('ngo-intro-dismissed') !== 'true';
+  });
+
+  const dismissIntro = () => {
+    setShowIntro(false);
+    localStorage.setItem('ngo-intro-dismissed', 'true');
+  };
 
   const { data: assignedRegions } = useQuery({
     queryKey: ['ngo-regions', user?.id],
@@ -249,6 +260,75 @@ const NgoDashboard = () => {
     });
   }
 
+  const introFeatures = [
+    {
+      icon: <Globe className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature1Title', 'Multi-Region Coverage'),
+      description: t('ngo.intro.feature1Desc', 'Monitor and respond to environmental issues across multiple cities and regions assigned to your organization.')
+    },
+    {
+      icon: <Users className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature2Title', 'Volunteer Coordination'),
+      description: t('ngo.intro.feature2Desc', 'Recruit, organize, and manage volunteers for cleanup campaigns and environmental initiatives.')
+    },
+    {
+      icon: <Calendar className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature3Title', 'Event Organization'),
+      description: t('ngo.intro.feature3Desc', 'Plan and execute community cleanup events with built-in registration and attendance tracking.')
+    },
+    {
+      icon: <Handshake className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature4Title', 'Municipality Collaboration'),
+      description: t('ngo.intro.feature4Desc', 'Work alongside municipal authorities to ensure coordinated environmental action.')
+    },
+    {
+      icon: <BarChart3 className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature5Title', 'Impact Reporting'),
+      description: t('ngo.intro.feature5Desc', 'Generate detailed reports showing your organization\'s environmental impact for stakeholders and donors.')
+    },
+    {
+      icon: <FileText className="h-5 w-5 text-emerald-500" />,
+      title: t('ngo.intro.feature6Title', 'Report Processing'),
+      description: t('ngo.intro.feature6Desc', 'Review and act on citizen reports within your assigned territories.')
+    }
+  ];
+
+  const introBenefits = [
+    { text: t('ngo.intro.benefit1', 'Expanded reach across multiple regions') },
+    { text: t('ngo.intro.benefit2', 'Measurable environmental impact data') },
+    { text: t('ngo.intro.benefit3', 'Streamlined volunteer management') },
+    { text: t('ngo.intro.benefit4', 'Enhanced credibility with impact metrics') },
+    { text: t('ngo.intro.benefit5', 'Better coordination with authorities') },
+    { text: t('ngo.intro.benefit6', 'Community engagement at scale') }
+  ];
+
+  const howItWorksSteps = [
+    {
+      number: 1,
+      icon: <MapPin className="h-4 w-4" />,
+      title: t('ngo.intro.step1Title', 'Get Assigned Regions'),
+      description: t('ngo.intro.step1Desc', 'Administrators assign cities and regions to your NGO based on your operational areas.')
+    },
+    {
+      number: 2,
+      icon: <Eye className="h-4 w-4" />,
+      title: t('ngo.intro.step2Title', 'Monitor Reports'),
+      description: t('ngo.intro.step2Desc', 'View all environmental reports in your regions. Prioritize based on urgency and impact.')
+    },
+    {
+      number: 3,
+      icon: <Calendar className="h-4 w-4" />,
+      title: t('ngo.intro.step3Title', 'Organize Action'),
+      description: t('ngo.intro.step3Desc', 'Create cleanup events, coordinate volunteers, and work with municipalities to resolve issues.')
+    },
+    {
+      number: 4,
+      icon: <TrendingUp className="h-4 w-4" />,
+      title: t('ngo.intro.step4Title', 'Measure Impact'),
+      description: t('ngo.intro.step4Desc', 'Track your progress, celebrate successes, and share impact reports with your community.')
+    }
+  ];
+
   return (
     <DashboardLayout 
       title={t('ngo.dashboard.title', 'NGO Dashboard')} 
@@ -256,6 +336,29 @@ const NgoDashboard = () => {
       role="ngo"
     >
       <div className="p-4 lg:p-8 space-y-6">
+        {/* Platform Introduction */}
+        {showIntro && (
+          <div className="relative">
+            <button 
+              onClick={dismissIntro}
+              className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-foreground text-sm underline"
+            >
+              {t('common.dismiss', 'Dismiss')}
+            </button>
+            <PlatformIntroCard
+              role="ngo"
+              title={t('ngo.intro.title', 'Your Environmental Action Hub')}
+              subtitle={t('ngo.intro.subtitle', 'For NGOs')}
+              description={t('ngo.intro.description', 'CleanAfricaNow connects your NGO with communities that need environmental support. Coordinate volunteers, organize cleanup events, and demonstrate your impact with real data. Build trust with donors and stakeholders through transparent, measurable results.')}
+              features={introFeatures}
+              benefits={introBenefits}
+            />
+            <div className="mt-4">
+              <HowItWorksSection steps={howItWorksSteps} />
+            </div>
+          </div>
+        )}
+
         {/* Welcome Banner with Regions */}
         {assignedRegions && assignedRegions.length > 0 ? (
           <WelcomeBanner

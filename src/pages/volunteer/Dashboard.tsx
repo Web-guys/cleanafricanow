@@ -1,10 +1,12 @@
-import { Heart, Calendar, Trophy, TrendingUp, CheckCircle2, Clock, Star, Award, Target } from "lucide-react";
+import { Heart, Calendar, Trophy, TrendingUp, CheckCircle2, Clock, Star, Award, Target, MapPin, Camera, Users, Leaf, Eye, Zap } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { StatsGrid } from "@/components/dashboard/StatsGrid";
+import PlatformIntroCard from "@/components/dashboard/PlatformIntroCard";
+import HowItWorksSection from "@/components/dashboard/HowItWorksSection";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +15,7 @@ import { format, isPast, isFuture } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
 
 interface EventRegistration {
   id: string;
@@ -43,6 +46,14 @@ const BADGES = [
 const VolunteerDashboard = () => {
   const { t } = useTranslation();
   const { user, profile } = useAuth();
+  const [showIntro, setShowIntro] = useState(() => {
+    return localStorage.getItem('citizen-intro-dismissed') !== 'true';
+  });
+
+  const dismissIntro = () => {
+    setShowIntro(false);
+    localStorage.setItem('citizen-intro-dismissed', 'true');
+  };
 
   const { data: registrations, isLoading } = useQuery({
     queryKey: ['volunteer-registrations', user?.id],
@@ -137,13 +148,105 @@ const VolunteerDashboard = () => {
     },
   ];
 
+  const introFeatures = [
+    {
+      icon: <Camera className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature1Title', 'Report Issues'),
+      description: t('citizen.intro.feature1Desc', 'Spot pollution, waste, or environmental hazards? Report them instantly with photos and location.')
+    },
+    {
+      icon: <MapPin className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature2Title', 'Track Progress'),
+      description: t('citizen.intro.feature2Desc', 'Follow your reports on the map and get notified when they\'re being addressed.')
+    },
+    {
+      icon: <Calendar className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature3Title', 'Join Events'),
+      description: t('citizen.intro.feature3Desc', 'Participate in community cleanup events organized in your city.')
+    },
+    {
+      icon: <Trophy className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature4Title', 'Earn Recognition'),
+      description: t('citizen.intro.feature4Desc', 'Collect badges and climb the leaderboard as you contribute to a cleaner environment.')
+    },
+    {
+      icon: <Users className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature5Title', 'Community Impact'),
+      description: t('citizen.intro.feature5Desc', 'Join thousands of citizens making a real difference in their communities.')
+    },
+    {
+      icon: <Leaf className="h-5 w-5 text-purple-500" />,
+      title: t('citizen.intro.feature6Title', 'Environmental Awareness'),
+      description: t('citizen.intro.feature6Desc', 'Learn about environmental issues and best practices for sustainable living.')
+    }
+  ];
+
+  const introBenefits = [
+    { text: t('citizen.intro.benefit1', 'Direct impact on your community\'s cleanliness') },
+    { text: t('citizen.intro.benefit2', 'Real-time updates on issue resolution') },
+    { text: t('citizen.intro.benefit3', 'Connect with like-minded citizens') },
+    { text: t('citizen.intro.benefit4', 'Free and easy to use') },
+    { text: t('citizen.intro.benefit5', 'Your voice matters to authorities') },
+    { text: t('citizen.intro.benefit6', 'Contribute to a cleaner Africa') }
+  ];
+
+  const howItWorksSteps = [
+    {
+      number: 1,
+      icon: <Eye className="h-4 w-4" />,
+      title: t('citizen.intro.step1Title', 'Spot a Problem'),
+      description: t('citizen.intro.step1Desc', 'See illegal dumping, pollution, or environmental hazards in your neighborhood.')
+    },
+    {
+      number: 2,
+      icon: <Camera className="h-4 w-4" />,
+      title: t('citizen.intro.step2Title', 'Take a Photo'),
+      description: t('citizen.intro.step2Desc', 'Capture the issue with your phone. The app automatically records your location.')
+    },
+    {
+      number: 3,
+      icon: <Zap className="h-4 w-4" />,
+      title: t('citizen.intro.step3Title', 'Submit Report'),
+      description: t('citizen.intro.step3Desc', 'Add a description and submit. It\'s sent instantly to the relevant authorities.')
+    },
+    {
+      number: 4,
+      icon: <CheckCircle2 className="h-4 w-4" />,
+      title: t('citizen.intro.step4Title', 'See Results'),
+      description: t('citizen.intro.step4Desc', 'Track your report\'s progress and get notified when it\'s resolved. You made a difference!')
+    }
+  ];
+
   return (
     <DashboardLayout 
-      title="Espace Bénévole" 
+      title={t('citizen.dashboard.title', 'Citizen Dashboard')}
       icon={<Heart className="h-6 w-6 text-primary" />}
       role="ngo" // Use ngo layout as base
     >
       <div className="p-4 lg:p-8 space-y-8">
+        {/* Platform Introduction */}
+        {showIntro && (
+          <div className="relative">
+            <button 
+              onClick={dismissIntro}
+              className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-foreground text-sm underline"
+            >
+              {t('common.dismiss', 'Dismiss')}
+            </button>
+            <PlatformIntroCard
+              role="citizen"
+              title={t('citizen.intro.title', 'Be the Change You Want to See')}
+              subtitle={t('citizen.intro.subtitle', 'For Citizens')}
+              description={t('citizen.intro.description', 'CleanAfricaNow empowers you to report environmental issues directly to authorities. Your reports create real change in your community. Join thousands of active citizens making Africa cleaner, one report at a time.')}
+              features={introFeatures}
+              benefits={introBenefits}
+            />
+            <div className="mt-4">
+              <HowItWorksSection steps={howItWorksSteps} />
+            </div>
+          </div>
+        )}
+
         {/* Welcome Banner */}
         <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
           <CardContent className="p-6">
@@ -152,19 +255,19 @@ const VolunteerDashboard = () => {
                 <Heart className="h-6 w-6 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground">Bienvenue</p>
-                <h2 className="text-2xl font-bold">{profile?.full_name || 'Bénévole'}</h2>
+                <p className="text-sm text-muted-foreground">{t('common.welcome', 'Welcome')}</p>
+                <h2 className="text-2xl font-bold">{profile?.full_name || t('citizen.dashboard.citizen', 'Citizen')}</h2>
                 <p className="text-sm text-muted-foreground">
                   {pastEvents.length > 0 
-                    ? `Merci pour vos ${pastEvents.length} participation(s) !`
-                    : 'Prêt à faire la différence ?'
+                    ? t('citizen.dashboard.thanksParticipation', 'Thank you for your {{count}} participation(s)!', { count: pastEvents.length })
+                    : t('citizen.dashboard.readyToMakeDifference', 'Ready to make a difference?')
                   }
                 </p>
               </div>
               <Link to="/events">
                 <Button>
                   <Calendar className="h-4 w-4 mr-2" />
-                  Voir les Événements
+                  {t('citizen.dashboard.viewEvents', 'View Events')}
                 </Button>
               </Link>
             </div>

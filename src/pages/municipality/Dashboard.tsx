@@ -1,4 +1,4 @@
-import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route, Recycle, Trash, Building2, AlertTriangle } from "lucide-react";
+import { Building, TrendingUp, Clock, CheckCircle2, FileText, Map, MapPin, Calendar, Users, Route, Recycle, Trash, Building2, AlertTriangle, ClipboardList, BarChart3, Shield, Eye, Zap, Target } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,8 @@ import { RecentReportsTable } from "@/components/dashboard/RecentReportsTable";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { OperationalOverview } from "@/components/dashboard/OperationalOverview";
+import PlatformIntroCard from "@/components/dashboard/PlatformIntroCard";
+import HowItWorksSection from "@/components/dashboard/HowItWorksSection";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -23,6 +25,7 @@ import { TeamWorkersPanel } from "@/components/municipality/TeamWorkersPanel";
 import { PartnerCompaniesPanel } from "@/components/municipality/PartnerCompaniesPanel";
 import { DischargeSitesPanel } from "@/components/municipality/DischargeSitesPanel";
 import { SortingCentersPanel } from "@/components/municipality/SortingCentersPanel";
+import { useState } from "react";
 
 interface ProfileWithCity {
   city_id: string | null;
@@ -54,6 +57,14 @@ const MunicipalityDashboard = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [showIntro, setShowIntro] = useState(() => {
+    return localStorage.getItem('municipality-intro-dismissed') !== 'true';
+  });
+
+  const dismissIntro = () => {
+    setShowIntro(false);
+    localStorage.setItem('municipality-intro-dismissed', 'true');
+  };
 
   const { data: profile } = useQuery({
     queryKey: ['municipality-profile', user?.id],
@@ -193,6 +204,75 @@ const MunicipalityDashboard = () => {
     { label: t('dashboard.manageRoutes', 'Manage Routes'), to: '#routes', icon: Route },
   ];
 
+  const introFeatures = [
+    {
+      icon: <ClipboardList className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature1Title', 'Report Management'),
+      description: t('municipality.intro.feature1Desc', 'Receive, track, and resolve environmental reports submitted by citizens in your city.')
+    },
+    {
+      icon: <Route className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature2Title', 'Collection Routes'),
+      description: t('municipality.intro.feature2Desc', 'Plan and optimize waste collection routes for maximum efficiency.')
+    },
+    {
+      icon: <Users className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature3Title', 'Team Management'),
+      description: t('municipality.intro.feature3Desc', 'Manage field workers, assign tasks, and track team performance.')
+    },
+    {
+      icon: <Calendar className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature4Title', 'Cleanup Events'),
+      description: t('municipality.intro.feature4Desc', 'Organize community cleanup events and manage volunteer registrations.')
+    },
+    {
+      icon: <BarChart3 className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature5Title', 'Analytics & SLA'),
+      description: t('municipality.intro.feature5Desc', 'Monitor resolution rates, SLA compliance, and environmental impact metrics.')
+    },
+    {
+      icon: <Building2 className="h-5 w-5 text-primary" />,
+      title: t('municipality.intro.feature6Title', 'Partner Companies'),
+      description: t('municipality.intro.feature6Desc', 'Coordinate with waste management companies and service providers.')
+    }
+  ];
+
+  const introBenefits = [
+    { text: t('municipality.intro.benefit1', 'Faster response to citizen reports') },
+    { text: t('municipality.intro.benefit2', 'Improved transparency and accountability') },
+    { text: t('municipality.intro.benefit3', 'Optimized resource allocation') },
+    { text: t('municipality.intro.benefit4', 'Real-time monitoring and alerts') },
+    { text: t('municipality.intro.benefit5', 'Enhanced citizen satisfaction') },
+    { text: t('municipality.intro.benefit6', 'Data-driven decision making') }
+  ];
+
+  const howItWorksSteps = [
+    {
+      number: 1,
+      icon: <Eye className="h-4 w-4" />,
+      title: t('municipality.intro.step1Title', 'Receive Reports'),
+      description: t('municipality.intro.step1Desc', 'Citizens report environmental issues through the mobile app or website. You receive them instantly in your dashboard.')
+    },
+    {
+      number: 2,
+      icon: <Target className="h-4 w-4" />,
+      title: t('municipality.intro.step2Title', 'Prioritize & Assign'),
+      description: t('municipality.intro.step2Desc', 'Review reports, set priorities based on urgency, and assign them to field teams or partner companies.')
+    },
+    {
+      number: 3,
+      icon: <Zap className="h-4 w-4" />,
+      title: t('municipality.intro.step3Title', 'Take Action'),
+      description: t('municipality.intro.step3Desc', 'Teams resolve issues on the ground. Update status in real-time and citizens are automatically notified.')
+    },
+    {
+      number: 4,
+      icon: <CheckCircle2 className="h-4 w-4" />,
+      title: t('municipality.intro.step4Title', 'Track & Improve'),
+      description: t('municipality.intro.step4Desc', 'Monitor performance metrics, identify patterns, and continuously improve your city\'s cleanliness.')
+    }
+  ];
+
   return (
     <DashboardLayout 
       title={t('municipality.dashboard.title', 'Municipality Dashboard')} 
@@ -200,6 +280,29 @@ const MunicipalityDashboard = () => {
       role="municipality"
     >
       <div className="p-4 lg:p-8 space-y-6">
+        {/* Platform Introduction */}
+        {showIntro && (
+          <div className="relative">
+            <button 
+              onClick={dismissIntro}
+              className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-foreground text-sm underline"
+            >
+              {t('common.dismiss', 'Dismiss')}
+            </button>
+            <PlatformIntroCard
+              role="municipality"
+              title={t('municipality.intro.title', 'Your City Management Hub')}
+              subtitle={t('municipality.intro.subtitle', 'For Municipalities')}
+              description={t('municipality.intro.description', 'CleanAfricaNow empowers municipalities to efficiently manage environmental reports, coordinate cleanup operations, and engage with citizens. Track issues from report to resolution, manage waste collection routes, and demonstrate measurable impact to your community.')}
+              features={introFeatures}
+              benefits={introBenefits}
+            />
+            <div className="mt-4">
+              <HowItWorksSection steps={howItWorksSteps} />
+            </div>
+          </div>
+        )}
+
         {/* Welcome Banner */}
         {profile?.cities ? (
           <WelcomeBanner
