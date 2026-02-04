@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Footer from "@/components/Footer";
 import { useTranslation } from "react-i18next";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 
 const About = () => {
@@ -27,7 +27,7 @@ const teamMembers = [
   }
 ];
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20 md:pb-0">
       <SEOHead {...pageSEO.about} />
       <StructuredData type="Organization" />
       
@@ -51,7 +51,6 @@ const teamMembers = [
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>

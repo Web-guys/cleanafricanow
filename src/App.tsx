@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { GoogleAnalyticsProvider } from "./components/GoogleAnalytics";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { MobileBottomNav } from "./components/MobileBottomNav";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Report from "./pages/Report";
@@ -56,6 +57,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <GoogleAnalyticsProvider>
+          <MobileBottomNav />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />

@@ -10,7 +10,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { CommunityImpact } from "@/components/home/CommunityImpact";
 import { FeaturedCities } from "@/components/home/FeaturedCities";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import { HeroSection } from "@/components/home/HeroSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { PartnersSection } from "@/components/home/PartnersSection";
@@ -24,7 +24,7 @@ const Home = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-20 md:pb-0">
       <SEOHead {...pageSEO.home} />
       <StructuredData type="Organization" />
       <StructuredData type="WebSite" />
@@ -92,7 +92,6 @@ const Home = () => {
           <div className="flex items-center gap-2 md:hidden">
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>

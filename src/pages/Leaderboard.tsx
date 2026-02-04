@@ -29,7 +29,7 @@ import {
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Footer from "@/components/Footer";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 
 // Badge definitions
@@ -125,7 +125,7 @@ const Leaderboard = () => {
   const restOfList = leaderboard?.slice(3) || [];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background pb-20 md:pb-0">
       <SEOHead {...pageSEO.leaderboard} />
       
       {/* Header */}
@@ -158,7 +158,6 @@ const Leaderboard = () => {
             </Button>
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>

@@ -21,7 +21,7 @@ import { OfflineReportBanner } from "@/components/OfflineReportBanner";
 import { NetworkStatusIndicator } from "@/components/NetworkStatusIndicator";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { MobileNav } from "@/components/home/MobileNav";
+
 import logo from "@/assets/cleanafricanow-logo.png";
 
 const reportSchema = z.object({
@@ -194,7 +194,7 @@ const Report = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <SEOHead {...pageSEO.report} />
       
       {/* Header */}
@@ -218,7 +218,6 @@ const Report = () => {
             <NetworkStatusIndicator showDetails />
             <LanguageSwitcher />
             <ThemeToggle />
-            <MobileNav />
           </div>
         </div>
       </header>
