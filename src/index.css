@@ -259,3 +259,195 @@ All colors MUST be HSL.
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Moroccan-inspired decorative styles */
+.moroccan-glow {
+  box-shadow: 
+    0 0 20px hsl(var(--moroccan-gold) / 0.15),
+    0 0 40px hsl(var(--moroccan-teal) / 0.1);
+}
+
+.moroccan-border-gradient {
+  border-image: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--moroccan-gold) / 0.5),
+    hsl(var(--moroccan-teal) / 0.5),
+    transparent
+  ) 1;
+}
+
+/* Moroccan star animation */
+@keyframes moroccan-star-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes moroccan-pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes zellige-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-moroccan-star {
+  animation: moroccan-star-spin 20s linear infinite;
+}
+
+.animate-moroccan-pulse {
+  animation: moroccan-pulse 3s ease-in-out infinite;
+}
+
+.animate-zellige-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--moroccan-gold) / 0.1) 25%,
+    hsl(var(--moroccan-teal) / 0.15) 50%,
+    hsl(var(--moroccan-gold) / 0.1) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: zellige-shimmer 8s linear infinite;
+}
+
+/* Category icon hover effects */
+.category-icon-moroccan {
+  position: relative;
+}
+
+.category-icon-moroccan::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--moroccan-gold) / 0.3),
+    hsl(var(--moroccan-teal) / 0.3)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.category-icon-moroccan:hover::before {
+  opacity: 1;
+}
+
+/* Moroccan card style */
+.moroccan-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.moroccan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--moroccan-terracotta)),
+    hsl(var(--moroccan-gold)),
+    hsl(var(--moroccan-teal)),
+    hsl(var(--moroccan-blue))
+  );
+  opacity: 0.7;
+}
+
+.moroccan-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--moroccan-blue)),
+    hsl(var(--moroccan-teal)),
+    hsl(var(--moroccan-gold)),
+    hsl(var(--moroccan-terracotta))
+  );
+  opacity: 0.7;
+}
+
+/* Moroccan button style */
+.btn-moroccan {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--primary)),
+    hsl(var(--moroccan-teal))
+  );
+  transition: all 0.3s ease;
+}
+
+.btn-moroccan::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    hsl(var(--moroccan-gold) / 0.3) 0%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn-moroccan:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+/* Moroccan input focus style */
+.input-moroccan:focus {
+  box-shadow: 
+    0 0 0 2px hsl(var(--background)),
+    0 0 0 4px hsl(var(--moroccan-teal) / 0.5),
+    0 0 20px hsl(var(--moroccan-gold) / 0.2);
+}
+
+/* Scrollbar with Moroccan colors */
+.moroccan-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.moroccan-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+.moroccan-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--moroccan-teal)),
+    hsl(var(--moroccan-gold))
+  );
+  border-radius: 4px;
+}
+
+.moroccan-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--moroccan-gold)),
+    hsl(var(--moroccan-terracotta))
+  );
+}
