@@ -78,18 +78,25 @@ export const UpcomingEvents = () => {
     queryFn: async () => {
       if (!events?.length) return {};
       
-      const counts: Record<string, number> = {};
-      for (const event of events) {
-        const { count } = await supabase
-          .from("event_registrations")
-          .select("*", { count: "exact", head: true })
-          .eq("event_id", event.id)
-          .eq("status", "approved");
-        counts[event.id] = count || 0;
-      }
+      const eventIds = events.map(e => e.id);
+      
+      // Fetch all registrations in a single query
+      const { data: registrations } = await supabase
+        .from("event_registrations")
+        .select("event_id")
+        .in("event_id", eventIds)
+        .eq("status", "approved");
+      
+      // Count registrations per event
+      const counts = (registrations || []).reduce((acc, r) => {
+        acc[r.event_id] = (acc[r.event_id] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
       return counts;
     },
     enabled: !!events?.length,
+    staleTime: 2 * 60 * 1000, // Cache for 2 minutes
   });
 
   if (isLoading) {
