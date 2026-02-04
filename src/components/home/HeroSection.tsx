@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
+import { MoroccanPattern, MoroccanCorner } from "@/components/ui/moroccan-pattern";
 
 const AnimatedCounter = ({ end, duration = 2000, suffix = "" }: { end: number; duration?: number; suffix?: string }) => {
   const [count, setCount] = useState(0);
@@ -70,16 +71,22 @@ export const HeroSection = () => {
   });
 
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-moroccan-teal via-primary to-moroccan-blue">
+      {/* Moroccan Pattern Overlay */}
+      <MoroccanPattern variant="zellige" opacity={0.08} color="white" className="z-0" />
+      
+      {/* Corner Decorations */}
+      <MoroccanCorner position="top-left" size={120} className="text-moroccan-gold/20 z-10" />
+      <MoroccanCorner position="top-right" size={120} className="text-moroccan-gold/20 z-10" />
+      <MoroccanCorner position="bottom-left" size={100} className="text-white/10 z-10" />
+      <MoroccanCorner position="bottom-right" size={100} className="text-white/10 z-10" />
+
       {/* Animated Background */}
-      <div className="absolute inset-0">
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-        
-        {/* Gradient Orbs */}
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-secondary/30 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary-glow/20 rounded-full blur-[200px]" />
+      <div className="absolute inset-0 z-0">
+        {/* Gradient Orbs with Moroccan colors */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-moroccan-gold/15 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-moroccan-blue/20 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-moroccan-terracotta/10 rounded-full blur-[200px]" />
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
@@ -87,10 +94,10 @@ export const HeroSection = () => {
           {/* Left Content */}
           <div className="text-primary-foreground">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-5 py-2.5 rounded-full mb-8 border border-white/20 animate-fade-in">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <div className="inline-flex items-center gap-2 bg-moroccan-gold/20 backdrop-blur-md px-5 py-2.5 rounded-full mb-8 border border-moroccan-gold/30 animate-fade-in">
+              <div className="w-2 h-2 bg-moroccan-gold rounded-full animate-pulse" />
               <span className="text-sm font-semibold">AI-Powered Environmental Platform</span>
-              <Sparkles className="h-4 w-4 text-yellow-300" />
+              <Sparkles className="h-4 w-4 text-moroccan-gold" />
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.1] animate-fade-in" style={{ animationDelay: '100ms' }}>

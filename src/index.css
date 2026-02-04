@@ -74,7 +74,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 35 30% 98%;
     --foreground: 210 100% 12%;
 
     --card: 0 0% 100%;
@@ -83,102 +83,120 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 210 100% 12%;
 
-    /* Environmental Green - Primary */
-    --primary: 145 63% 42%;
+    /* Moroccan-inspired Primary - Deep Teal/Green */
+    --primary: 168 65% 35%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 145 63% 55%;
+    --primary-glow: 168 65% 45%;
 
-    /* Deep Blue - Secondary */
-    --secondary: 210 57% 16%;
+    /* Moroccan Deep Blue - Secondary */
+    --secondary: 215 60% 25%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 145 20% 96%;
+    --muted: 35 20% 94%;
     --muted-foreground: 210 20% 40%;
 
-    --accent: 145 63% 42%;
+    --accent: 168 65% 35%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 145 30% 90%;
-    --input: 145 30% 90%;
-    --ring: 145 63% 42%;
+    --border: 35 25% 88%;
+    --input: 35 25% 88%;
+    --ring: 168 65% 35%;
 
     --radius: 1rem;
 
+    /* Moroccan Color Palette */
+    --moroccan-terracotta: 15 70% 50%;
+    --moroccan-gold: 42 85% 55%;
+    --moroccan-sand: 35 40% 85%;
+    --moroccan-blue: 215 60% 40%;
+    --moroccan-teal: 168 65% 35%;
+    --moroccan-olive: 85 30% 40%;
+    --moroccan-burgundy: 350 60% 35%;
+
     /* Custom environmental colors */
-    --hero-gradient-start: 145 63% 42%;
-    --hero-gradient-end: 210 57% 16%;
-    --success: 145 63% 42%;
-    --success-foreground: 145 40% 25%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 45 80% 25%;
-    --info: 210 100% 50%;
-    --info-foreground: 210 80% 25%;
+    --hero-gradient-start: 168 65% 35%;
+    --hero-gradient-end: 215 60% 25%;
+    --success: 168 65% 35%;
+    --success-foreground: 168 40% 20%;
+    --warning: 42 85% 50%;
+    --warning-foreground: 42 80% 20%;
+    --info: 215 60% 40%;
+    --info-foreground: 215 80% 20%;
 
     /* Shadows */
-    --shadow-primary: 145 63% 42%;
+    --shadow-primary: 168 65% 35%;
     
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 145 20% 98%;
+    --sidebar-background: 35 20% 97%;
     --sidebar-foreground: 210 100% 12%;
-    --sidebar-primary: 145 63% 42%;
+    --sidebar-primary: 168 65% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 145 20% 96%;
+    --sidebar-accent: 35 20% 94%;
     --sidebar-accent-foreground: 210 100% 12%;
-    --sidebar-border: 145 30% 90%;
-    --sidebar-ring: 145 63% 42%;
+    --sidebar-border: 35 25% 88%;
+    --sidebar-ring: 168 65% 35%;
   }
 
   .dark {
-    --background: 210 57% 16%;
-    --foreground: 0 0% 98%;
+    --background: 215 50% 12%;
+    --foreground: 35 20% 95%;
 
-    --card: 210 50% 20%;
-    --card-foreground: 0 0% 98%;
+    --card: 215 45% 16%;
+    --card-foreground: 35 20% 95%;
 
-    --popover: 210 50% 20%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 215 45% 16%;
+    --popover-foreground: 35 20% 95%;
 
-    --primary: 145 63% 42%;
+    --primary: 168 60% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 145 63% 55%;
+    --primary-glow: 168 60% 55%;
 
-    --secondary: 210 40% 30%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 215 50% 30%;
+    --secondary-foreground: 35 20% 95%;
 
-    --muted: 210 40% 25%;
-    --muted-foreground: 145 20% 70%;
+    --muted: 215 40% 20%;
+    --muted-foreground: 35 15% 65%;
 
-    --accent: 145 63% 42%;
+    --accent: 168 60% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 35 20% 95%;
+
+    /* Dark mode Moroccan colors */
+    --moroccan-terracotta: 15 65% 55%;
+    --moroccan-gold: 42 80% 60%;
+    --moroccan-sand: 35 30% 25%;
+    --moroccan-blue: 215 55% 50%;
+    --moroccan-teal: 168 55% 45%;
+    --moroccan-olive: 85 25% 45%;
+    --moroccan-burgundy: 350 55% 45%;
 
     /* Dark mode environmental colors */
-    --success: 145 63% 42%;
-    --success-foreground: 145 30% 90%;
-    --warning: 45 93% 47%;
-    --warning-foreground: 45 30% 90%;
-    --info: 210 100% 50%;
-    --info-foreground: 210 30% 90%;
+    --success: 168 55% 45%;
+    --success-foreground: 168 30% 90%;
+    --warning: 42 80% 55%;
+    --warning-foreground: 42 30% 90%;
+    --info: 215 55% 50%;
+    --info-foreground: 215 30% 90%;
 
-    --border: 210 40% 30%;
-    --input: 210 40% 30%;
-    --ring: 145 63% 42%;
+    --border: 215 40% 25%;
+    --input: 215 40% 25%;
+    --ring: 168 55% 45%;
     
-    --sidebar-background: 210 50% 18%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 145 63% 42%;
+    --sidebar-background: 215 45% 14%;
+    --sidebar-foreground: 35 20% 95%;
+    --sidebar-primary: 168 55% 45%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 25%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 210 40% 30%;
-    --sidebar-ring: 145 63% 42%;
+    --sidebar-accent: 215 40% 20%;
+    --sidebar-accent-foreground: 35 20% 95%;
+    --sidebar-border: 215 40% 25%;
+    --sidebar-ring: 168 55% 45%;
   }
 }
 
