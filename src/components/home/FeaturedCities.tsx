@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, TrendingUp, ArrowRight, Sparkles } from "lucide-react";
@@ -8,14 +9,46 @@ import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
 
+const LoadingSkeleton = () => (
+  <section className="py-20 bg-gradient-to-b from-background via-muted/20 to-background">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-12">
+        <Skeleton className="h-8 w-40 mx-auto mb-4" />
+        <Skeleton className="h-10 w-64 mx-auto mb-4" />
+        <Skeleton className="h-5 w-96 mx-auto" />
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Card key={i} className="overflow-hidden">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <Skeleton className="w-12 h-12 rounded-xl" />
+                <div className="flex-1">
+                  <Skeleton className="h-4 w-20 mb-1" />
+                  <Skeleton className="h-3 w-16" />
+                </div>
+              </div>
+              <Skeleton className="h-px w-full mb-2" />
+              <div className="flex justify-between">
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-4 w-4" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 export const FeaturedCities = () => {
   const { t } = useTranslation();
   const { ref, isVisible } = useScrollAnimation();
 
-  const { data: cities } = useQuery({
-    queryKey: ["featured-cities-enhanced"],
+  const { data: cities, isLoading } = useQuery({
+    queryKey: ["featured-cities-optimized"],
     queryFn: async () => {
-      // Fetch cities
+      // Fetch featured cities
       const { data: citiesData, error } = await supabase
         .from("cities")
         .select("*")
@@ -24,23 +57,32 @@ export const FeaturedCities = () => {
         .limit(8);
 
       if (error) throw error;
+      if (!citiesData?.length) return [];
 
-      // Fetch report counts for each city
-      const citiesWithCounts = await Promise.all(
-        (citiesData || []).map(async (city) => {
-          const { count } = await supabase
-            .from("reports_public")
-            .select("*", { count: "exact", head: true })
-            .eq("city_id", city.id);
-          
-          return { ...city, reportCount: count || 0 };
-        })
-      );
+      // Get all city IDs for a single batch query
+      const cityIds = citiesData.map(c => c.id);
+      
+      // Fetch all report counts in a single query using group by
+      const { data: reportCounts } = await supabase
+        .from("reports_public")
+        .select("city_id")
+        .in("city_id", cityIds);
 
-      return citiesWithCounts;
+      // Count reports per city from the result
+      const countMap = (reportCounts || []).reduce((acc, r) => {
+        acc[r.city_id] = (acc[r.city_id] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      return citiesData.map(city => ({
+        ...city,
+        reportCount: countMap[city.id] || 0
+      }));
     },
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
+  if (isLoading) return <LoadingSkeleton />;
   if (!cities?.length) return null;
 
   // Sort by report count for visual hierarchy
