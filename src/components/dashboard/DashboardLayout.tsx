@@ -25,7 +25,7 @@ interface DashboardLayoutProps {
   children: ReactNode;
   title: string;
   icon?: ReactNode;
-  role: 'admin' | 'municipality' | 'ngo' | 'volunteer' | 'partner';
+  role: 'admin' | 'municipality' | 'ngo' | 'volunteer' | 'partner' | 'tourist';
 }
 
 export const DashboardLayout = ({ children, title, icon, role }: DashboardLayoutProps) => {
@@ -59,6 +59,11 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
     { to: '/partner', label: t('nav.dashboard'), icon: LayoutDashboard },
   ];
 
+  const touristLinks = [
+    { to: '/tourist', label: t('nav.dashboard'), icon: LayoutDashboard },
+    { to: '/map', label: t('nav.map'), icon: MapPin },
+  ];
+
   const getLinks = () => {
     switch (role) {
       case 'admin': return adminLinks;
@@ -66,6 +71,7 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
       case 'ngo': return ngoLinks;
       case 'volunteer': return volunteerLinks;
       case 'partner': return partnerLinks;
+      case 'tourist': return touristLinks;
       default: return [];
     }
   };
@@ -195,7 +201,7 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
         </header>
 
         {/* Page Content */}
-        <main className="flex-1">
+        <main className="flex-1 overflow-x-hidden">
           {children}
         </main>
       </div>

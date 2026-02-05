@@ -241,6 +241,49 @@ All colors MUST be HSL.
   }
 }
 
+/* Scrollable tabs container with fade indicators */
+.scrollable-tabs-container {
+  position: relative;
+}
+
+.scrollable-tabs-container::before,
+.scrollable-tabs-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.scrollable-tabs-container::before {
+  left: 0;
+  background: linear-gradient(to right, hsl(var(--background)), transparent);
+}
+
+.scrollable-tabs-container::after {
+  right: 0;
+  background: linear-gradient(to left, hsl(var(--background)), transparent);
+}
+
+.scrollable-tabs-container.show-fade-right::after,
+.scrollable-tabs-container.show-fade-left::before {
+  opacity: 1;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Arabic font stack */
 .font-arabic {
   font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
