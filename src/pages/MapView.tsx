@@ -17,7 +17,7 @@ import MapStats from "@/components/map/MapStats";
 import ReportsSidebar from "@/components/map/ReportsSidebar";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Plus, List, X, MapPin } from "lucide-react";
+import { Plus, List, X, MapPin, Trash2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -166,17 +166,30 @@ const MapView = () => {
               <MapStats reports={reports} className="pointer-events-auto" />
               
               {/* Cities Map Link */}
-              <Button 
-                variant="secondary" 
-                size="sm" 
-                asChild 
-                className="pointer-events-auto shadow-lg bg-card backdrop-blur-md border border-border hover:bg-accent text-foreground"
-              >
-                <Link to="/cities-map">
-                  <MapPin className="mr-2 h-4 w-4" />
-                  Cities Map
-                </Link>
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  asChild 
+                  className="pointer-events-auto shadow-lg bg-card backdrop-blur-md border border-border hover:bg-accent text-foreground"
+                >
+                  <Link to="/bins-map">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Poubelles
+                  </Link>
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  asChild 
+                  className="pointer-events-auto shadow-lg bg-card backdrop-blur-md border border-border hover:bg-accent text-foreground"
+                >
+                  <Link to="/cities-map">
+                    <MapPin className="mr-2 h-4 w-4" />
+                    Cities Map
+                  </Link>
+                </Button>
+              </div>
             </div>
 
             {/* Category Filter - Always visible */}

@@ -49,6 +49,7 @@ import CitiesMapView from "./pages/CitiesMapView";
 import Leaderboard from "./pages/Leaderboard";
 import CollectionEvents from "./pages/CollectionEvents";
 import Install from "./pages/Install";
+import BinsMap from "./pages/BinsMap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -238,6 +239,10 @@ const App = () => (
             <Route
               path="/bins"
               element={<WasteBinsDashboard />}
+            />
+            <Route
+              path="/bins-map"
+              element={<BinsMap />}
             />
             <Route
               path="/volunteer"
