@@ -353,20 +353,22 @@ const PartnerDashboard = () => {
 
         {/* Assignments Tabs */}
         <Tabs defaultValue="active" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="active" className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              Actives ({pendingAssignments.length + inProgressAssignments.length})
-            </TabsTrigger>
-            <TabsTrigger value="completed" className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              Complétées ({completedAssignments.length})
-            </TabsTrigger>
-            <TabsTrigger value="all" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Toutes ({totalAssignments})
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-2">
+            <TabsList className="inline-flex w-max min-w-full md:grid md:w-full md:grid-cols-3 gap-1">
+              <TabsTrigger value="active" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <Clock className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">Actives ({pendingAssignments.length + inProgressAssignments.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="completed" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">Complétées ({completedAssignments.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="all" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <FileText className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">Toutes ({totalAssignments})</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="active">
             <Card>

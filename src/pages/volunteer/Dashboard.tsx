@@ -330,20 +330,22 @@ const VolunteerDashboard = () => {
 
         {/* Events Tabs */}
         <Tabs defaultValue="upcoming" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="upcoming" className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              À Venir ({upcomingRegistrations.length})
-            </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4" />
-              Historique ({pastEvents.length})
-            </TabsTrigger>
-            <TabsTrigger value="discover" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
-              Découvrir
-            </TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-2">
+            <TabsList className="inline-flex w-max min-w-full md:grid md:w-full md:grid-cols-3 gap-1">
+              <TabsTrigger value="upcoming" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <Calendar className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">À Venir ({upcomingRegistrations.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="history" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">Historique ({pastEvents.length})</span>
+              </TabsTrigger>
+              <TabsTrigger value="discover" className="flex items-center gap-2 px-3 py-2 whitespace-nowrap">
+                <TrendingUp className="h-4 w-4 shrink-0" />
+                <span className="text-xs md:text-sm">Découvrir</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="upcoming">
             <Card>
