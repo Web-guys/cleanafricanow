@@ -164,36 +164,36 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
     <div className="min-h-screen bg-background flex">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block w-72 shrink-0">
-        <div className="fixed w-72 h-screen overflow-y-auto">
+        <div className="fixed w-72 h-screen overflow-y-auto scrollbar-thin">
           <Sidebar />
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen w-full overflow-hidden">
         {/* Top Header */}
         <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
-          <div className="flex items-center justify-between px-4 lg:px-8 py-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between px-3 sm:px-4 lg:px-8 py-3 sm:py-4 gap-2">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
               {/* Mobile Menu */}
               <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="lg:hidden">
-                    <Menu className="h-6 w-6" />
+                  <Button variant="ghost" size="icon" className="lg:hidden shrink-0">
+                    <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-72 p-0">
+                <SheetContent side="left" className="w-[280px] sm:w-72 p-0">
                   <Sidebar mobile />
                 </SheetContent>
               </Sheet>
               
-              <div className="flex items-center gap-3">
-                {icon}
-                <h1 className="text-xl lg:text-2xl font-bold">{title}</h1>
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="shrink-0">{icon}</div>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold truncate">{title}</h1>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <LanguageSwitcher />
               <ThemeToggle />
             </div>
@@ -201,7 +201,7 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 lg:pb-0">
           {children}
         </main>
       </div>

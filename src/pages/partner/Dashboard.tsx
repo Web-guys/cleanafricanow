@@ -222,10 +222,10 @@ const PartnerDashboard = () => {
   return (
     <DashboardLayout 
       title="Espace Partenaire" 
-      icon={<Building2 className="h-6 w-6 text-primary" />}
-      role="municipality" // Use municipality layout as base
+      icon={<Building2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />}
+      role="partner"
     >
-      <div className="p-4 lg:p-8 space-y-8">
+      <div className="p-3 sm:p-4 lg:p-8 space-y-4 sm:space-y-6 overflow-x-hidden">
         {/* Company Info Banner */}
         <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
           <CardContent className="p-6">

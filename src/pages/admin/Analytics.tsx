@@ -16,41 +16,41 @@ const AdminAnalytics = () => {
     <div className="min-h-screen bg-background flex">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block w-64 shrink-0">
-        <div className="fixed w-64 h-screen overflow-y-auto">
+        <div className="fixed w-64 h-screen overflow-y-auto scrollbar-thin">
           <AdminSidebar />
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen w-full overflow-hidden">
         {/* Top Header */}
         <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
-          <div className="flex items-center justify-between px-4 lg:px-8 py-4">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between px-3 sm:px-4 lg:px-8 py-3 sm:py-4 gap-2">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
               {/* Mobile Menu */}
               <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="lg:hidden">
-                    <Menu className="h-6 w-6" />
+                  <Button variant="ghost" size="icon" className="lg:hidden shrink-0">
+                    <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-64 p-0">
+                <SheetContent side="left" className="w-[280px] sm:w-64 p-0">
                   <AdminSidebar mobile onNavigate={() => setSidebarOpen(false)} />
                 </SheetContent>
               </Sheet>
 
-              <div className="flex items-center gap-3">
-                <BarChart3 className="h-6 w-6 text-primary" />
-                <div>
-                  <h1 className="text-xl lg:text-2xl font-bold">Advanced Analytics</h1>
-                  <p className="text-sm text-muted-foreground hidden md:block">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-primary shrink-0" />
+                <div className="min-w-0">
+                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold truncate">Advanced Analytics</h1>
+                  <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block truncate">
                     In-depth platform metrics and insights
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <LanguageSwitcher />
               <ThemeToggle />
             </div>
@@ -58,7 +58,7 @@ const AdminAnalytics = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-8">
+        <main className="flex-1 p-3 sm:p-4 lg:p-8 overflow-x-hidden overflow-y-auto pb-24 lg:pb-8">
           <AdvancedAnalyticsPanel />
         </main>
       </div>

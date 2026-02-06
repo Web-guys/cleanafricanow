@@ -220,10 +220,10 @@ const VolunteerDashboard = () => {
   return (
     <DashboardLayout 
       title={t('citizen.dashboard.title', 'Citizen Dashboard')}
-      icon={<Heart className="h-6 w-6 text-primary" />}
-      role="ngo" // Use ngo layout as base
+      icon={<Heart className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />}
+      role="volunteer"
     >
-      <div className="p-4 lg:p-8 space-y-8">
+      <div className="p-3 sm:p-4 lg:p-8 space-y-4 sm:space-y-6 overflow-x-hidden">
         {/* Platform Introduction */}
         {showIntro && (
           <div className="relative">
