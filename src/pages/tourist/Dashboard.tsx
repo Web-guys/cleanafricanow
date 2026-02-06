@@ -126,9 +126,9 @@ const TouristDashboard = () => {
     <DashboardLayout 
       title={t('tourist.dashboard.title', 'Tourist Information')}
       icon={<Compass className="h-6 w-6 text-primary" />}
-      role="ngo"
+      role="tourist"
     >
-      <div className="p-4 lg:p-8 space-y-8">
+      <div className="p-4 lg:p-8 space-y-6 overflow-x-hidden">
         {/* Platform Introduction */}
         {showIntro && (
           <div className="relative">

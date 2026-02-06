@@ -332,10 +332,10 @@ const NgoDashboard = () => {
   return (
     <DashboardLayout 
       title={t('ngo.dashboard.title', 'NGO Dashboard')} 
-      icon={<Heart className="h-6 w-6 text-primary" />}
+      icon={<Heart className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />}
       role="ngo"
     >
-      <div className="p-4 lg:p-8 space-y-6">
+      <div className="p-3 sm:p-4 lg:p-8 space-y-4 sm:space-y-6 overflow-x-hidden">
         {/* Platform Introduction */}
         {showIntro && (
           <div className="relative">

@@ -276,10 +276,10 @@ const MunicipalityDashboard = () => {
   return (
     <DashboardLayout 
       title={t('municipality.dashboard.title', 'Municipality Dashboard')} 
-      icon={<Building className="h-6 w-6 text-primary" />}
+      icon={<Building className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />}
       role="municipality"
     >
-      <div className="p-4 lg:p-8 space-y-6">
+      <div className="p-3 sm:p-4 lg:p-8 space-y-4 sm:space-y-6 overflow-x-hidden">
         {/* Platform Introduction */}
         {showIntro && (
           <div className="relative">
