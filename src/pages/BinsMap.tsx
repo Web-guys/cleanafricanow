@@ -1,11 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { useBins, WasteBin, BinStatus } from "@/hooks/useWasteBins";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,11 +20,21 @@ import {
   ZoomOut, 
   Locate,
   Info,
-  X
+  X,
+  Share2,
+  Copy,
+  Navigation,
+  Check
 } from "lucide-react";
 import { getStatusColor, BinStatusBadge } from "@/components/bins/BinStatusBadge";
 import { PublicBinReportDialog } from "@/components/bins/PublicBinReportDialog";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const statusLabels: Record<BinStatus, string> = {
   empty: "Vide",
@@ -48,6 +59,8 @@ const statusEmojis: Record<BinStatus, string> = {
 const BinsMap = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,8 +68,23 @@ const BinsMap = () => {
   const [selectedBin, setSelectedBin] = useState<WasteBin | null>(null);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [showLegend, setShowLegend] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   
   const { data: bins, isLoading } = useBins();
+
+  // Handle deep linking to specific bin
+  useEffect(() => {
+    const binId = searchParams.get('bin');
+    if (binId && bins) {
+      const bin = bins.find(b => b.id === binId);
+      if (bin) {
+        setSelectedBin(bin);
+        setTimeout(() => {
+          mapRef.current?.flyTo([bin.latitude, bin.longitude], 17, { duration: 1 });
+        }, 500);
+      }
+    }
+  }, [searchParams, bins]);
 
   // Initialize map
   useEffect(() => {
@@ -126,12 +154,12 @@ const BinsMap = () => {
       markersRef.current.push(marker);
     });
 
-    // Fit bounds if there are bins
-    if (bins.length > 0) {
+    // Fit bounds if there are bins (only on initial load, not when selecting)
+    if (bins.length > 0 && !searchParams.get('bin')) {
       const bounds = L.latLngBounds(bins.map(b => [b.latitude, b.longitude]));
       mapRef.current.fitBounds(bounds, { padding: [50, 50], maxZoom: 12 });
     }
-  }, [bins]);
+  }, [bins, searchParams]);
 
   const handleZoomIn = useCallback(() => {
     mapRef.current?.zoomIn();
@@ -159,11 +187,60 @@ const BinsMap = () => {
 
   const handleReportClick = () => {
     if (!user) {
-      // Redirect to login
       window.location.href = '/auth?redirect=/bins-map';
       return;
     }
     setReportDialogOpen(true);
+  };
+
+  const getBinShareUrl = (bin: WasteBin) => {
+    return `${window.location.origin}/bins-map?bin=${bin.id}`;
+  };
+
+  const handleCopyLink = async (bin: WasteBin) => {
+    const url = getBinShareUrl(bin);
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      toast({
+        title: "Lien copié!",
+        description: "Le lien de la poubelle a été copié dans le presse-papier.",
+      });
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch (err) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de copier le lien.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShare = async (bin: WasteBin) => {
+    const url = getBinShareUrl(bin);
+    const title = `Poubelle ${bin.bin_code}`;
+    const text = `État: ${statusLabels[bin.current_status]} - ${bin.street || bin.district || "Voir sur la carte"}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url });
+      } catch (err) {
+        // User cancelled or error
+      }
+    } else {
+      handleCopyLink(bin);
+    }
+  };
+
+  const handleNavigate = (bin: WasteBin) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${bin.latitude},${bin.longitude}`;
+    window.open(url, '_blank');
+  };
+
+  const handleWhatsAppShare = (bin: WasteBin) => {
+    const url = getBinShareUrl(bin);
+    const text = `🗑️ Poubelle ${bin.bin_code}\n📍 ${bin.street || bin.district || "Voir localisation"}\n${statusEmojis[bin.current_status]} État: ${statusLabels[bin.current_status]}\n\n${url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   return (
@@ -174,16 +251,16 @@ const BinsMap = () => {
       />
       
       {/* Header */}
-      <header className="bg-card border-b px-4 py-3 flex items-center justify-between z-50">
-        <div className="flex items-center gap-3">
+      <header className="bg-card border-b px-3 sm:px-4 py-3 flex items-center justify-between z-50">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Button variant="ghost" size="icon" asChild>
             <Link to="/map">
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
           <div>
-            <h1 className="font-semibold flex items-center gap-2">
-              <Trash2 className="h-5 w-5 text-primary" />
+            <h1 className="font-semibold flex items-center gap-2 text-sm sm:text-base">
+              <Trash2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               Carte des Poubelles
             </h1>
             <p className="text-xs text-muted-foreground">
@@ -192,13 +269,17 @@ const BinsMap = () => {
           </div>
         </div>
         
-        <Button 
-          variant="outline" 
-          size="sm"
-          onClick={() => setShowLegend(!showLegend)}
-        >
-          <Info className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => setShowLegend(!showLegend)}
+            className="gap-1"
+          >
+            <Info className="h-4 w-4" />
+            <span className="hidden sm:inline">Légende</span>
+          </Button>
+        </div>
       </header>
 
       {/* Map Container */}
@@ -256,20 +337,20 @@ const BinsMap = () => {
           </Button>
         </div>
 
-        {/* Selected Bin Card */}
+        {/* Selected Bin Card - Enhanced */}
         {selectedBin && (
           <Card className={cn(
-            "absolute bottom-24 left-4 right-4 z-[1000] shadow-xl animate-fade-in",
-            "md:left-auto md:right-4 md:w-80"
+            "absolute bottom-24 left-3 right-3 z-[1000] shadow-xl animate-fade-in",
+            "sm:left-4 sm:right-4 md:left-auto md:right-4 md:w-96"
           )}>
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-bold text-lg">{selectedBin.bin_code}</span>
                     <BinStatusBadge status={selectedBin.current_status} />
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground truncate">
                     {selectedBin.street || selectedBin.district || "Emplacement"}
                   </p>
                   {selectedBin.cities && (
@@ -281,49 +362,152 @@ const BinsMap = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="shrink-0"
+                  className="shrink-0 -mr-2 -mt-2"
                   onClick={() => setSelectedBin(null)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               
-              <div className="mt-4 flex gap-2">
+              {/* Action Buttons - Enhanced */}
+              <div className="mt-4 grid grid-cols-2 gap-2">
                 <Button 
-                  className="flex-1 gap-2"
+                  className="gap-2"
                   onClick={handleReportClick}
                 >
                   <AlertCircle className="h-4 w-4" />
-                  Signaler l'état
+                  Signaler
                 </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <Share2 className="h-4 w-4" />
+                      Partager
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => handleShare(selectedBin)}>
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Partager...
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleCopyLink(selectedBin)}>
+                      {linkCopied ? (
+                        <Check className="h-4 w-4 mr-2 text-primary" />
+                      ) : (
+                        <Copy className="h-4 w-4 mr-2" />
+                      )}
+                      Copier le lien
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleWhatsAppShare(selectedBin)}>
+                      <span className="mr-2">💬</span>
+                      Envoyer via WhatsApp
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleNavigate(selectedBin)}>
+                      <Navigation className="h-4 w-4 mr-2" />
+                      Itinéraire
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Quick share row */}
+              <div className="mt-3 flex items-center justify-center gap-3 pt-3 border-t">
+                <button
+                  onClick={() => handleWhatsAppShare(selectedBin)}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <span className="text-lg">💬</span>
+                  WhatsApp
+                </button>
+                <span className="text-muted-foreground">•</span>
+                <button
+                  onClick={() => handleCopyLink(selectedBin)}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {linkCopied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
+                  {linkCopied ? "Copié!" : "Copier lien"}
+                </button>
+                <span className="text-muted-foreground">•</span>
+                <button
+                  onClick={() => handleNavigate(selectedBin)}
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Navigation className="h-3 w-3" />
+                  Y aller
+                </button>
               </div>
               
               {!user && (
-                <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Connectez-vous pour signaler
+                <p className="text-xs text-muted-foreground mt-3 text-center bg-muted/50 rounded-lg py-2">
+                  <Link to="/auth?redirect=/bins-map" className="text-primary hover:underline">
+                    Connectez-vous
+                  </Link> pour signaler l'état
                 </p>
               )}
             </CardContent>
           </Card>
         )}
 
-        {/* Quick Action Button (Mobile) */}
-        <div className="absolute bottom-24 right-4 z-[1000] md:hidden">
-          {!selectedBin && (
-            <Button
-              size="lg"
-              className="shadow-xl gap-2 rounded-full"
-              onClick={() => {
-                if (bins && bins.length > 0) {
-                  // Select nearest bin or first one
+        {/* Quick Actions (Mobile) */}
+        <div className={cn(
+          "absolute bottom-24 left-4 right-4 z-[1000] flex justify-between items-end",
+          "md:hidden transition-opacity duration-200",
+          selectedBin && "opacity-0 pointer-events-none"
+        )}>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="shadow-lg bg-card backdrop-blur-md border gap-2"
+            onClick={handleLocate}
+          >
+            <Locate className="h-5 w-5" />
+            Ma position
+          </Button>
+          
+          <Button
+            size="lg"
+            className="shadow-xl gap-2 rounded-full"
+            onClick={() => {
+              if (bins && bins.length > 0) {
+                // Find nearest bin if we have location
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      const userLat = position.coords.latitude;
+                      const userLng = position.coords.longitude;
+                      
+                      // Find nearest bin
+                      let nearest = bins[0];
+                      let minDist = Infinity;
+                      bins.forEach(bin => {
+                        const dist = Math.sqrt(
+                          Math.pow(bin.latitude - userLat, 2) + 
+                          Math.pow(bin.longitude - userLng, 2)
+                        );
+                        if (dist < minDist) {
+                          minDist = dist;
+                          nearest = bin;
+                        }
+                      });
+                      
+                      setSelectedBin(nearest);
+                      mapRef.current?.flyTo([nearest.latitude, nearest.longitude], 17, { duration: 0.5 });
+                    },
+                    () => {
+                      // Fallback to first bin
+                      setSelectedBin(bins[0]);
+                    }
+                  );
+                } else {
                   setSelectedBin(bins[0]);
                 }
-              }}
-            >
-              <Trash2 className="h-5 w-5" />
-              Trouver une poubelle
-            </Button>
-          )}
+              }
+            }}
+          >
+            <Trash2 className="h-5 w-5" />
+            Trouver
+          </Button>
         </div>
       </div>
 
