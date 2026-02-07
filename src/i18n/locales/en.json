@@ -855,7 +855,11 @@
   "cities": {
     "featured": "Cities We Cover",
     "featuredDesc": "Report environmental issues in major Moroccan cities",
-    "viewAll": "View all cities on map"
+    "viewAll": "View all cities on map",
+    "activeCoverage": "Active Coverage",
+    "mostActive": "Most Active",
+    "reports": "reports",
+    "exploreAll": "Explore all {{count}}+ cities"
   },
   "dashboard": {
     "quickActions": "Quick Actions",
@@ -903,6 +907,9 @@
     "cleanup": "Cleanup",
     "awareness": "Awareness",
     "recycling": "Recycling",
-    "collection": "Collection"
+    "collection": "Collection",
+    "joinMovement": "Join the movement",
+    "viewDetails": "View Details",
+    "registerNow": "Register Now"
   }
 }

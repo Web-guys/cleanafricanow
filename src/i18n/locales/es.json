@@ -673,7 +673,11 @@
   "cities": {
     "featured": "Ciudades Cubiertas",
     "featuredDesc": "Reporta problemas ambientales en las principales ciudades marroquíes",
-    "viewAll": "Ver todas las ciudades en el mapa"
+    "viewAll": "Ver todas las ciudades en el mapa",
+    "activeCoverage": "Cobertura Activa",
+    "mostActive": "Más Activa",
+    "reports": "reportes",
+    "exploreAll": "Explorar las {{count}}+ ciudades"
   },
   "dashboard": {
     "quickActions": "Acciones Rápidas",
@@ -721,6 +725,9 @@
     "cleanup": "Limpieza",
     "awareness": "Concientización",
     "recycling": "Reciclaje",
-    "collection": "Recolección"
+    "collection": "Recolección",
+    "joinMovement": "Únete al movimiento",
+    "viewDetails": "Ver Detalles",
+    "registerNow": "Registrarse Ahora"
   }
 }
