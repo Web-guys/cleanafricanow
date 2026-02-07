@@ -102,7 +102,7 @@ export const FeaturedCities = () => {
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <MapPin className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Active Coverage</span>
+            <span className="text-sm font-medium text-primary">{t('cities.activeCoverage', 'Active Coverage')}</span>
           </div>
           <h3 className="text-3xl md:text-4xl font-bold mb-4">
             {t('cities.featured', 'Cities We Cover')}
@@ -141,7 +141,7 @@ export const FeaturedCities = () => {
                     <div className="absolute top-2 right-2">
                       <Badge className="bg-primary/90 text-primary-foreground text-[10px] px-2">
                         <Sparkles className="h-3 w-3 mr-1" />
-                        Most Active
+                        {t('cities.mostActive', 'Most Active')}
                       </Badge>
                     </div>
                   )}
@@ -167,7 +167,7 @@ export const FeaturedCities = () => {
                     <div className="flex items-center justify-between pt-2 border-t border-border/50">
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <TrendingUp className="h-3.5 w-3.5" />
-                        <span>{city.reportCount} reports</span>
+                        <span>{city.reportCount} {t('cities.reports', 'reports')}</span>
                       </div>
                       <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </div>
@@ -195,7 +195,7 @@ export const FeaturedCities = () => {
               to="/cities-map" 
               className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors group"
             >
-              Explore all {cities.length}+ Moroccan cities
+              {t('cities.exploreAll', 'Explore all {{count}}+ cities', { count: cities.length })}
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>

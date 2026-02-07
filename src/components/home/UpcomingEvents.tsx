@@ -155,7 +155,7 @@ export const UpcomingEvents = () => {
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <Sparkles className="h-4 w-4 text-primary animate-pulse" />
-            <span className="text-sm font-medium text-primary">Join the movement</span>
+            <span className="text-sm font-medium text-primary">{t('events.joinMovement', 'Join the movement')}</span>
           </div>
           <h3 className="text-3xl md:text-4xl font-bold mb-4">
             {t("events.upcoming", "Upcoming Events")}
@@ -265,7 +265,7 @@ export const UpcomingEvents = () => {
                       disabled={isFull}
                     >
                       <Link to={`/events?event=${event.id}`}>
-                        {isFull ? "View Details" : "Register Now"}
+                        {isFull ? t('events.viewDetails', 'View Details') : t('events.registerNow', 'Register Now')}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </Link>
                     </Button>

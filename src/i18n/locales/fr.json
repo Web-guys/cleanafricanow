@@ -847,7 +847,11 @@
   "cities": {
     "featured": "Villes Couvertes",
     "featuredDesc": "Signalez les problèmes environnementaux dans les principales villes marocaines",
-    "viewAll": "Voir toutes les villes sur la carte"
+    "viewAll": "Voir toutes les villes sur la carte",
+    "activeCoverage": "Couverture Active",
+    "mostActive": "Plus Active",
+    "reports": "signalements",
+    "exploreAll": "Explorer les {{count}}+ villes"
   },
   "dashboard": {
     "quickActions": "Actions Rapides",
@@ -895,6 +899,9 @@
     "cleanup": "Nettoyage",
     "awareness": "Sensibilisation",
     "recycling": "Recyclage",
-    "collection": "Collecte"
+    "collection": "Collecte",
+    "joinMovement": "Rejoignez le mouvement",
+    "viewDetails": "Voir Détails",
+    "registerNow": "S'inscrire Maintenant"
   }
 }

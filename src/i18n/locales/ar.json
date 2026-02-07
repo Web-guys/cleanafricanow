@@ -673,7 +673,11 @@
   "cities": {
     "featured": "المدن المغطاة",
     "featuredDesc": "أبلغ عن المشاكل البيئية في المدن المغربية الرئيسية",
-    "viewAll": "عرض جميع المدن على الخريطة"
+    "viewAll": "عرض جميع المدن على الخريطة",
+    "activeCoverage": "التغطية النشطة",
+    "mostActive": "الأكثر نشاطاً",
+    "reports": "تقارير",
+    "exploreAll": "استكشف {{count}}+ مدينة"
   },
   "dashboard": {
     "quickActions": "إجراءات سريعة",
@@ -721,6 +725,9 @@
     "cleanup": "تنظيف",
     "awareness": "توعية",
     "recycling": "إعادة تدوير",
-    "collection": "جمع"
+    "collection": "جمع",
+    "joinMovement": "انضم للحركة",
+    "viewDetails": "عرض التفاصيل",
+    "registerNow": "سجّل الآن"
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 
 interface UseScrollAnimationOptions {
   threshold?: number;
@@ -7,21 +7,35 @@ interface UseScrollAnimationOptions {
 }
 
 export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
-  const { threshold = 0.1, rootMargin = "50px", triggerOnce = true } = options;
+  const { threshold = 0.1, rootMargin = "100px", triggerOnce = true } = options;
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // Start with true to prevent flash of invisible content on initial load
+  const [isVisible, setIsVisible] = useState(true);
+  const hasCheckedInitial = useRef(false);
+
+  // Use layout effect to check visibility before paint
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element || hasCheckedInitial.current) return;
+    
+    hasCheckedInitial.current = true;
+    
+    // Check if element is in view on mount
+    const rect = element.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+    
+    // If element is in viewport or above it (already scrolled past), show it
+    if (rect.top < windowHeight + 100 && rect.bottom > -100) {
+      setIsVisible(true);
+    } else {
+      // Only hide if element is below viewport (not yet scrolled to)
+      setIsVisible(false);
+    }
+  }, []);
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-
-    // Check if element is already in view on mount
-    const rect = element.getBoundingClientRect();
-    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-    if (rect.top < windowHeight && rect.bottom > 0) {
-      setIsVisible(true);
-      if (triggerOnce) return;
-    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
