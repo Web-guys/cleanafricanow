@@ -596,6 +596,13 @@
     "noReportsDesc": "You haven't submitted any environmental reports yet.",
     "submitFirst": "Submit Your First Report"
   },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No notifications yet",
+    "settings": "Notification Settings",
+    "viewDetails": "View"
+  },
   "pages": {
     "mission": {
       "title": "Our Mission",

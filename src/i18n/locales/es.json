@@ -10,7 +10,9 @@
     "loading": "Cargando...",
     "submit": "Enviar",
     "actions": "Acciones",
-    "clearSelection": "Limpiar"
+    "clearSelection": "Limpiar",
+    "dismiss": "Cerrar",
+    "welcome": "Bienvenido"
   },
   "nav": {
     "home": "Inicio",
@@ -414,6 +416,13 @@
     "noReportsDesc": "Aún no has enviado ningún reporte ambiental.",
     "submitFirst": "Envía Tu Primer Reporte"
   },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo como leído",
+    "noNotifications": "Sin notificaciones",
+    "settings": "Configuración de notificaciones",
+    "viewDetails": "Ver"
+  },
   "pages": {
     "mission": {
       "title": "Nuestra Misión",
@@ -680,6 +689,8 @@
     "exploreAll": "Explorar las {{count}}+ ciudades"
   },
   "dashboard": {
+    "keyBenefits": "Beneficios Clave",
+    "howItWorks": "Cómo Funciona",
     "quickActions": "Acciones Rápidas",
     "needsAttention": "Necesita atención",
     "beingProcessed": "En proceso",

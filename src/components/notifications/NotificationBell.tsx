@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, Check, CheckCheck, ExternalLink, Trash2 } from "lucide-react";
+import { Bell, Check, CheckCheck, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Notification {
   id: string;
@@ -27,6 +28,7 @@ interface Notification {
 }
 
 export const NotificationBell = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -150,7 +152,7 @@ export const NotificationBell = () => {
       </PopoverTrigger>
       <PopoverContent className="w-96 p-0" align="end">
         <div className="flex items-center justify-between px-4 py-3 border-b">
-          <h3 className="font-semibold">Notifications</h3>
+          <h3 className="font-semibold">{t('notifications.title', 'Notifications')}</h3>
           {unreadCount > 0 && (
             <Button
               variant="ghost"
@@ -159,7 +161,7 @@ export const NotificationBell = () => {
               disabled={markAllAsReadMutation.isPending}
             >
               <CheckCheck className="h-4 w-4 mr-1" />
-              Mark all read
+              {t('notifications.markAllRead', 'Mark all read')}
             </Button>
           )}
         </div>
@@ -167,12 +169,12 @@ export const NotificationBell = () => {
         <ScrollArea className="h-[400px]">
           {isLoading ? (
             <div className="p-4 text-center text-muted-foreground">
-              Loading...
+              {t('common.loading', 'Loading...')}
             </div>
           ) : notifications.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">
               <Bell className="h-10 w-10 mx-auto mb-2 opacity-50" />
-              <p>No notifications yet</p>
+              <p>{t('notifications.noNotifications', 'No notifications yet')}</p>
             </div>
           ) : (
             <div className="divide-y">
@@ -243,7 +245,7 @@ export const NotificationBell = () => {
         <div className="border-t p-2">
           <Button variant="ghost" className="w-full" asChild>
             <Link to="/profile#notifications" onClick={() => setOpen(false)}>
-              Notification Settings
+              {t('notifications.settings', 'Notification Settings')}
             </Link>
           </Button>
         </div>

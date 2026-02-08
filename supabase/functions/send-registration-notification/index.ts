@@ -26,6 +26,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { registrationId, status }: NotificationRequest = await req.json();
 
+    console.log(`Processing registration notification: ${registrationId}, status: ${status}`);
+
     // Get registration details with event info
     const { data: registration, error: regError } = await supabase
       .from("event_registrations")
@@ -41,6 +43,7 @@ const handler = async (req: Request): Promise<Response> => {
       .single();
 
     if (regError || !registration) {
+      console.error("Registration not found:", regError);
       throw new Error("Registration not found");
     }
 
@@ -72,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
           <p>We look forward to seeing you at the event! Please arrive on time and bring any necessary equipment.</p>
           <p>If you have any questions, please don't hesitate to contact us.</p>
-          <p>Best regards,<br>The EcoTrack Team</p>
+          <p>Best regards,<br>The CleanAfricaNow Team</p>
         </div>
       `
       : `
@@ -92,12 +95,46 @@ const handler = async (req: Request): Promise<Response> => {
             <li>Contact us if you have any questions</li>
           </ul>
           <p>Thank you for your interest in environmental conservation!</p>
-          <p>Best regards,<br>The EcoTrack Team</p>
+          <p>Best regards,<br>The CleanAfricaNow Team</p>
         </div>
       `;
 
+    // Create in-app notification if user_id is available
+    if (registration.user_id) {
+      const notificationTitle = isApproved
+        ? `Registration Approved: ${event.title}`
+        : `Registration Update: ${event.title}`;
+      
+      const notificationMessage = isApproved
+        ? `Your registration for "${event.title}" on ${eventDate} has been approved. See you there!`
+        : `Your registration for "${event.title}" could not be approved at this time. Check for other events.`;
+
+      const { error: notifError } = await supabase
+        .from("notifications")
+        .insert({
+          user_id: registration.user_id,
+          title: notificationTitle,
+          message: notificationMessage,
+          type: isApproved ? "success" : "warning",
+          category: "report",
+          action_url: "/collection-events",
+          metadata: {
+            registration_id: registrationId,
+            event_id: registration.event_id,
+            status: status,
+          },
+        });
+
+      if (notifError) {
+        console.error("Error creating in-app notification:", notifError);
+      } else {
+        console.log("In-app notification created for user:", registration.user_id);
+      }
+    }
+
+    // Send email notification
     const emailResponse = await resend.emails.send({
-      from: "EcoTrack <onboarding@resend.dev>",
+      from: "CleanAfricaNow <onboarding@resend.dev>",
       to: [registration.contact_email],
       subject,
       html: htmlContent,
