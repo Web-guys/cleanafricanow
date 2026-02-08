@@ -588,6 +588,13 @@
     "noReportsDesc": "Vous n'avez pas encore soumis de signalements environnementaux.",
     "submitFirst": "Soumettre Votre Premier Signalement"
   },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Tout marquer comme lu",
+    "noNotifications": "Aucune notification",
+    "settings": "Paramètres de notification",
+    "viewDetails": "Voir"
+  },
   "pages": {
     "mission": {
       "title": "Notre Mission",

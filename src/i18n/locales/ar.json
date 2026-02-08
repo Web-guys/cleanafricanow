@@ -10,7 +10,9 @@
     "loading": "جاري التحميل...",
     "submit": "إرسال",
     "actions": "إجراءات",
-    "clearSelection": "مسح"
+    "clearSelection": "مسح",
+    "dismiss": "إغلاق",
+    "welcome": "مرحباً"
   },
   "nav": {
     "home": "الرئيسية",
@@ -414,6 +416,13 @@
     "noReportsDesc": "لم تقدم أي تقارير بيئية بعد.",
     "submitFirst": "قدم تقريرك الأول"
   },
+  "notifications": {
+    "title": "الإشعارات",
+    "markAllRead": "تحديد الكل كمقروء",
+    "noNotifications": "لا توجد إشعارات",
+    "settings": "إعدادات الإشعارات",
+    "viewDetails": "عرض"
+  },
   "pages": {
     "mission": {
       "title": "مهمتنا",
@@ -680,6 +689,8 @@
     "exploreAll": "استكشف {{count}}+ مدينة"
   },
   "dashboard": {
+    "keyBenefits": "المزايا الرئيسية",
+    "howItWorks": "كيف يعمل",
     "quickActions": "إجراءات سريعة",
     "needsAttention": "تحتاج انتباه",
     "beingProcessed": "قيد المعالجة",
