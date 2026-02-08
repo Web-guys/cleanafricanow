@@ -8,6 +8,7 @@ import { ReportAnalytics } from "@/components/admin/ReportAnalytics";
 import { SystemHealthCard } from "@/components/admin/SystemHealthCard";
 import { RecentActivityFeed } from "@/components/admin/RecentActivityFeed";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { QuickActionsCard } from "@/components/admin/QuickActionsCard";
 import { PerformanceMetricsCard } from "@/components/admin/PerformanceMetricsCard";
@@ -196,6 +197,9 @@ const AdminDashboard = () => {
             </div>
           </div>
         </main>
+
+        {/* Mobile Bottom Navigation */}
+        <AdminMobileNav />
       </div>
     </div>
   );

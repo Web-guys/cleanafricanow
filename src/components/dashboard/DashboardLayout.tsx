@@ -20,6 +20,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { ReactNode, useState } from "react";
+import { AdminMobileNav } from "@/components/admin/AdminMobileNav";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -201,9 +202,12 @@ export const DashboardLayout = ({ children, title, icon, role }: DashboardLayout
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto pb-20 lg:pb-0">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto pb-24 lg:pb-0">
           {children}
         </main>
+
+        {/* Mobile Bottom Navigation for Admin */}
+        {role === 'admin' && <AdminMobileNav />}
       </div>
     </div>
   );
