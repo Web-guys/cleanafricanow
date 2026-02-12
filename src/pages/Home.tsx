@@ -49,7 +49,7 @@ const Home = () => {
             <Button variant="ghost" asChild>
               <Link to="/leaderboard">
                 <Trophy className="mr-2 h-4 w-4" />
-                Leaderboard
+                {t('leaderboard.title', 'Leaderboard')}
               </Link>
             </Button>
             {user ? (

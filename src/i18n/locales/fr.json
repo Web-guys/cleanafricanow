@@ -567,14 +567,6 @@
       "tip4": "Respectez les réglementations environnementales locales et les zones protégées."
     }
   },
-  "common": {
-    "dismiss": "Fermer",
-    "welcome": "Bienvenue"
-  },
-  "dashboard": {
-    "keyBenefits": "Avantages Clés",
-    "howItWorks": "Comment Ça Marche"
-  },
   "profile": {
     "citizen": "Citoyen",
     "totalReports": "Total des Signalements",

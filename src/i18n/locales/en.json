@@ -575,14 +575,6 @@
       "tip4": "Respect local environmental regulations and protected areas."
     }
   },
-  "common": {
-    "dismiss": "Dismiss",
-    "welcome": "Welcome"
-  },
-  "dashboard": {
-    "keyBenefits": "Key Benefits",
-    "howItWorks": "How It Works"
-  },
   "profile": {
     "citizen": "Citizen",
     "totalReports": "Total Reports",
