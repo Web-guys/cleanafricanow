@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut, User, Trophy } from "lucide-react";
+import { LogOut, User, Trophy, Heart } from "lucide-react";
 import { SEOHead, pageSEO } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -17,7 +17,7 @@ import { PartnersSection } from "@/components/home/PartnersSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { CTASection } from "@/components/home/CTASection";
 import { UpcomingEvents } from "@/components/home/UpcomingEvents";
-import logo from "@/assets/cleanafricanow-logo.png";
+import logo from "@/assets/cleanafricanow-logo.svg";
 
 const Home = () => {
   const { user, signOut, hasRole } = useAuth();
@@ -50,6 +50,12 @@ const Home = () => {
               <Link to="/leaderboard">
                 <Trophy className="mr-2 h-4 w-4" />
                 {t('leaderboard.title', 'Leaderboard')}
+              </Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link to="/donate">
+                <Heart className="mr-2 h-4 w-4" />
+                {t('nav.donate', 'Donate')}
               </Link>
             </Button>
             {user ? (

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import logo from "@/assets/cleanafricanow-logo.png";
+import logo from "@/assets/cleanafricanow-logo.svg";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -69,6 +69,14 @@ const Footer = () => {
                   className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 inline-block hover:translate-x-1"
                 >
                   {t('footer.careers')}
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/donate" 
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 inline-block hover:translate-x-1"
+                >
+                  {t('nav.donate', 'Donate')}
                 </Link>
               </li>
             </ul>

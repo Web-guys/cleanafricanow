@@ -99,8 +99,8 @@ export const CTASection = () => {
                   className="bg-transparent border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-sm text-lg h-14 px-10"
                   asChild
                 >
-                  <Link to="/leaderboard">
-                    View Leaderboard
+                  <Link to="/donate">
+                    ❤️ Donate to the Network
                   </Link>
                 </Button>
               </div>
