@@ -50,6 +50,7 @@ import Leaderboard from "./pages/Leaderboard";
 import CollectionEvents from "./pages/CollectionEvents";
 import Install from "./pages/Install";
 import BinsMap from "./pages/BinsMap";
+import Donate from "./pages/Donate";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -84,6 +85,7 @@ const App = () => (
             <Route path="/terms" element={<Terms />} />
             <Route path="/cookies" element={<Cookies />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/donate" element={<Donate />} />
             <Route
               path="/profile"
               element={
