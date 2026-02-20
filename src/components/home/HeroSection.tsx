@@ -96,7 +96,7 @@ export const HeroSection = () => {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-moroccan-gold/20 backdrop-blur-md px-5 py-2.5 rounded-full mb-8 border border-moroccan-gold/30 animate-fade-in">
               <div className="w-2 h-2 bg-moroccan-gold rounded-full animate-pulse" />
-              <span className="text-sm font-semibold">AI-Powered Environmental Platform</span>
+              <span className="text-sm font-semibold">{t('hero.badge', 'AI-Powered Environmental Platform')}</span>
               <Sparkles className="h-4 w-4 text-moroccan-gold" />
             </div>
             
@@ -117,7 +117,7 @@ export const HeroSection = () => {
               >
                 <Link to="/report">
                   <Zap className="mr-2 h-5 w-5" />
-                  Start Reporting
+                  {t('hero.startReporting', 'Start Reporting')}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -129,14 +129,14 @@ export const HeroSection = () => {
               >
                 <Link to="/map">
                   <Map className="mr-2 h-5 w-5" />
-                  Explore Map
+                  {t('hero.exploreMap', 'Explore Map')}
                 </Link>
               </Button>
             </div>
 
             {/* Quick Report Buttons */}
             <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '400ms' }}>
-              <span className="text-sm text-primary-foreground font-medium self-center mr-2">Quick report:</span>
+              <span className="text-sm text-primary-foreground font-medium self-center mr-2">{t('hero.quickReport', 'Quick report:')}</span>
               <Button 
                 size="sm" 
                 variant="secondary" 
@@ -145,7 +145,7 @@ export const HeroSection = () => {
               >
                 <Link to="/report?category=waste">
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Waste
+                  {t('report.categories.waste')}
                 </Link>
               </Button>
               <Button 
@@ -156,7 +156,7 @@ export const HeroSection = () => {
               >
                 <Link to="/report?category=pollution">
                   <AlertTriangle className="mr-2 h-4 w-4" />
-                  Pollution
+                  {t('report.categories.pollution')}
                 </Link>
               </Button>
             </div>
@@ -171,7 +171,7 @@ export const HeroSection = () => {
                   <TrendingUp className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Reports</p>
+                  <p className="text-sm text-muted-foreground">{t('stats.totalReports')}</p>
                   <p className="text-3xl font-bold text-foreground">
                     <AnimatedCounter end={stats?.reports || 0} suffix="+" />
                   </p>
@@ -191,7 +191,7 @@ export const HeroSection = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Issues Resolved</p>
+                  <p className="text-sm text-muted-foreground">{t('hero.issuesResolved', 'Issues Resolved')}</p>
                   <p className="text-2xl font-bold text-foreground">
                     <AnimatedCounter end={stats?.resolved || 0} />
                   </p>
@@ -206,7 +206,7 @@ export const HeroSection = () => {
                   <Map className="w-5 h-5 text-blue-500" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Cities Covered</p>
+                  <p className="text-sm text-muted-foreground">{t('stats.citiesCovered')}</p>
                   <p className="text-2xl font-bold text-foreground">
                     <AnimatedCounter end={stats?.cities || 0} suffix="+" />
                   </p>
@@ -221,7 +221,7 @@ export const HeroSection = () => {
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
                   <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
                 </div>
-                <span className="text-sm font-medium text-foreground">Live updates enabled</span>
+                <span className="text-sm font-medium text-foreground">{t('hero.liveUpdates', 'Live updates enabled')}</span>
               </div>
             </FloatingCard>
 

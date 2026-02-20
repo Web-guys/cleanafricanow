@@ -84,7 +84,7 @@ export const TestimonialsSection = () => {
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <Quote className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Real Stories</span>
+            <span className="text-sm font-medium text-primary">{t('testimonials.badge', 'Real Stories')}</span>
           </div>
           <h3 className="text-3xl md:text-5xl font-bold mb-4 text-foreground">
             {t('testimonials.title', 'Voices from the Community')}

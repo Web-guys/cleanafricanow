@@ -38,7 +38,13 @@
     "reportWaste": "Signaler des Déchets",
     "reportPollution": "Signaler la Pollution",
     "reportDanger": "Signaler un Danger",
-    "viewMap": "Voir la Carte"
+    "viewMap": "Voir la Carte",
+    "badge": "Plateforme Environnementale IA",
+    "startReporting": "Commencer à Signaler",
+    "exploreMap": "Explorer la Carte",
+    "quickReport": "Signalement rapide :",
+    "issuesResolved": "Problèmes Résolus",
+    "liveUpdates": "Mises à jour en direct"
   },
   "stats": {
     "totalReports": "Total des Signalements",
@@ -49,6 +55,7 @@
     "cleanerCommunities": "Des communautés plus propres"
   },
   "impact": {
+    "badge": "Impact Réel",
     "title": "Impact Communautaire",
     "subtitle": "Statistiques en temps réel montrant notre effort collectif pour créer des communautés plus propres et plus sûres à travers l'Afrique.",
     "totalReports": "Total Signalements",
@@ -71,12 +78,18 @@
     "step3Title": "Suivez la Progression",
     "step3Desc": "Consultez votre signalement sur la carte et suivez son statut de résolution",
     "step4Title": "Problème Résolu",
-    "step4Desc": "Regardez les autorités résoudre le problème et le marquer comme résolu"
+    "step4Desc": "Regardez les autorités résoudre le problème et le marquer comme résolu",
+    "badge": "Processus Simple",
+    "readyCta": "Prêt à faire la différence ?",
+    "startReport": "Commencez Votre Premier Signalement"
   },
   "cta": {
     "title": "Prêt à Faire la Différence ?",
     "subtitle": "Rejoignez des milliers de citoyens travaillant ensemble pour créer des communautés plus propres et plus sûres à travers l'Afrique.",
-    "button": "Signaler un Problème Maintenant"
+    "button": "Signaler un Problème Maintenant",
+    "badge": "Rejoignez le Mouvement",
+    "donate": "Faire un Don au Réseau",
+    "trustedBy": "Approuvé par des communautés à travers"
   },
   "footer": {
     "tagline": "Construire une Afrique plus propre et plus durable grâce à l'engagement civique et à la technologie.",
@@ -861,6 +874,7 @@
     "inYourRegions": "Dans vos régions"
   },
   "testimonials": {
+    "badge": "Histoires Réelles",
     "title": "Ce que Disent les Gens",
     "subtitle": "Des histoires vraies de citoyens et d'officiels qui font la différence"
   },

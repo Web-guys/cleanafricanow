@@ -67,7 +67,7 @@ export const HowItWorksSection = () => {
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-6">
             <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-            <span className="text-sm font-semibold text-primary">Simple Process</span>
+            <span className="text-sm font-semibold text-primary">{t('howItWorks.badge', 'Simple Process')}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">{t('howItWorks.title', 'How It Works')}</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -157,12 +157,12 @@ export const HowItWorksSection = () => {
           "text-center mt-16 opacity-0",
           isVisible && "animate-fade-in"
         )} style={{ animationDelay: "800ms" }}>
-          <p className="text-muted-foreground mb-4">Ready to make a difference?</p>
+          <p className="text-muted-foreground mb-4">{t('howItWorks.readyCta', 'Ready to make a difference?')}</p>
           <Link 
             to="/report" 
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold hover:shadow-xl hover:shadow-primary/20 hover:scale-105 transition-all group"
           >
-            Start Your First Report
+            {t('howItWorks.startReport', 'Start Your First Report')}
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>

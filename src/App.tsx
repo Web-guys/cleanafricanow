@@ -7,51 +7,63 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { GoogleAnalyticsProvider } from "./components/GoogleAnalytics";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { MobileBottomNav } from "./components/MobileBottomNav";
+import { lazy, Suspense } from "react";
+import { Loader2 } from "lucide-react";
+
+// Eager-loaded for instant first paint
 import Home from "./pages/Home";
-import Auth from "./pages/Auth";
-import Report from "./pages/Report";
-import MapView from "./pages/MapView";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminReports from "./pages/admin/Reports";
-import AdminCities from "./pages/admin/Cities";
-import AdminCountries from "./pages/admin/Countries";
-import AdminUsers from "./pages/admin/Users";
-import AdminOrganizations from "./pages/admin/Organizations";
-import AdminSLADashboard from "./pages/admin/SLADashboard";
-import AdminAuditLogs from "./pages/admin/AuditLogs";
-import AdminAIAnalysis from "./pages/admin/AIAnalysis";
-import AdminExport from "./pages/admin/Export";
-import AdminSettings from "./pages/admin/Settings";
-import AdminAnalytics from "./pages/admin/Analytics";
-import AdminRegistrationRequests from "./pages/admin/RegistrationRequests";
-import RequestAccess from "./pages/RequestAccess";
-import NgoDashboard from "./pages/ngo/Dashboard";
-import MunicipalityDashboard from "./pages/municipality/Dashboard";
-import WasteBinsDashboard from "./pages/municipality/WasteBinsDashboard";
-import VolunteerDashboard from "./pages/volunteer/Dashboard";
-import PartnerDashboard from "./pages/partner/Dashboard";
-import TouristDashboard from "./pages/tourist/Dashboard";
-import Mission from "./pages/Mission";
-import Team from "./pages/Team";
-import Careers from "./pages/Careers";
-import Docs from "./pages/Docs";
-import Community from "./pages/Community";
-import Blog from "./pages/Blog";
-import Press from "./pages/Press";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Cookies from "./pages/Cookies";
-import Support from "./pages/Support";
-import Profile from "./pages/Profile";
-import CitiesMapView from "./pages/CitiesMapView";
-import Leaderboard from "./pages/Leaderboard";
-import CollectionEvents from "./pages/CollectionEvents";
-import Install from "./pages/Install";
-import BinsMap from "./pages/BinsMap";
-import Donate from "./pages/Donate";
-import NotFound from "./pages/NotFound";
+
+// Lazy-loaded routes for better performance
+const Auth = lazy(() => import("./pages/Auth"));
+const Report = lazy(() => import("./pages/Report"));
+const MapView = lazy(() => import("./pages/MapView"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminReports = lazy(() => import("./pages/admin/Reports"));
+const AdminCities = lazy(() => import("./pages/admin/Cities"));
+const AdminCountries = lazy(() => import("./pages/admin/Countries"));
+const AdminUsers = lazy(() => import("./pages/admin/Users"));
+const AdminOrganizations = lazy(() => import("./pages/admin/Organizations"));
+const AdminSLADashboard = lazy(() => import("./pages/admin/SLADashboard"));
+const AdminAuditLogs = lazy(() => import("./pages/admin/AuditLogs"));
+const AdminAIAnalysis = lazy(() => import("./pages/admin/AIAnalysis"));
+const AdminExport = lazy(() => import("./pages/admin/Export"));
+const AdminSettings = lazy(() => import("./pages/admin/Settings"));
+const AdminAnalytics = lazy(() => import("./pages/admin/Analytics"));
+const AdminRegistrationRequests = lazy(() => import("./pages/admin/RegistrationRequests"));
+const RequestAccess = lazy(() => import("./pages/RequestAccess"));
+const NgoDashboard = lazy(() => import("./pages/ngo/Dashboard"));
+const MunicipalityDashboard = lazy(() => import("./pages/municipality/Dashboard"));
+const WasteBinsDashboard = lazy(() => import("./pages/municipality/WasteBinsDashboard"));
+const VolunteerDashboard = lazy(() => import("./pages/volunteer/Dashboard"));
+const PartnerDashboard = lazy(() => import("./pages/partner/Dashboard"));
+const TouristDashboard = lazy(() => import("./pages/tourist/Dashboard"));
+const Mission = lazy(() => import("./pages/Mission"));
+const Team = lazy(() => import("./pages/Team"));
+const Careers = lazy(() => import("./pages/Careers"));
+const Docs = lazy(() => import("./pages/Docs"));
+const Community = lazy(() => import("./pages/Community"));
+const Blog = lazy(() => import("./pages/Blog"));
+const Press = lazy(() => import("./pages/Press"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Cookies = lazy(() => import("./pages/Cookies"));
+const Support = lazy(() => import("./pages/Support"));
+const Profile = lazy(() => import("./pages/Profile"));
+const CitiesMapView = lazy(() => import("./pages/CitiesMapView"));
+const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const CollectionEvents = lazy(() => import("./pages/CollectionEvents"));
+const Install = lazy(() => import("./pages/Install"));
+const BinsMap = lazy(() => import("./pages/BinsMap"));
+const Donate = lazy(() => import("./pages/Donate"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -64,6 +76,7 @@ const App = () => (
         <BrowserRouter>
           <GoogleAnalyticsProvider>
           <MobileBottomNav />
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
@@ -273,6 +286,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
             </Routes>
+          </Suspense>
           </GoogleAnalyticsProvider>
         </BrowserRouter>
       </AuthProvider>

@@ -54,7 +54,7 @@ export const CTASection = () => {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 bg-moroccan-gold/20 backdrop-blur-sm px-5 py-2 rounded-full mb-8 border border-moroccan-gold/30">
                 <Zap className="h-4 w-4 animate-pulse text-moroccan-gold" />
-                <span className="text-sm font-semibold">Join the Movement</span>
+                <span className="text-sm font-semibold">{t('cta.badge', 'Join the Movement')}</span>
               </div>
 
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
@@ -99,8 +99,8 @@ export const CTASection = () => {
                   className="bg-transparent border-2 border-white/40 text-white hover:bg-white/10 backdrop-blur-sm text-lg h-14 px-10"
                   asChild
                 >
-                  <Link to="/donate">
-                    ❤️ Donate to the Network
+                   <Link to="/donate">
+                    ❤️ {t('cta.donate', 'Donate to the Network')}
                   </Link>
                 </Button>
               </div>
@@ -134,7 +134,7 @@ export const CTASection = () => {
             "mt-20 pt-12 border-t border-white/20 text-center opacity-0",
             isVisible && "animate-fade-in"
           )} style={{ animationDelay: "800ms" }}>
-            <p className="text-sm text-primary-foreground/60 mb-6">Trusted by communities across</p>
+            <p className="text-sm text-primary-foreground/60 mb-6">{t('cta.trustedBy', 'Trusted by communities across')}</p>
             <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-primary-foreground/90">
               {["🇲🇦 Morocco", "🇳🇬 Nigeria", "🇰🇪 Kenya", "🇿🇦 South Africa", "🇪🇬 Egypt"].map((country) => (
                 <span key={country} className="font-semibold text-lg hover:scale-110 transition-transform cursor-default">
