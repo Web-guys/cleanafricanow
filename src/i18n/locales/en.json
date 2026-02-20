@@ -38,7 +38,13 @@
     "reportWaste": "Report Waste",
     "reportPollution": "Report Pollution",
     "reportDanger": "Report Danger",
-    "viewMap": "View Map"
+    "viewMap": "View Map",
+    "badge": "AI-Powered Environmental Platform",
+    "startReporting": "Start Reporting",
+    "exploreMap": "Explore Map",
+    "quickReport": "Quick report:",
+    "issuesResolved": "Issues Resolved",
+    "liveUpdates": "Live updates enabled"
   },
   "stats": {
     "totalReports": "Total Reports",
@@ -49,6 +55,7 @@
     "cleanerCommunities": "Cleaner communities"
   },
   "impact": {
+    "badge": "Real Impact",
     "title": "Community Impact",
     "subtitle": "Real-time statistics showing our collective effort to create cleaner, safer communities across Africa.",
     "totalReports": "Total Reports",
@@ -71,12 +78,18 @@
     "step3Title": "Track Progress",
     "step3Desc": "See your report on the map and track its resolution status",
     "step4Title": "Issue Resolved",
-    "step4Desc": "Watch as authorities address the problem and mark it resolved"
+    "step4Desc": "Watch as authorities address the problem and mark it resolved",
+    "badge": "Simple Process",
+    "readyCta": "Ready to make a difference?",
+    "startReport": "Start Your First Report"
   },
   "cta": {
     "title": "Ready to Make a Difference?",
     "subtitle": "Join thousands of citizens working together to create cleaner, safer communities across Africa.",
-    "button": "Report an Issue Now"
+    "button": "Report an Issue Now",
+    "badge": "Join the Movement",
+    "donate": "Donate to the Network",
+    "trustedBy": "Trusted by communities across"
   },
   "footer": {
     "tagline": "Building a cleaner, more sustainable Africa through civic engagement and technology.",
@@ -869,6 +882,7 @@
     "inYourRegions": "In your regions"
   },
   "testimonials": {
+    "badge": "Real Stories",
     "title": "What People Are Saying",
     "subtitle": "Real stories from citizens and officials making a difference"
   },

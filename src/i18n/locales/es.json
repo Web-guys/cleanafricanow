@@ -34,7 +34,13 @@
     "reportWaste": "Reportar Residuos",
     "reportPollution": "Reportar Contaminación",
     "reportDanger": "Reportar Peligro",
-    "viewMap": "Ver Mapa"
+    "viewMap": "Ver Mapa",
+    "badge": "Plataforma Ambiental con IA",
+    "startReporting": "Empezar a Reportar",
+    "exploreMap": "Explorar Mapa",
+    "quickReport": "Reporte rápido:",
+    "issuesResolved": "Problemas Resueltos",
+    "liveUpdates": "Actualizaciones en vivo"
   },
   "stats": {
     "totalReports": "Total de Reportes",
@@ -45,6 +51,7 @@
     "cleanerCommunities": "Comunidades más limpias"
   },
   "impact": {
+    "badge": "Impacto Real",
     "title": "Impacto Comunitario",
     "subtitle": "Estadísticas en tiempo real que muestran nuestro esfuerzo colectivo para crear comunidades más limpias y seguras en toda África.",
     "totalReports": "Total Reportes",
@@ -67,12 +74,18 @@
     "step3Title": "Sigue el Progreso",
     "step3Desc": "Ve tu reporte en el mapa y sigue el estado de su resolución",
     "step4Title": "Problema Resuelto",
-    "step4Desc": "Observa cómo las autoridades abordan el problema y lo marcan como resuelto"
+    "step4Desc": "Observa cómo las autoridades abordan el problema y lo marcan como resuelto",
+    "badge": "Proceso Simple",
+    "readyCta": "¿Listo para hacer la diferencia?",
+    "startReport": "Comienza Tu Primer Reporte"
   },
   "cta": {
     "title": "¿Listo para Hacer la Diferencia?",
     "subtitle": "Únete a miles de ciudadanos trabajando juntos para crear comunidades más limpias y seguras en toda África.",
-    "button": "Reportar un Problema Ahora"
+    "button": "Reportar un Problema Ahora",
+    "badge": "Únete al Movimiento",
+    "donate": "Donar a la Red",
+    "trustedBy": "Confiado por comunidades en"
   },
   "footer": {
     "tagline": "Construyendo una África más limpia y sostenible a través de la participación ciudadana y la tecnología.",
@@ -867,6 +880,7 @@
     "inYourRegions": "En tus regiones"
   },
   "testimonials": {
+    "badge": "Historias Reales",
     "title": "Lo Que Dice la Gente",
     "subtitle": "Historias reales de ciudadanos y funcionarios haciendo la diferencia"
   },

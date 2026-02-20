@@ -173,7 +173,7 @@ export const CommunityImpact = () => {
         )}>
           <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
             <Award className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Real Impact</span>
+            <span className="text-sm font-medium text-primary">{t('impact.badge', 'Real Impact')}</span>
           </div>
           <div className="flex items-center justify-center gap-3 mb-4">
             <Leaf className="h-10 w-10 text-primary" />
